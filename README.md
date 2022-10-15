@@ -1,0 +1,1 @@
+My attempt to create a game physics engine following the book "Game Physics: In One Weekend"
