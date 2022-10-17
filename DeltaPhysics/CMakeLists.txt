@@ -6,8 +6,8 @@ file(GLOB_RECURSE SRC_LIST CONFIGURE_DEPENDS
     src/*.cpp
 )
 
-message(${SRC_LIST})
 
 add_library(${PROJECT_NAME} STATIC ${SRC_LIST})
 
+set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 include_directories(${PROJECT_NAME} PRIVATE src)
