@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
-project(Sandbox VERSION 0.0.1)
+project(Demo VERSION 0.0.1)
 
 file(GLOB_RECURSE SRC_LIST CONFIGURE_DEPENDS
     include/*.hpp
