@@ -95,13 +95,13 @@ inline const Vec4& Vec4::operator/=(const float rhs)
     return *this;
 }
 
-inline float Vec4::operator[](const int idx) const
+inline float Vec4::operator[](const size_t idx) const
 {
     assert(idx >= 0 && idx <= 3);
     return (&x)[idx];
 }
 
-inline float& Vec4::operator[](const int idx)
+inline float& Vec4::operator[](const size_t idx)
 {
     assert(idx >= 0 && idx <= 3);
     return (&x)[idx];

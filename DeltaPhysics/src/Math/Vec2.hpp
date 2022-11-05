@@ -27,8 +27,8 @@ public:
     const Vec2& operator*=(const float rhs);
     const Vec2& operator/=(const float rhs);
 
-    float operator[](const int idx) const;
-    float& operator[](const int idx);
+    float operator[](const size_t idx) const;
+    float& operator[](const size_t idx);
 
     const Vec2& normalize();
     float getMagnitude() const;

@@ -90,13 +90,13 @@ inline const Vec3& Vec3::operator/=(const float rhs)
     return *this;
 }
 
-inline float Vec3::operator[](const int idx) const
+inline float Vec3::operator[](const size_t idx) const
 {
     assert(idx >= 0 && idx <= 2);
     return (&x)[idx];
 }
 
-inline float& Vec3::operator[](const int idx)
+inline float& Vec3::operator[](const size_t idx)
 {
     assert(idx >= 0 && idx <= 2);
     return (&x)[idx];
