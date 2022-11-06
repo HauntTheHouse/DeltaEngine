@@ -29,8 +29,8 @@ public:
     float determinant() const;
     Mat4 transpose() const;
     Mat4 inverse() const;
-    Mat3 minor(const int i, const int j) const;
-    float cofactor(const int i, const int j) const;
+    Mat3 minor(const size_t i, const size_t j) const;
+    float cofactor(const size_t i, const size_t j) const;
 
     void orient(const Vec3& pos, const Vec3& forward, const Vec3& up);
     void lookAt(const Vec3& pos, const Vec3& lookAt, const Vec3& up);

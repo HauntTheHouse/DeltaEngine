@@ -137,7 +137,7 @@ inline Mat3 Mat3::inverse() const
     return inv * (1.0f / Mat3::determinant());
 }
 
-inline Mat2 Mat3::minor(const int i, const int j) const
+inline Mat2 Mat3::minor(const size_t i, const size_t j) const
 {
     Mat2 minor;
 
@@ -160,7 +160,7 @@ inline Mat2 Mat3::minor(const int i, const int j) const
     return minor;
 }
 
-inline float Mat3::cofactor(const int i, const int j) const
+inline float Mat3::cofactor(const size_t i, const size_t j) const
 {
     const Mat2 minor = Mat3::minor(i, j);
     float sign = (i + j) % 2 == 0 ? 1.0f : -1.0f;

@@ -48,9 +48,9 @@ inline const Mat4& Mat4::operator+=(const Mat4& rhs)
     return *this;
 }
 
-inline Vec3 Mat4::operator*(const Vec3& rhs) const
+inline Vec4 Mat4::operator*(const Vec4& rhs) const
 {
-    Vec3 tmp;
+    Vec4 tmp;
     for (size_t i = 0; i < 4; ++i)
         tmp[i] = rows[i].dot(rhs);
     return tmp;
@@ -144,7 +144,7 @@ inline Mat4 Mat4::inverse() const
     return inv * (1.0f / Mat4::determinant());
 }
 
-inline Mat3 Mat4::minor(const int i, const int j) const
+inline Mat3 Mat4::minor(const size_t i, const size_t j) const
 {
     Mat3 minor;
 
@@ -167,7 +167,7 @@ inline Mat3 Mat4::minor(const int i, const int j) const
     return minor;
 }
 
-inline float Mat4::cofactor(const int i, const int j) const
+inline float Mat4::cofactor(const size_t i, const size_t j) const
 {
     const Mat2 minor = Mat4::minor(i, j);
     float sign = (i + j) % 2 == 0 ? 1.0f : -1.0f;

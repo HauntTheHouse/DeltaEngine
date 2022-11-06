@@ -28,8 +28,8 @@ public:
     float determinant() const;
     Mat3 transpose() const;
     Mat3 inverse() const;
-    Mat2 minor(const int i, const int j) const;
-    float cofactor(const int i, const int j) const;
+    Mat2 minor(const size_t i, const size_t j) const;
+    float cofactor(const size_t i, const size_t j) const;
 
     const float* toPtr() const;
 
