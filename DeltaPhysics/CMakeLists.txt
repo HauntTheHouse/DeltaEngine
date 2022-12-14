@@ -1,15 +1,7 @@
 cmake_minimum_required(VERSION 3.12)
-project(DeltaPhysics VERSION 0.0.1)
+project(DeltaPhysics)
 
 set(CMAKE_CXX_STANDARD 17)
 
-file(GLOB_RECURSE SRC_LIST CONFIGURE_DEPENDS
-    include/*.hpp
-    src/*.cpp
-)
-
-add_library(${PROJECT_NAME} STATIC ${SRC_LIST})
-
-set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
-
-include_directories(${PROJECT_NAME} PRIVATE "include")
+add_subdirectory(DeltaMath)
+add_subdirectory(DeltaCore)
