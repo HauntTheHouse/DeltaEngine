@@ -6,9 +6,15 @@ file(GLOB_RECURSE SRC_LIST CONFIGURE_DEPENDS
     src/*.cpp
 )
 
+add_subdirectory(vendor)
+
 add_library(${PROJECT_NAME} STATIC ${SRC_LIST})
 
-target_include_directories(${PROJECT_NAME} PRIVATE "include")
-target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_SOURCE_DIR}/DeltaPhysics/DeltaMath/include")
+target_include_directories(${PROJECT_NAME} PRIVATE
+	"include"
+	"${CMAKE_SOURCE_DIR}/DeltaPhysics/DeltaMath/include"
+	"vendor/glfw/include"
+	"vendor/glad/include"
+)
 
-target_link_libraries(${PROJECT_NAME} DeltaMath)
+target_link_libraries(${PROJECT_NAME} DeltaMath glfw glad)
