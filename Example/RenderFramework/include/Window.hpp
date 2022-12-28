@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
-#include <functional>
 #include "Event.hpp"
 
 struct GLFWwindow;

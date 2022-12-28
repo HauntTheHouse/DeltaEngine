@@ -1,5 +1,5 @@
+#include "PCH.hpp"
 #include "Application.hpp"
-#include <iostream>
 
 Application::Application()
 {

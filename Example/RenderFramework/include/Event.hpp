@@ -1,8 +1,5 @@
 #pragma once
 
-#include <array>
-#include <functional>
-
 enum class EventType
 {
 	WINDOW_RESIZED = 0,

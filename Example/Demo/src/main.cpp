@@ -1,12 +1,9 @@
-#include <iostream>
-#include <memory>
 #include <Application.hpp>
 
 class DemoApplication : public Application
 {
     void onUpdate() override
     {
-        std::cout << "Hello Demo!" << std::endl;
     }
 };
 

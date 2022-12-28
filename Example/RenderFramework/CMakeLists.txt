@@ -18,3 +18,5 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 )
 
 target_link_libraries(${PROJECT_NAME} DeltaMath glfw glad)
+
+target_precompile_headers(${PROJECT_NAME} PUBLIC "include/PCH.hpp")
