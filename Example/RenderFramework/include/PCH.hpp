@@ -20,3 +20,5 @@
 #include <numeric>
 #include <limits>
 #include <cassert>
+
+#include "Log.hpp"

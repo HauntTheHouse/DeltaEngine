@@ -15,22 +15,21 @@ int Application::start(unsigned int aWindowWidth, unsigned int aWindowHeight, co
 
 	mEventDispatcher.addEventListener<WindowResizeEvent>([](WindowResizeEvent& event)
 	{
-		std::cout << "WindowResizeEvent: width = " << event.width << ", height = " << event.height << "\n";
+		LOG_INFO("WindowResizeEvent: {0}x{1}", event.width, event.height);
 	});
 	mEventDispatcher.addEventListener<MouseMoveEvent>([](MouseMoveEvent& event)
 	{
-		std::cout << "MouseMovedEvent : x = " << event.x << ", y = " << event.y << "\n";
+		LOG_INFO("MouseMovedEvent: x = {0}, y = {1}", event.x, event.y);
 	});
 	mEventDispatcher.addEventListener<WindowCloseEvent>([this](WindowCloseEvent& event)
 	{
-		std::cout << "MouseCloseEvent\n";
+		LOG_INFO("MouseCloseEvent");
 		mIsShouldClose = true;
 	});
 
 	mWindow.setEventCallback([this](EventBase& event)
 	{
 		mEventDispatcher.dispatch(event);
-		//std::cout << "EventCallback: width = " << event.width << ", height = " << event.height << "\n";
 	});
 
 	while (!mIsShouldClose)

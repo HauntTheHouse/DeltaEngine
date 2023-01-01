@@ -15,8 +15,9 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 	"${CMAKE_SOURCE_DIR}/DeltaPhysics/DeltaMath/include"
 	"vendor/glfw/include"
 	"vendor/glad/include"
+	"vendor/spdlog/include"
 )
 
-target_link_libraries(${PROJECT_NAME} DeltaMath glfw glad)
+target_link_libraries(${PROJECT_NAME} DeltaMath glfw glad spdlog)
 
 target_precompile_headers(${PROJECT_NAME} PUBLIC "include/PCH.hpp")

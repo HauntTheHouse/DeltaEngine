@@ -13,22 +13,30 @@ int Window::init(unsigned int aWindowWidth, unsigned int aWindowHeight, const ch
 
 
 	if (!sIsGLFWInitialized && !glfwInit())
+	{
+		LOG_ERROR("Can't initialize GLFW!");
 		return -1;
+	}
+	LOG_INFO("GLFW initialized succesfully");
 	sIsGLFWInitialized = true;
 
 	mWindow = glfwCreateWindow(aWindowWidth, aWindowHeight, aTitle, nullptr, nullptr);
 	if (!mWindow)
 	{
+		LOG_ERROR("Can't create GLFW window");
 		glfwTerminate();
 		return -2;
 	}
+	LOG_INFO("GLFW window created succesfully");
 
 	glfwMakeContextCurrent(mWindow);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
+		LOG_ERROR("Can't initialize OpenGL");
 		return -3;
 	}
+	LOG_INFO("OpenGL initialized succesfully");
 
 	glfwSetWindowUserPointer(mWindow, &mData);
 
@@ -66,6 +74,7 @@ void Window::shutdown()
 		glfwDestroyWindow(mWindow);
 		glfwTerminate();
 	}
+	LOG_INFO("Window terminated");
 }
 
 void Window::onUpdate()
