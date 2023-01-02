@@ -2,6 +2,9 @@
 
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
+#include <imgui.h>
+#include <backends/imgui_impl_opengl3.h>
+#include <backends/imgui_impl_glfw.h>
 
 bool Window::sIsGLFWInitialized = false;
 
@@ -64,6 +67,12 @@ int Window::init(unsigned int aWindowWidth, unsigned int aWindowHeight, const ch
 		params->eventCallback(event);
 	});
 
+
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGui_ImplOpenGL3_Init("#version 330 core");
+	ImGui_ImplGlfw_InitForOpenGL(mWindow, true);
+
     return 0;
 }
 
@@ -82,6 +91,19 @@ void Window::onUpdate()
 	if (sIsGLFWInitialized)
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
+		glClearColor(mBackgroundColor[0], mBackgroundColor[1], mBackgroundColor[2], 1.0f);
+
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+
+		//ImGui::ShowDemoWindow();
+		ImGui::Begin("Editor Window");
+		ImGui::ColorEdit3("Background color", mBackgroundColor);
+		ImGui::End();
+
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		glfwSwapBuffers(mWindow);
 		glfwPollEvents();

@@ -38,5 +38,6 @@ private:
 	GLFWwindow* mWindow{ nullptr };
 	WindowParameters mData;
 
+	float mBackgroundColor[3] = { 1.0f, 1.0f, 1.0f };
 	static bool sIsGLFWInitialized;
 };

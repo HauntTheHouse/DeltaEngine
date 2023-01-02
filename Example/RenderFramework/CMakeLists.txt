@@ -16,8 +16,9 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 	"vendor/glfw/include"
 	"vendor/glad/include"
 	"vendor/spdlog/include"
+	"vendor/imgui"
 )
 
-target_link_libraries(${PROJECT_NAME} DeltaMath glfw glad spdlog)
+target_link_libraries(${PROJECT_NAME} DeltaMath glfw glad spdlog imgui)
 
 target_precompile_headers(${PROJECT_NAME} PUBLIC "include/PCH.hpp")
