@@ -1,13 +1,5 @@
-#include "PCH.hpp"
-#include "Application.hpp"
-
-Application::Application()
-{
-}
-
-Application::~Application()
-{
-}
+#include "EngineCore/PCH.hpp"
+#include "EngineCore/Application.hpp"
 
 int Application::start(unsigned int aWindowWidth, unsigned int aWindowHeight, const char* aTitle)
 {
@@ -19,7 +11,7 @@ int Application::start(unsigned int aWindowWidth, unsigned int aWindowHeight, co
 	});
 	mEventDispatcher.addEventListener<MouseMoveEvent>([](MouseMoveEvent& event)
 	{
-		LOG_INFO("MouseMovedEvent: x = {0}, y = {1}", event.x, event.y);
+		//LOG_INFO("MouseMovedEvent: x = {0}, y = {1}", event.x, event.y);
 	});
 	mEventDispatcher.addEventListener<WindowCloseEvent>([this](WindowCloseEvent& event)
 	{

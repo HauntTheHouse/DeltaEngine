@@ -21,4 +21,6 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 
 target_link_libraries(${PROJECT_NAME} DeltaMath glfw glad spdlog imgui)
 
-target_precompile_headers(${PROJECT_NAME} PUBLIC "include/PCH.hpp")
+target_precompile_headers(${PROJECT_NAME} PUBLIC "include/EngineCore/PCH.hpp")
+
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SRC_LIST})

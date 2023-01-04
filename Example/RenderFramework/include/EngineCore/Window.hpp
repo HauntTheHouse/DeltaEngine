@@ -1,6 +1,10 @@
 #pragma once
 
-#include "Event.hpp"
+#include "EngineCore/Event.hpp"
+#include "EngineCore/Rendering/OpenGL/GlShaderProgram.hpp"
+#include "EngineCore/Rendering/OpenGL/GlVertexBuffer.hpp"
+#include "EngineCore/Rendering/OpenGL/GlIndexBuffer.hpp"
+#include "EngineCore/Rendering/OpenGL/GlVertexArray.hpp"
 
 struct GLFWwindow;
 
@@ -38,6 +42,12 @@ private:
 	GLFWwindow* mWindow{ nullptr };
 	WindowParameters mData;
 
-	float mBackgroundColor[3] = { 1.0f, 1.0f, 1.0f };
+	GlShaderProgram mShaderProgram;
+	GlVertexBuffer mVBO;
+	GlIndexBuffer mEBO;
+	GlVertexArray mVAO;
+
+	float mBackgroundColor[3] = { 0.2f, 0.2f, 0.2f };
+
 	static bool sIsGLFWInitialized;
 };

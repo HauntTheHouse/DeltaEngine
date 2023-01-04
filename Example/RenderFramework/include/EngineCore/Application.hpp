@@ -1,13 +1,13 @@
 #pragma once
 
-#include <Window.hpp>
-#include <Event.hpp>
+#include <EngineCore/Window.hpp>
+#include <EngineCore/Event.hpp>
 
 class Application
 {
 public:
-	Application();
-	virtual ~Application();
+	Application() = default;
+	virtual ~Application() = default;
 
 	Application(const Application&) = delete;
 	Application(Application&&) = delete;
