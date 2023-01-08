@@ -21,6 +21,7 @@ public:
     Vec2 operator-(const Vec2& rhs) const;
     Vec2 operator*(const float rhs) const;
     Vec2 operator/(const float rhs) const;
+    Vec2 operator-() const;
 
     const Vec2& operator+=(const Vec2& rhs);
     const Vec2& operator-=(const Vec2& rhs);
@@ -34,7 +35,8 @@ public:
     float getMagnitude() const;
     float dot(const Vec2& rhs) const;
 
-    const float* toPtr() const;
+	const float* toPtr() const;
+	float* toPtr();
 
 public:
     float x;

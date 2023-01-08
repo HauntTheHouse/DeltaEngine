@@ -59,6 +59,11 @@ inline Vec4 Vec4::operator/(const float rhs) const
     return Vec4(x / rhs, y / rhs, z / rhs, w / rhs);
 }
 
+inline Vec4 Vec4::operator-() const
+{
+    return Vec4(-x, -y, -z, -w);
+}
+
 inline const Vec4& Vec4::operator+=(const Vec4& rhs)
 {
     x += rhs.x;
@@ -131,6 +136,11 @@ inline float Vec4::dot(const Vec4& rhs) const
 inline const float* Vec4::toPtr() const
 {
     return &x;
+}
+
+inline float* Vec4::toPtr()
+{
+	return &x;
 }
 
 } // namespace Delta

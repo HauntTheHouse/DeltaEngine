@@ -53,4 +53,9 @@ inline const float* Mat2::toPtr() const
     return rows[0].toPtr();
 }
 
+inline float* Mat2::toPtr()
+{
+	return rows[0].toPtr();
+}
+
 } // namespace Delta

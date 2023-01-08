@@ -58,6 +58,11 @@ inline Vec3 Vec3::operator/(const float rhs) const
     return Vec3(x / rhs, y / rhs, z / rhs);
 }
 
+inline Vec3 Vec3::operator-() const
+{
+    return Vec3(-x, -y, -z);
+}
+
 inline const Vec3& Vec3::operator+=(const Vec3& rhs)
 {
     x += rhs.x;
@@ -153,6 +158,11 @@ inline Vec3 Vec3::cross(const Vec3& rhs) const
 }
 
 inline const float* Vec3::toPtr() const
+{
+    return &x;
+}
+
+inline float* Vec3::toPtr()
 {
     return &x;
 }

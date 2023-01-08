@@ -21,6 +21,7 @@ public:
     float determinant() const;
 
     const float* toPtr() const;
+    float* toPtr();
 
 public:
     Vec2 rows[2];

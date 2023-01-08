@@ -21,6 +21,7 @@ public:
     Vec3 operator-(const Vec3& rhs) const;
     Vec3 operator*(const float rhs) const;
     Vec3 operator/(const float rhs) const;
+    Vec3 operator-() const;
 
     const Vec3& operator+=(const Vec3& rhs);
     const Vec3& operator-=(const Vec3& rhs);
@@ -39,6 +40,7 @@ public:
     Vec3 cross(const Vec3& rhs) const;
 
     const float* toPtr() const;
+    float* toPtr();
 
 public:
     float x;

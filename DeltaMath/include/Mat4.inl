@@ -87,10 +87,10 @@ inline Mat4 Mat4::operator+(const Mat4& rhs) const
 
 inline void Mat4::identity()
 {
-    rows[0] = Vec3(1, 0, 0, 0);
-    rows[1] = Vec3(0, 1, 0, 0);
-    rows[2] = Vec3(0, 0, 1, 0);
-    rows[3] = Vec3(0, 0, 0, 1);
+    rows[0] = Vec4(1, 0, 0, 0);
+    rows[1] = Vec4(0, 1, 0, 0);
+    rows[2] = Vec4(0, 0, 1, 0);
+    rows[3] = Vec4(0, 0, 0, 1);
 }
 
 inline float Mat4::trace() const
@@ -169,7 +169,7 @@ inline Mat3 Mat4::minor(const size_t i, const size_t j) const
 
 inline float Mat4::cofactor(const size_t i, const size_t j) const
 {
-    const Mat2 minor = Mat4::minor(i, j);
+    const Mat3 minor = Mat4::minor(i, j);
     float sign = (i + j) % 2 == 0 ? 1.0f : -1.0f;
 
     return sign * minor.determinant();
@@ -186,7 +186,7 @@ inline void Mat4::orient(const Vec3& pos, const Vec3& forward, const Vec3& up)
     rows[0] = Vec4(forward.x, left.x, up.x, pos.x);
     rows[1] = Vec4(forward.y, left.y, up.y, pos.y);
     rows[2] = Vec4(forward.z, left.z, up.z, pos.z);
-    rows[3] = Vec4(0,         0,      0,    1);
+    rows[3] = Vec4(0.0f,      0.0f,   0.0f, 1.0f);
 }
 
 inline void Mat4::lookAt(const Vec3& pos, const Vec3& lookAt, const Vec3& up)
@@ -207,7 +207,7 @@ inline void Mat4::lookAt(const Vec3& pos, const Vec3& lookAt, const Vec3& up)
     rows[0] = Vec4(right.x,   right.y,   right.z,   -pos.dot(right));
     rows[1] = Vec4(up.x,      up.y,      up.z,      -pos.dot(up));
     rows[2] = Vec4(forward.x, forward.y, forward.z, -pos.dot(forward));
-    rows[3] = Vec4(0,         0,         0,          1);
+    rows[3] = Vec4(0.0f,      0.0f,      0.0f,       1.0f);
 }
 
 inline void Mat4::orthoOpenGL(float xmin, float xmax, float ymin, float ymax, float znear, float zfar)
@@ -220,10 +220,10 @@ inline void Mat4::orthoOpenGL(float xmin, float xmax, float ymin, float ymax, fl
     const float ty = -(ymax + ymin)  / height;
     const float tz = -(zfar + znear) / depth;
 
-    rows[0] = Vec4(2.0f/width, 0,            0,          tx);
-    rows[1] = Vec4(0,          2.0f/height,  0,          ty);
-    rows[2] = Vec4(0,          0,           -2.0f/depth, tz);
-    rows[3] = Vec4(0,          0,            0,          1);
+    rows[0] = Vec4(2.0f/width, 0.0f,         0.0f,       0.0f);
+    rows[1] = Vec4(0.0f,       2.0f/height,  0.0f,       0.0f);
+    rows[2] = Vec4(0.0f,       0.0f,        -2.0f/depth, 0.0f);
+    rows[3] = Vec4(tx,         ty,           tz,         1.0f);
 }
 
 inline void Mat4::orthoVulkan(float xmin, float xmax, float ymin, float ymax, float znear, float zfar)
@@ -236,10 +236,10 @@ inline void Mat4::orthoVulkan(float xmin, float xmax, float ymin, float ymax, fl
     // Clip space remains [-1, 1] for x and y
     // Check section 23 of the specification
     Mat4 matVulkan;
-    matVulkan.rows[0] = Vec4(1,  0, 0,    0);
-    matVulkan.rows[0] = Vec4(0, -1, 0,    0);
-    matVulkan.rows[0] = Vec4(0,  0, 0.5f, 0.0f);
-    matVulkan.rows[0] = Vec4(0,  0, 0,    1);
+    matVulkan.rows[0] = Vec4(1.0f,  0.0f, 0.0f, 0.0f);
+    matVulkan.rows[1] = Vec4(0.0f, -1.0f, 0.0f, 0.0f);
+    matVulkan.rows[2] = Vec4(0.0f,  0.0f, 0.5f, 0.0f);
+    matVulkan.rows[3] = Vec4(0.0f,  0.0f, 0.0f, 1.0f);
 
     Mat4 matOpengl;
     matOpengl.orthoOpenGL(xmin, xmax, ymin, ymax, znear, zfar);
@@ -253,10 +253,10 @@ inline void Mat4::perspectiveOpenGL(float fovy, float aspect, float near, float 
     const float xScale = f;
     const float yScale = f / aspect;
 
-    rows[0] = Vec4(xScale, 0,      0,                     0);
-    rows[1] = Vec4(0,      yScale, 0,                     0);
-    rows[2] = Vec4(0,      0,      (far+near)/(near-far), (2.0f*far*near)-(near-far));
-    rows[3] = Vec4(0,      0,     -1,                     0);
+    rows[0] = Vec4(xScale, 0.0f,    0.0f,                       0.0f);
+    rows[1] = Vec4(0.0f,   yScale,  0.0f,                       0.0f);
+    rows[2] = Vec4(0.0f,   0.0f,    (far+near)/(near-far),     -1.0f);
+    rows[3] = Vec4(0.0f,   0.0f,    (2.0f*far*near)/(near-far), 0.0f);
 }
 
 inline void Mat4::perspectiveVulkan(float fovy, float aspect, float near, float far)
@@ -269,17 +269,68 @@ inline void Mat4::perspectiveVulkan(float fovy, float aspect, float near, float 
     // Clip space remains [-1, 1] for x and y
     // Check section 23 of the specification
     Mat4 matVulkan;
-    matVulkan.rows[0] = Vec4(1,  0,  0,    0);
-    matVulkan.rows[0] = Vec4(0, -1,  0,    0);
-    matVulkan.rows[0] = Vec4(0,  0,  0.5f, 0.0f);
-    matVulkan.rows[0] = Vec4(0,  0,  0,    1);
+    matVulkan.rows[0] = Vec4(1.0f,  0.0f,  0.0f, 0.0f);
+    matVulkan.rows[1] = Vec4(0.0f, -1.0f,  0.0f, 0.0f);
+    matVulkan.rows[2] = Vec4(0.0f,  0.0f,  0.5f, 0.0f);
+    matVulkan.rows[3] = Vec4(0.0f,  0.0f,  0.0f, 1.0f);
 
     Mat4 matOpengl;
     matOpengl.perspectiveOpenGL(fovy, aspect, near, far);
     *this = matVulkan * matOpengl;
 }
 
+inline void Mat4::transform(const Vec3& translate, const Vec3& rotate, const Vec3& scale)
+{
+    this->identity();
+    this->translate(translate);
+    this->rotate(rotate);
+    this->scale(scale);
+}
+
+inline void Mat4::translate(const Vec3& translate)
+{
+    *this = Mat4(Vec4(1.0f,        0.0f,        0.0f,        0.0f),
+                 Vec4(0.0f,        1.0f,        0.0f,        0.0f),
+                 Vec4(0.0f,        0.0f,        1.0f,        0.0f),
+                 Vec4(translate.x, translate.y, translate.z, 1.0f)) * *this;
+}
+
+inline void Mat4::rotate(const Vec3& angles)
+{
+    Vec3 radians = angles * (PI / 180.0);
+
+    Mat4 rotX(Vec4(1.0f,  0.0f,             0.0f,            0.0f),
+              Vec4(0.0f,  cosf(radians.x),  sinf(radians.x), 0.0f),
+              Vec4(0.0f, -sinf(radians.x),  cosf(radians.x), 0.0f),
+              Vec4(0.0f,  0.0f,             0.0f,            1.0f));
+
+    Mat4 rotY(Vec4( cosf(radians.y), 0.0f, -sinf(radians.y), 0.0f),
+              Vec4( 0.0f,            1.0f,  0.0f,            0.0f),
+              Vec4( sinf(radians.y), 0.0f,  cosf(radians.y), 0.0f),
+              Vec4( 0.0f,            0.0f,  0.0f,            1.0f));
+
+    Mat4 rotZ(Vec4( cosf(radians.z),  sinf(radians.z), 0.0f, 0.0f),
+              Vec4(-sinf(radians.z),  cosf(radians.z), 0.0f, 0.0f),
+              Vec4( 0.0f,             0.0f,            1.0f, 0.0f),
+              Vec4( 0.0f,             0.0f,            0.0f, 1.0f));
+
+    *this = rotX * rotY * rotZ * *this;
+}
+
+inline void Mat4::scale(const Vec3& scale)
+{
+    *this = Mat4(Vec4(scale.x, 0.0f, 0.0f, 0.0f),
+                 Vec4(0.0f, scale.y, 0.0f, 0.0f),
+                 Vec4(0.0f, 0.0f, scale.z, 0.0f),
+                 Vec4(0.0f, 0.0f, 0.0f,    1.0f)) * *this;
+}
+
 inline const float* Mat4::toPtr() const
+{
+    return rows[0].toPtr();
+}
+
+inline float* Mat4::toPtr()
 {
     return rows[0].toPtr();
 }

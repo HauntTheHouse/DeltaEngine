@@ -21,6 +21,7 @@ public:
     Vec4 operator-(const Vec4& rhs) const;
     Vec4 operator*(const float rhs) const;
     Vec4 operator/(const float rhs) const;
+    Vec4 operator-() const;
 
     const Vec4& operator+=(const Vec4& rhs);
     const Vec4& operator-=(const Vec4& rhs);
@@ -35,6 +36,7 @@ public:
     float dot(const Vec4& rhs) const;
 
     const float* toPtr() const;
+    float* toPtr();
 
 public:
     float x;

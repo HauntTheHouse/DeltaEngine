@@ -39,7 +39,13 @@ public:
     void perspectiveOpenGL(float fovy, float aspect, float near, float far);
     void perspectiveVulkan(float fovy, float aspect, float near, float far);
 
+    void transform(const Vec3& translate, const Vec3& rotate, const Vec3& scale = Vec3(1.0f));
+    void translate(const Vec3& translate);
+    void rotate(const Vec3& angles);
+    void scale(const Vec3& scale);
+
     const float* toPtr() const;
+    float* toPtr();
 
 public:
     Vec4 rows[4];
