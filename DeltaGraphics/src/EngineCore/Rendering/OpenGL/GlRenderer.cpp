@@ -1,14 +1,15 @@
-#include "EngineCore/Rendering/OpenGL/GlRenderer.hpp"
+#include "EngineCore/Rendering/OpenGL/Renderer.hpp"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <Vec4.hpp>
 
-#include "EngineCore/Rendering/OpenGL/GlVertexArray.hpp"
+#include "EngineCore/Rendering/OpenGL/VertexArray.hpp"
 
 namespace Delta
 {
 
-bool GlRenderer::init(GLFWwindow* aWindow)
+bool Renderer::init(GLFWwindow* aWindow)
 {
 	glfwMakeContextCurrent(aWindow);
 
@@ -26,7 +27,7 @@ bool GlRenderer::init(GLFWwindow* aWindow)
 	return true;
 }
 
-void GlRenderer::draw(const GlVertexArray& aVertexArray)
+void Renderer::draw(const VertexArray& aVertexArray)
 {
 	aVertexArray.bind();
 	aVertexArray.getIndicesCount() > 0
@@ -35,32 +36,32 @@ void GlRenderer::draw(const GlVertexArray& aVertexArray)
 	aVertexArray.unbind();
 }
 
-void GlRenderer::clearColor(const Vec4& aClearColor)
+void Renderer::clearColor(const Vec4& aClearColor)
 {
 	glClearColor(aClearColor.x, aClearColor.y, aClearColor.z, aClearColor.w);
 }
 
-void GlRenderer::clear()
+void Renderer::clear()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
 
-void GlRenderer::viewport(GLsizei aWidth, GLsizei aHeight, GLint aLeftOffset, GLint aBottomOffset)
+void Renderer::viewport(int aWidth, int aHeight, int aLeftOffset, int aBottomOffset)
 {
 	glViewport(aLeftOffset, aBottomOffset, aWidth, aHeight);
 }
 
-const char* GlRenderer::getVendorInfo()
+const char* Renderer::getVendorInfo()
 {
 	return reinterpret_cast<const char*>(glGetString(GL_VENDOR));
 }
 
-const char* GlRenderer::getRendererInfo()
+const char* Renderer::getRendererInfo()
 {
 	return reinterpret_cast<const char*>(glGetString(GL_RENDERER));
 }
 
-const char* GlRenderer::getVersionInfo()
+const char* Renderer::getVersionInfo()
 {
 	return reinterpret_cast<const char*>(glGetString(GL_VERSION));
 }

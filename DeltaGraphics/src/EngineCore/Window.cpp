@@ -6,7 +6,7 @@
 #include <backends/imgui_impl_opengl3.h>
 #include <backends/imgui_impl_glfw.h>
 
-#include "EngineCore/Rendering/OpenGL/GlRenderer.hpp"
+#include "EngineCore/Rendering/OpenGL/Renderer.hpp"
 
 namespace Delta
 {
@@ -24,7 +24,7 @@ std::vector<GLuint> indices = {
 	2, 1, 3
 };
 
-const GLchar* vertexShaderCode =
+const char* vertexShaderCode =
     R"(#version 330 core
        layout (location = 0) in vec3 vPosition;
        layout (location = 1) in vec3 vColor;
@@ -36,7 +36,7 @@ const GLchar* vertexShaderCode =
            gl_Position = uViewProject * uModel * vec4(vPosition, 1.0f);
        })";
 
-const GLchar* fragmentShaderCode =
+const char* fragmentShaderCode =
 	R"(#version 330 core
 	   in vec3 fColor;
 	   out vec4 FragColor;
@@ -81,7 +81,7 @@ int Window::init(unsigned int aWindowWidth, unsigned int aWindowHeight, const ch
 	}
 	LOG_INFO("GLFW window created succesfully");
 
-	if (!GlRenderer::init(mWindow))
+	if (!Renderer::init(mWindow))
 		return -3;
 
 	glfwSetWindowUserPointer(mWindow, &mData);
@@ -112,7 +112,7 @@ int Window::init(unsigned int aWindowWidth, unsigned int aWindowHeight, const ch
 
 	glfwSetFramebufferSizeCallback(mWindow, [](GLFWwindow* window, int width, int height)
 	{
-		GlRenderer::viewport(width, height);
+		Renderer::viewport(width, height);
 	});
 
 	IMGUI_CHECKVERSION();
@@ -124,7 +124,7 @@ int Window::init(unsigned int aWindowWidth, unsigned int aWindowHeight, const ch
 	if (mShaderProgram.init(vertexShaderCode, fragmentShaderCode) == false)
 		return -4;
 
-	GlBufferLayout layout({ GlShaderData::Type::FLOAT3, GlShaderData::Type::FLOAT3 });
+	BufferLayout layout({ ShaderData::Type::FLOAT3, ShaderData::Type::FLOAT3 });
 
 	mVBO.init(vertices, layout);
 	mEBO.init(indices);
@@ -158,8 +158,8 @@ void Window::shutdown()
 
 void Window::onUpdate()
 {
-	GlRenderer::clearColor(Vec4(mBackgroundColor.x, mBackgroundColor.y, mBackgroundColor.z, 1.0f));
-	GlRenderer::clear();
+	Renderer::clearColor(Vec4(mBackgroundColor.x, mBackgroundColor.y, mBackgroundColor.z, 1.0f));
+	Renderer::clear();
 
 	Mat4 transformMat;
 	transformMat.transform(translate, angles, scale);
@@ -172,7 +172,7 @@ void Window::onUpdate()
 	mShaderProgram.setMat4("uModel", transformMat);
 	mShaderProgram.setMat4("uViewProject", mCamera.getViewProjectionMatrix());
 
-	GlRenderer::draw(mVAO);
+	Renderer::draw(mVAO);
 
 	mShaderProgram.unbind();
 

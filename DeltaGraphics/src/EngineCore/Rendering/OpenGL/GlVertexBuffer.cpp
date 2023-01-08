@@ -1,44 +1,44 @@
-#include "EngineCore/Rendering/OpenGL/GlVertexBuffer.hpp"
+#include "EngineCore/Rendering/OpenGL/VertexBuffer.hpp"
 
 #include <glad/glad.h>
 
 namespace Delta
 {
 
-void GlVertexBuffer::initImpl(const void* aData, const size_t aSize, const GlBufferLayout& aLayout, const Usage aUsage)
+void VertexBuffer::initImpl(const void* aData, const size_t aSize, const BufferLayout& aLayout, const Usage aUsage)
 {
 	mLayout = aLayout;
 
-	glGenBuffers(1, &mId);
-	glBindBuffer(GL_ARRAY_BUFFER, mId);
-	glBufferData(GL_ARRAY_BUFFER, aSize, aData, castToGLenum(aUsage));
+	glGenBuffers(1, static_cast<GLuint*>(&mId));
+	glBindBuffer(GL_ARRAY_BUFFER, static_cast<GLuint>(mId));
+	glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(aSize), aData, static_cast<GLenum>(getRendererCode(aUsage)));
 }
 
-void GlVertexBuffer::clear()
+void VertexBuffer::clear()
 {
-	glDeleteBuffers(1, &mId);
+	glDeleteBuffers(1, static_cast<GLuint*>(&mId));
 	mId = 0;
 }
 
-void GlVertexBuffer::bind() const
+void VertexBuffer::bind() const
 {
 	assert(mId != 0);
-	glBindBuffer(GL_ARRAY_BUFFER, mId);
+	glBindBuffer(GL_ARRAY_BUFFER, static_cast<GLuint>(mId));
 }
 
-void GlVertexBuffer::unbind()
+void VertexBuffer::unbind()
 {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-constexpr GLenum GlVertexBuffer::castToGLenum(Usage aUsage)
+constexpr unsigned int VertexBuffer::getRendererCode(Usage aUsage)
 {
 	switch (aUsage)
 	{
-	case Usage::STATIC: return GL_STATIC_DRAW;
-	case Usage::DYNAMIC: return GL_DYNAMIC_DRAW;
-	case Usage::STREAM: return GL_STREAM_DRAW;
-	default: return GL_NONE;
+		case Usage::STATIC: return GL_STATIC_DRAW;
+		case Usage::DYNAMIC: return GL_DYNAMIC_DRAW;
+		case Usage::STREAM: return GL_STREAM_DRAW;
+		default: return GL_NONE;
 	}
 }
 

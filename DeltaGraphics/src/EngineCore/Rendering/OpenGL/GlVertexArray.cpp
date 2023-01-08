@@ -1,25 +1,25 @@
-#include "EngineCore/Rendering/OpenGL/GlVertexArray.hpp"
+#include "EngineCore/Rendering/OpenGL/VertexArray.hpp"
 
 #include <glad/glad.h>
 
 namespace Delta
 {
 
-bool GlVertexArray::init()
+bool VertexArray::init()
 {
-	if (mId != 0) return false;
+	if (static_cast<GLuint>(mId) != 0) return false;
 
-	glGenVertexArrays(1, &mId);
+	glGenVertexArrays(1, static_cast<GLuint*>(&mId));
 	return true;
 }
 
-void GlVertexArray::clear()
+void VertexArray::clear()
 {
-	glDeleteVertexArrays(1, &mId);
+	glDeleteVertexArrays(1, static_cast<GLuint*>(&mId));
 	mId = 0;
 }
 
-void GlVertexArray::addVertexBuffer(const GlVertexBuffer& aVertexBuffer)
+void VertexArray::addVertexBuffer(const VertexBuffer& aVertexBuffer)
 {
 	bind();
 	aVertexBuffer.bind();
@@ -29,12 +29,19 @@ void GlVertexArray::addVertexBuffer(const GlVertexBuffer& aVertexBuffer)
 	const auto& layout = aVertexBuffer.getLayout();
 	for (const auto& element : layout.getElements())
 	{
-		glEnableVertexAttribArray(mAttributesCount);
-		glVertexAttribPointer(mAttributesCount++, element.shaderData.getCount(), element.shaderData.getGlType(), GL_FALSE, layout.getStride(), (const void*)(element.offset));
+		glEnableVertexAttribArray(static_cast<GLuint>(mAttributesCount));
+		glVertexAttribPointer(
+			static_cast<GLuint>(mAttributesCount),
+			static_cast<GLint>(element.shaderData.getCount()),
+			static_cast<GLenum>(element.shaderData.getRendererCodeType()),
+			GL_FALSE,
+			static_cast<GLsizei>(layout.getStride()),
+			reinterpret_cast<const void*>(element.offset));
+		mAttributesCount++;
 	}
 }
 
-void GlVertexArray::setIndexBuffer(const GlIndexBuffer& aIndexBuffer)
+void VertexArray::setIndexBuffer(const IndexBuffer& aIndexBuffer)
 {
 	bind();
 	aIndexBuffer.bind();
@@ -42,13 +49,13 @@ void GlVertexArray::setIndexBuffer(const GlIndexBuffer& aIndexBuffer)
 	mIndicesCount = aIndexBuffer.getIndicesCount();
 }
 
-void GlVertexArray::bind() const
+void VertexArray::bind() const
 {
 	assert(mId != 0);
-	glBindVertexArray(mId);
+	glBindVertexArray(static_cast<GLuint>(mId));
 }
 
-void GlVertexArray::unbind()
+void VertexArray::unbind()
 {
 	glBindVertexArray(0);
 }

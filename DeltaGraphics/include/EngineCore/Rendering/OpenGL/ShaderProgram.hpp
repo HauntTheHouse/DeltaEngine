@@ -1,12 +1,11 @@
 #pragma once
 
-#include "GlTypes.hpp"
-#include "Mat4.hpp"
-
 namespace Delta
 {
 
-class GlShaderProgram
+class Mat4;
+
+class ShaderProgram
 {
 public:
 	enum class ShaderType
@@ -15,10 +14,10 @@ public:
 		FRAGMENT,
 	};
 
-	GlShaderProgram() = default;
-	~GlShaderProgram() = default;
-	GlShaderProgram(GlShaderProgram&) = delete;
-	GlShaderProgram& operator=(GlShaderProgram&) = delete;
+	ShaderProgram() = default;
+	~ShaderProgram() = default;
+	ShaderProgram(ShaderProgram&) = delete;
+	ShaderProgram& operator=(ShaderProgram&) = delete;
 
 	bool init(const char* aVertexShaderSrc, const char* aFragmentShaderSrc);
 	void clear();
@@ -29,11 +28,11 @@ public:
 	void setMat4(const char* aUniformName, const Mat4& aMat4);
 
 private:
-	static GLuint compileShader(const char* aSourceCode, ShaderType aShaderType);
+	static unsigned int compileShader(const char* aSourceCode, ShaderType aShaderType);
 	static const char* getShaderTypeStr(ShaderType aShaderType);
-	constexpr static GLenum castToGLenum(ShaderType aShaderType);
+	constexpr static unsigned int getRendererCode(ShaderType aShaderType);
 
-	GLuint mId{ 0 };
+	unsigned int mId{ 0 };
 
 };
 

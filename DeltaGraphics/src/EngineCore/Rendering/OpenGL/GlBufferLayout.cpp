@@ -1,11 +1,11 @@
-#include "EngineCore/Rendering/OpenGL/GlBufferLayout.hpp"
+#include "EngineCore/Rendering/OpenGL/BufferLayout.hpp"
 
 #include <glad/glad.h>
 
 namespace Delta
 {
 
-void GlShaderData::construct(Type aShaderDataType)
+void ShaderData::construct(Type aShaderDataType)
 {
 	switch (aShaderDataType)
 	{
@@ -36,12 +36,12 @@ void GlShaderData::construct(Type aShaderDataType)
 	}
 }
 
-GlBufferLayout::GlBufferLayout(const std::vector<GlShaderData::Type>& aShaderDataTypes)
+BufferLayout::BufferLayout(const std::vector<ShaderData::Type>& aShaderDataTypes)
 {
 	init(aShaderDataTypes);
 }
 
-void GlBufferLayout::init(const std::vector<GlShaderData::Type>& aShaderDataTypes)
+void BufferLayout::init(const std::vector<ShaderData::Type>& aShaderDataTypes)
 {
 	mElements.reserve(aShaderDataTypes.size());
 

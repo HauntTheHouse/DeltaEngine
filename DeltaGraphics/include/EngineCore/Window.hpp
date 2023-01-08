@@ -2,10 +2,10 @@
 
 #include "Event.hpp"
 #include "Camera.hpp"
-#include "Rendering/OpenGL/GlShaderProgram.hpp"
-#include "Rendering/OpenGL/GlVertexBuffer.hpp"
-#include "Rendering/OpenGL/GlIndexBuffer.hpp"
-#include "Rendering/OpenGL/GlVertexArray.hpp"
+#include "Rendering/OpenGL/ShaderProgram.hpp"
+#include "Rendering/OpenGL/VertexBuffer.hpp"
+#include "Rendering/OpenGL/IndexBuffer.hpp"
+#include "Rendering/OpenGL/VertexArray.hpp"
 
 struct GLFWwindow;
 
@@ -48,10 +48,10 @@ private:
 
 	Camera mCamera;
 
-	GlShaderProgram mShaderProgram;
-	GlVertexBuffer mVBO;
-	GlIndexBuffer mEBO;
-	GlVertexArray mVAO;
+	ShaderProgram mShaderProgram;
+	VertexBuffer mVBO;
+	IndexBuffer mEBO;
+	VertexArray mVAO;
 
 	Vec3 mBackgroundColor{ 0.2f, 0.2f, 0.2f };
 };

@@ -1,24 +1,22 @@
 #pragma once
 
-#include <Vec4.hpp>
-#include "GlTypes.hpp"
-
 struct GLFWwindow;
 
 namespace Delta
 {
 
-class GlVertexArray;
+class VertexArray;
+class Vec4;
 
-class GlRenderer
+class Renderer
 {
 public:
 	static bool init(GLFWwindow* aWindow);
 
-	static void draw(const GlVertexArray& aVertexArray);
+	static void draw(const VertexArray& aVertexArray);
 	static void clearColor(const Vec4& aClearColor);
 	static void clear();
-	static void viewport(GLsizei aWidth, GLsizei aHeight, GLint aLeftOffset = 0, GLint aBottomOffset = 0);
+	static void viewport(int aWidth, int aHeight, int aLeftOffset = 0, int aBottomOffset = 0);
 
 	static const char* getVendorInfo();
 	static const char* getRendererInfo();
