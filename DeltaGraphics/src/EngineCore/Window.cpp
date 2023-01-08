@@ -1,11 +1,12 @@
 #include "EngineCore/Window.hpp"
 
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 #include <imgui.h>
 #include <backends/imgui_impl_opengl3.h>
 #include <backends/imgui_impl_glfw.h>
+
+#include "EngineCore/Rendering/OpenGL/GlRenderer.hpp"
 
 namespace Delta
 {
@@ -58,9 +59,15 @@ int Window::init(unsigned int aWindowWidth, unsigned int aWindowHeight, const ch
 	mData.title = std::string(aTitle);
 
 	LOG_INFO("Creating window {0} ({1}, {2})", mData.title, mData.width, mData.height);
+
+	glfwSetErrorCallback([](int errorCode, const char* description)
+	{
+		LOG_ERROR("GLFW error {0}: {1}", errorCode, description);
+	});
+
 	if (!glfwInit())
 	{
-		LOG_ERROR("Can't initialize GLFW!");
+		LOG_ERROR("GLFW initialization failed");
 		return -1;
 	}
 	LOG_INFO("GLFW initialized succesfully");
@@ -68,20 +75,14 @@ int Window::init(unsigned int aWindowWidth, unsigned int aWindowHeight, const ch
 	mWindow = glfwCreateWindow(aWindowWidth, aWindowHeight, aTitle, nullptr, nullptr);
 	if (!mWindow)
 	{
-		LOG_ERROR("Can't create GLFW window");
+		LOG_ERROR("GLFW window creation failed");
 		glfwTerminate();
 		return -2;
 	}
 	LOG_INFO("GLFW window created succesfully");
 
-	glfwMakeContextCurrent(mWindow);
-
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-	{
-		LOG_ERROR("Can't initialize OpenGL");
+	if (!GlRenderer::init(mWindow))
 		return -3;
-	}
-	LOG_INFO("OpenGL initialized succesfully");
 
 	glfwSetWindowUserPointer(mWindow, &mData);
 
@@ -111,7 +112,7 @@ int Window::init(unsigned int aWindowWidth, unsigned int aWindowHeight, const ch
 
 	glfwSetFramebufferSizeCallback(mWindow, [](GLFWwindow* window, int width, int height)
 	{
-		glViewport(0, 0, width, height);
+		GlRenderer::viewport(width, height);
 	});
 
 	IMGUI_CHECKVERSION();
@@ -157,10 +158,8 @@ void Window::shutdown()
 
 void Window::onUpdate()
 {
-	glClearColor(mBackgroundColor[0], mBackgroundColor[1], mBackgroundColor[2], 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
-
-	mShaderProgram.bind();
+	GlRenderer::clearColor(Vec4(mBackgroundColor.x, mBackgroundColor.y, mBackgroundColor.z, 1.0f));
+	GlRenderer::clear();
 
 	Mat4 transformMat;
 	transformMat.transform(translate, angles, scale);
@@ -168,13 +167,13 @@ void Window::onUpdate()
 	mCamera.setTransform(cameraPosition, cameraRotation);
 	mCamera.setProjectionMode(isPerspectiveCamera ? Camera::ProjectionMode::PERSPECTIVE : Camera::ProjectionMode::ORTHO);
 
+	mShaderProgram.bind();
+
 	mShaderProgram.setMat4("uModel", transformMat);
 	mShaderProgram.setMat4("uViewProject", mCamera.getViewProjectionMatrix());
 
-	mVAO.bind();
-	//glDrawArrays(GL_TRIANGLES, 0, 6);
-	glDrawElements(GL_TRIANGLES, mVAO.getIndicesCount(), GL_UNSIGNED_INT, nullptr);
-	mVAO.unbind();
+	GlRenderer::draw(mVAO);
+
 	mShaderProgram.unbind();
 
 	ImGui_ImplOpenGL3_NewFrame();
