@@ -19,7 +19,7 @@ int Application::start(unsigned int aWindowWidth, unsigned int aWindowHeight, co
 	mEventDispatcher.addEventListener<WindowCloseEvent>([this](WindowCloseEvent& event)
 	{
 		LOG_INFO("MouseCloseEvent");
-	mIsShouldClose = true;
+		mIsShouldClose = true;
 	});
 
 	mWindow.setEventCallback([this](EventBase& event)

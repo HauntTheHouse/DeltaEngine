@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GlTypes.hpp"
+#include "Mat4.hpp"
 
 namespace Delta
 {
@@ -24,6 +25,8 @@ public:
 
 	void bind() const;
 	static void unbind();
+
+	void setMat4(const char* aUniformName, const Mat4& aMat4);
 
 private:
 	static GLuint compileShader(const char* aSourceCode, ShaderType aShaderType);

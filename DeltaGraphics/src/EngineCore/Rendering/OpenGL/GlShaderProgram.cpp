@@ -53,7 +53,11 @@ void GlShaderProgram::bind() const
 void GlShaderProgram::unbind()
 {
 	glUseProgram(0);
+}
 
+void GlShaderProgram::setMat4(const char* aUniformName, const Mat4& aMat4)
+{
+	glUniformMatrix4fv(glGetUniformLocation(mId, aUniformName), 1, GL_FALSE, aMat4.toPtr());
 }
 
 GLuint GlShaderProgram::compileShader(const char* aSourceCode, ShaderType aShaderType)

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Event.hpp"
+#include "Camera.hpp"
 #include "Rendering/OpenGL/GlShaderProgram.hpp"
 #include "Rendering/OpenGL/GlVertexBuffer.hpp"
 #include "Rendering/OpenGL/GlIndexBuffer.hpp"
@@ -45,14 +46,14 @@ private:
 	GLFWwindow* mWindow{ nullptr };
 	WindowParameters mData;
 
+	Camera mCamera;
+
 	GlShaderProgram mShaderProgram;
 	GlVertexBuffer mVBO;
 	GlIndexBuffer mEBO;
 	GlVertexArray mVAO;
 
-	float mBackgroundColor[3] = { 0.2f, 0.2f, 0.2f };
-
-	static bool sIsGLFWInitialized;
+	Vec3 mBackgroundColor{ 0.2f, 0.2f, 0.2f };
 };
 
 } // namespace Delta
