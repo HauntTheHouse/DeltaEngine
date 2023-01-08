@@ -7,6 +7,7 @@
 #include <backends/imgui_impl_glfw.h>
 
 #include "EngineCore/Rendering/OpenGL/Renderer.hpp"
+#include "EngineCore/Modules/GUIModule.hpp"
 
 namespace Delta
 {
@@ -115,11 +116,7 @@ int Window::init(unsigned int aWindowWidth, unsigned int aWindowHeight, const ch
 		Renderer::viewport(width, height);
 	});
 
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGui_ImplOpenGL3_Init("#version 330 core");
-	ImGui_ImplGlfw_InitForOpenGL(mWindow, true);
-	LOG_INFO("ImGui initialized succesfully");
+	GUIModule::onWindowCreate(mWindow);
 
 	if (mShaderProgram.init(vertexShaderCode, fragmentShaderCode) == false)
 		return -4;
@@ -146,9 +143,7 @@ void Window::shutdown()
 
 	mShaderProgram.clear();
 
-	ImGui_ImplOpenGL3_Shutdown();
-	ImGui_ImplGlfw_Shutdown();
-	ImGui::DestroyContext();
+	GUIModule::onWindowClose();
 
 	glfwDestroyWindow(mWindow);
 	glfwTerminate();
@@ -169,16 +164,16 @@ void Window::onUpdate()
 
 	mShaderProgram.bind();
 
-	mShaderProgram.setMat4("uModel", transformMat);
-	mShaderProgram.setMat4("uViewProject", mCamera.getViewProjectionMatrix());
+		mShaderProgram.setMat4("uModel", transformMat);
+		mShaderProgram.setMat4("uViewProject", mCamera.getViewProjectionMatrix());
 
-	Renderer::draw(mVAO);
+		Renderer::draw(mVAO);
 
 	mShaderProgram.unbind();
 
-	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplGlfw_NewFrame();
-	ImGui::NewFrame();
+	GUIModule::onDrawBegin();
+
+	GUIModule::ShowExampleAppDockSpace();
 
 	//ImGui::ShowDemoWindow();
 	ImGui::Begin("Editor Window");
@@ -191,8 +186,7 @@ void Window::onUpdate()
 	ImGui::Checkbox("Perspective camera", &isPerspectiveCamera);
 	ImGui::End();
 
-	ImGui::Render();
-	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	GUIModule::onDrawEnd();
 
 	glfwSwapBuffers(mWindow);
 	glfwPollEvents();

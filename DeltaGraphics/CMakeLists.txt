@@ -7,6 +7,7 @@ file(GLOB_RECURSE INCLUDE_LIST CONFIGURE_DEPENDS
 
 file(GLOB SRC_LIST CONFIGURE_DEPENDS
     "src/EngineCore/*.cpp"
+    "src/EngineCore/Modules/*.cpp"
 )
 
 option(USE_OPENGL "Using OpenGL as rendering system" ON)
