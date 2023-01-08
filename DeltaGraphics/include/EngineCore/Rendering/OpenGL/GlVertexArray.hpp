@@ -24,8 +24,8 @@ public:
 	void bind() const;
 	static void unbind();
 
-	GLuint getVerticesCount() { return mVerticesCount; }
-	GLsizei getIndicesCount() { return mIndicesCount; }
+	GLuint getVerticesCount() const { return mVerticesCount; }
+	GLsizei getIndicesCount() const { return mIndicesCount; }
 
 private:
 	GLuint mId{ 0 };
