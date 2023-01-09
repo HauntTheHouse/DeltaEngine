@@ -60,6 +60,35 @@ int Window::init(unsigned int aWindowWidth, unsigned int aWindowHeight, const ch
 		params->eventCallback(event);
 	});
 
+	glfwSetKeyCallback(mWindow, [](GLFWwindow* window, int key, int scancode, int action, int mods)
+	{
+		const auto params = static_cast<WindowParameters*>(glfwGetWindowUserPointer(window));
+
+		switch (action)
+		{
+			case GLFW_PRESS:
+			{
+				KeyPressedEvent event(static_cast<KeyCode>(key), false);
+				params->eventCallback(event);
+				break;
+			}
+			case GLFW_REPEAT:
+			{
+				KeyPressedEvent event(static_cast<KeyCode>(key), true);
+				params->eventCallback(event);
+				break;
+			}
+			case GLFW_RELEASE:
+			{
+				KeyReleasedEvent event(static_cast<KeyCode>(key));
+				params->eventCallback(event);
+				break;
+			}
+			default:
+				break;
+			}
+	});
+
 	glfwSetWindowCloseCallback(mWindow, [](GLFWwindow* window)
 	{
 		const auto params = static_cast<WindowParameters*>(glfwGetWindowUserPointer(window));

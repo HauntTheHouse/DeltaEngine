@@ -2,6 +2,7 @@
 #include "EngineCore/Application.hpp"
 
 #include "EngineCore/Camera.hpp"
+#include "EngineCore/Input.hpp"
 #include "EngineCore/Rendering/OpenGL/ShaderProgram.hpp"
 #include "EngineCore/Rendering/OpenGL/VertexBuffer.hpp"
 #include "EngineCore/Rendering/OpenGL/IndexBuffer.hpp"
@@ -72,6 +73,14 @@ int Application::start(unsigned int aWindowWidth, unsigned int aWindowHeight, co
 	{
 		//LOG_INFO("MouseMovedEvent: x = {0}, y = {1}", event.x, event.y);
 	});
+	mEventDispatcher.addEventListener<KeyPressedEvent>([](KeyPressedEvent& event)
+	{
+		Input::pressKey(event.mKeyCode);
+	});
+	mEventDispatcher.addEventListener<KeyReleasedEvent>([](KeyReleasedEvent& event)
+	{
+		Input::releaseKey(event.mKeyCode);
+	});
 	mEventDispatcher.addEventListener<WindowCloseEvent>([this](WindowCloseEvent& event)
 	{
 		LOG_INFO("MouseCloseEvent");
@@ -119,13 +128,15 @@ int Application::start(unsigned int aWindowWidth, unsigned int aWindowHeight, co
 
 		GUIModule::onDrawBegin();
 		{
-			//GUIModule::ShowExampleAppDockSpace();
+			GUIModule::ShowExampleAppDockSpace();
 			//ImGui::ShowDemoWindow();
-			ImGui::Begin("Editor Window");
+			ImGui::Begin("General properties");
 			ImGui::ColorEdit3("Background color", mBackgroundColor.toPtr());
-			ImGui::SliderFloat3("Translate", translate.toPtr(), -5.0f, 5.0f);
-			ImGui::SliderFloat3("Rotate", angles.toPtr(), -180.0f, 180.0f);
-			ImGui::SliderFloat3("Scale", scale.toPtr(), 0.0f, 2.0f);
+			ImGui::Separator();
+			ImGui::SliderFloat3("Translate object", translate.toPtr(), -5.0f, 5.0f);
+			ImGui::SliderFloat3("Rotate object", angles.toPtr(), -180.0f, 180.0f);
+			ImGui::SliderFloat3("Scale object", scale.toPtr(), 0.0f, 2.0f);
+			ImGui::Separator();
 			ImGui::End();
 			onGuiDraw();
 		}

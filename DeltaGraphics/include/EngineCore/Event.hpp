@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Keys.hpp"
+
 namespace Delta
 {
 
@@ -56,6 +58,29 @@ public:
 	EventType getType() const override { return type; }
 
 	static const EventType type{ EventType::WINDOW_CLOSED };
+};
+
+class KeyPressedEvent : public EventBase
+{
+public:
+	KeyPressedEvent(KeyCode aKeyCode, bool aRepeated) : mKeyCode(aKeyCode), mRepeated(aRepeated) {}
+	EventType getType() const override { return type; }
+
+	KeyCode mKeyCode;
+	bool mRepeated;
+
+	static const EventType type{ EventType::KEY_PRESSED };
+};
+
+class KeyReleasedEvent : public EventBase
+{
+public:
+	KeyReleasedEvent(KeyCode aKeyCode) : mKeyCode(aKeyCode) {}
+	EventType getType() const override { return type; }
+
+	KeyCode mKeyCode;
+
+	static const EventType type{ EventType::KEY_RESEASED };
 };
 
 class EventDispatcher
