@@ -3,8 +3,8 @@ project(DeltaEngine)
 
 set(CMAKE_CXX_STANDARD 17)
 
+add_subdirectory(vendor)
 add_subdirectory(DeltaGraphics)
 add_subdirectory(DeltaPhysics)
 add_subdirectory(DeltaMath)
-add_subdirectory(vendor)
 add_subdirectory(Editor)

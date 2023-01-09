@@ -26,3 +26,5 @@ add_library(imgui STATIC
 )
 target_link_libraries(imgui glfw)
 target_include_directories(imgui PUBLIC "imgui")
+
+include(cmrc/CMakeRC.cmake)

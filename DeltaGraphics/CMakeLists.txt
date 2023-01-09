@@ -35,13 +35,20 @@ if(USE_OPENGL)
     message("Using OpenGL as rendering system")
     file(GLOB OPENGL_LIST CONFIGURE_DEPENDS
         "src/EngineCore/Rendering/OpenGL/*.cpp"
+        "shaders/*.vert"
+        "shaders/*.frag"
     )
     list(APPEND SRC_LIST ${OPENGL_LIST})
 endif()
 
 add_library(${PROJECT_NAME} STATIC ${INCLUDE_LIST} ${SRC_LIST})
 
-target_link_libraries(${PROJECT_NAME} glfw glad spdlog imgui DeltaMath)
+cmrc_add_resource_library(ShaderResources
+        NAMESPACE shaders
+        shaders/object.vert
+        shaders/object.frag)
+
+target_link_libraries(${PROJECT_NAME} glfw glad spdlog imgui DeltaMath ShaderResources)
 target_include_directories(${PROJECT_NAME} PUBLIC "include")
 
 target_precompile_headers(${PROJECT_NAME} PUBLIC "include/EngineCore/PCH.hpp")

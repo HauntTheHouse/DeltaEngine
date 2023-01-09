@@ -1,6 +1,9 @@
 #include "EngineCore/PCH.hpp"
 #include "EngineCore/Application.hpp"
 
+#include <imgui.h>
+#include <cmrc/cmrc.hpp>
+
 #include "EngineCore/Camera.hpp"
 #include "EngineCore/Input.hpp"
 #include "EngineCore/Rendering/OpenGL/ShaderProgram.hpp"
@@ -8,10 +11,10 @@
 #include "EngineCore/Rendering/OpenGL/IndexBuffer.hpp"
 #include "EngineCore/Rendering/OpenGL/VertexArray.hpp"
 
-#include <imgui.h>
-
 #include "EngineCore/Rendering/OpenGL/Renderer.hpp"
 #include "EngineCore/Modules/GUIModule.hpp"
+
+CMRC_DECLARE(shaders);
 
 namespace Delta
 {
@@ -28,27 +31,6 @@ std::vector<unsigned int> indices = {
     0, 1, 2,
     2, 1, 3
 };
-
-const char* vertexShaderCode =
-    R"(#version 330 core
-    layout (location = 0) in vec3 vPosition;
-    layout (location = 1) in vec3 vColor;
-    uniform mat4 uModel;
-    uniform mat4 uViewProject;
-    out vec3 fColor;
-    void main() {
-        fColor = vColor;
-        gl_Position = uViewProject * uModel * vec4(vPosition, 1.0f);
-    })";
-
-const char* fragmentShaderCode =
-    R"(#version 330 core
-    in vec3 fColor;
-    out vec4 FragColor;
-    void main() {
-        FragColor = vec4(fColor, 1.0f);
-    })";
-
 
 ShaderProgram mShaderProgram;
 VertexBuffer mVBO;
@@ -92,9 +74,11 @@ int Application::start(unsigned int aWindowWidth, unsigned int aWindowHeight, co
         mEventDispatcher.dispatch(event);
     });
 
+    const auto fs = cmrc::shaders::get_filesystem();
+    const auto vertShader = fs.open("shaders/object.vert");
+    const auto fragShader = fs.open("shaders/object.frag");
 
-
-    if (mShaderProgram.init(vertexShaderCode, fragmentShaderCode) == false)
+    if (mShaderProgram.init(vertShader.begin(), fragShader.begin()) == false)
         return -4;
 
     BufferLayout layout({ ShaderData::Type::FLOAT3, ShaderData::Type::FLOAT3 });
