@@ -8,6 +8,4 @@ file(GLOB_RECURSE SRC_LIST CONFIGURE_DEPENDS
 
 add_library(${PROJECT_NAME} STATIC ${SRC_LIST})
 
-set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
-
-include_directories(${PROJECT_NAME} PRIVATE "include")
+target_include_directories(${PROJECT_NAME} PUBLIC "include")

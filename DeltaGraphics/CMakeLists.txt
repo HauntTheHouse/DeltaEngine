@@ -41,16 +41,8 @@ endif()
 
 add_library(${PROJECT_NAME} STATIC ${INCLUDE_LIST} ${SRC_LIST})
 
-target_include_directories(${PROJECT_NAME} PRIVATE
-	"include"
-	"${CMAKE_SOURCE_DIR}/vendor/glfw/include"
-	"${CMAKE_SOURCE_DIR}/vendor/glad/include"
-	"${CMAKE_SOURCE_DIR}/vendor/spdlog/include"
-	"${CMAKE_SOURCE_DIR}/vendor/imgui"
-	"${CMAKE_SOURCE_DIR}/DeltaMath/include"
-)
-
 target_link_libraries(${PROJECT_NAME} glfw glad spdlog imgui DeltaMath)
+target_include_directories(${PROJECT_NAME} PUBLIC "include")
 
 target_precompile_headers(${PROJECT_NAME} PUBLIC "include/EngineCore/PCH.hpp")
 

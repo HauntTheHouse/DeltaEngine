@@ -8,4 +8,4 @@ file(GLOB_RECURSE SRC_LIST CONFIGURE_DEPENDS
 
 add_library(${PROJECT_NAME} STATIC ${SRC_LIST})
 
-include_directories(${PROJECT_NAME} PRIVATE "include")
+target_include_directories(${PROJECT_NAME} PUBLIC "include")

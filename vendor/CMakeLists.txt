@@ -8,7 +8,7 @@ add_library(glad STATIC
 	glad/include/KHR/khrplatform.h
 	glad/src/glad.c
 )
-target_include_directories(glad PRIVATE glad/include)
+target_include_directories(glad PUBLIC "glad/include")
 
 add_subdirectory(spdlog)
 
@@ -24,4 +24,5 @@ add_library(imgui STATIC
 	imgui/backends/imgui_impl_glfw.cpp
 	imgui/backends/imgui_impl_opengl3.cpp
 )
-target_include_directories(imgui PRIVATE imgui glfw/include)
+target_link_libraries(imgui glfw)
+target_include_directories(imgui PUBLIC "imgui")

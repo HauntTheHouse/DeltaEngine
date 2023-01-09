@@ -8,11 +8,5 @@ file(GLOB_RECURSE SRC_LIST CONFIGURE_DEPENDS
 
 add_executable(${PROJECT_NAME} src/main.cpp)
 
-target_include_directories(${PROJECT_NAME} PRIVATE
-	"include"
-	"${CMAKE_SOURCE_DIR}/DeltaGraphics/include"
-	"${CMAKE_SOURCE_DIR}/DeltaPhysics/include"
-	"${CMAKE_SOURCE_DIR}/DeltaMath/include"
-)
-
 target_link_libraries(${PROJECT_NAME} DeltaGraphics DeltaPhysics DeltaMath)
+target_include_directories(${PROJECT_NAME} PRIVATE "include")
