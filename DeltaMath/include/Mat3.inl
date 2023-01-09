@@ -173,4 +173,9 @@ inline const float* Mat3::toPtr() const
     return rows[0].toPtr();
 }
 
+inline float* Mat3::toPtr()
+{
+    return rows[0].toPtr();
+}
+
 } // namespace Delta

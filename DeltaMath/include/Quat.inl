@@ -137,7 +137,6 @@ inline Mat3 Quat::toMat3() const
     mat.rows[1] = Quat::rotatePoint(mat.rows[1]);
     mat.rows[2] = Quat::rotatePoint(mat.rows[2]);
     return mat;
-
 }
 
 } // namespace Delta

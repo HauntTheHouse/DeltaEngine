@@ -32,6 +32,7 @@ public:
     float cofactor(const size_t i, const size_t j) const;
 
     const float* toPtr() const;
+    float* toPtr();
 
 public:
     Vec3 rows[3];

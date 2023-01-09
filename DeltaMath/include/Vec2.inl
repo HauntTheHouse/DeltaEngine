@@ -128,7 +128,7 @@ inline const float* Vec2::toPtr() const
 
 inline float* Vec2::toPtr()
 {
-	return &x;
+    return &x;
 }
 
 } // namespace Delta

@@ -140,7 +140,7 @@ inline const float* Vec4::toPtr() const
 
 inline float* Vec4::toPtr()
 {
-	return &x;
+    return &x;
 }
 
 } // namespace Delta
