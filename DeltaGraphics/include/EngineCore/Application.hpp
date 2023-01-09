@@ -2,6 +2,7 @@
 
 #include "Window.hpp"
 #include "Event.hpp"
+#include "Camera.hpp"
 
 namespace Delta
 {
@@ -19,6 +20,10 @@ public:
 
 	virtual int start(unsigned int aWindowWidth, unsigned int aWindowHeight, const char* aTitle);
 	virtual void onUpdate() {};
+	virtual void onGuiDraw() {};
+
+protected:
+	Camera mCamera;
 
 private:
 	Window mWindow;

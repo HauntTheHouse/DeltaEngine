@@ -1,16 +1,11 @@
 #pragma once
 
-#include "Event.hpp"
-#include "Camera.hpp"
-#include "Rendering/OpenGL/ShaderProgram.hpp"
-#include "Rendering/OpenGL/VertexBuffer.hpp"
-#include "Rendering/OpenGL/IndexBuffer.hpp"
-#include "Rendering/OpenGL/VertexArray.hpp"
-
 struct GLFWwindow;
 
 namespace Delta
 {
+
+class EventBase;
 
 class Window
 {
@@ -45,15 +40,6 @@ private:
 
 	GLFWwindow* mWindow{ nullptr };
 	WindowParameters mData;
-
-	Camera mCamera;
-
-	ShaderProgram mShaderProgram;
-	VertexBuffer mVBO;
-	IndexBuffer mEBO;
-	VertexArray mVAO;
-
-	Vec3 mBackgroundColor{ 0.2f, 0.2f, 0.2f };
 };
 
 } // namespace Delta
