@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(Demo)
+project(Editor)
 
 file(GLOB_RECURSE SRC_LIST CONFIGURE_DEPENDS
     include/*.hpp
