@@ -204,10 +204,10 @@ inline void Mat4::lookAt(const Vec3& pos, const Vec3& lookAt, const Vec3& up)
     // +x-axis = right
     // +y-axis = up
     // +z-axis = forward
-    rows[0] = Vec4(right.x,   right.y,   right.z,   -pos.dot(right));
-    rows[1] = Vec4(up.x,      up.y,      up.z,      -pos.dot(up));
-    rows[2] = Vec4(forward.x, forward.y, forward.z, -pos.dot(forward));
-    rows[3] = Vec4(0.0f,      0.0f,      0.0f,       1.0f);
+    rows[0] = Vec4( right.x,         up.x,         forward.x,        0.0f);
+    rows[1] = Vec4( right.y,         up.y,         forward.y,        0.0f);
+    rows[2] = Vec4( right.z,         up.z,         forward.z,        0.0f);
+    rows[3] = Vec4(-pos.dot(right), -pos.dot(up), -pos.dot(forward), 1.0f);
 }
 
 inline void Mat4::orthoOpenGL(float xmin, float xmax, float ymin, float ymax, float znear, float zfar)

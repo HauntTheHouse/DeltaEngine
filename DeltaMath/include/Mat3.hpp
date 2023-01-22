@@ -2,6 +2,7 @@
 
 #include "Vec3.hpp"
 #include "Mat2.hpp"
+#include "Constants.hpp"
 
 namespace Delta
 {
@@ -30,6 +31,8 @@ public:
     Mat3 inverse() const;
     Mat2 minor(const size_t i, const size_t j) const;
     float cofactor(const size_t i, const size_t j) const;
+
+    void rotate(const Vec3& angles);
 
     const float* toPtr() const;
     float* toPtr();

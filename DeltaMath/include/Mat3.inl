@@ -168,6 +168,25 @@ inline float Mat3::cofactor(const size_t i, const size_t j) const
     return sign * minor.determinant();
 }
 
+inline void Mat3::rotate(const Vec3& angles)
+{
+    Vec3 radians = angles * (PI / 180.0);
+
+    Mat3 rotX(Vec3(1.0f,  0.0f,             0.0f),
+              Vec3(0.0f,  cosf(radians.x),  sinf(radians.x)),
+              Vec3(0.0f, -sinf(radians.x),  cosf(radians.x)));
+
+    Mat3 rotY(Vec3(cosf(radians.y), 0.0f, -sinf(radians.y)),
+              Vec3(0.0f,            1.0f,  0.0f),
+              Vec3(sinf(radians.y), 0.0f,  cosf(radians.y)));
+
+    Mat3 rotZ(Vec3( cosf(radians.z),  sinf(radians.z), 0.0f),
+              Vec3(-sinf(radians.z),  cosf(radians.z), 0.0f),
+              Vec3( 0.0f,             0.0f,            1.0f));
+
+    *this = rotZ * rotY * rotX * *this;
+}
+
 inline const float* Mat3::toPtr() const
 {
     return rows[0].toPtr();
