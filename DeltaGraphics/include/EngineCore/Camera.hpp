@@ -24,16 +24,34 @@ public:
     void setTransform(const Vec3& aPosition, const Vec3& aRotation);
     void setProjectionMode(ProjectionMode aProjectionMode);
 
-    Mat4 getViewProjectionMatrix() { return mViewProjectionMatrix; }
+    const Mat4& getView();
+    const Mat4& getProjection();
+    Mat4 getViewProjection();
+
+    void move(const Vec3& aMovementDelta, const Vec3& aRotationDelta);
 
 private:
-    void updateMatrix();
+    void updateView();
+    void updateProjection();
+
+    ProjectionMode mProjectionMode;
 
     Vec3 mPosition;
     Vec3 mRotation;
-    ProjectionMode mProjectionMode;
 
-    Mat4 mViewProjectionMatrix;
+    Vec3 mDirection;
+    Vec3 mRight;
+    Vec3 mUp;
+
+    static const Vec3 sWorldForward;
+    static const Vec3 sWorldRight;
+    static const Vec3 sWorldUp;
+
+    Mat4 mView;
+    Mat4 mProjection;
+
+    bool mUpdateView;
+    bool mUpdateProjection;
 
 };
 

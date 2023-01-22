@@ -21,6 +21,9 @@ public:
     virtual int start(unsigned int aWindowWidth, unsigned int aWindowHeight, const char* aTitle);
     virtual void onUpdate() {};
     virtual void onGuiDraw() {};
+    virtual void onMouseButtonEvent(MouseButtonCode aMouseButtonCode, double aPosX, double aPosY, bool aPressed) {};
+
+    Vec2 getCursorPosition() const;
 
 protected:
     Camera mCamera;

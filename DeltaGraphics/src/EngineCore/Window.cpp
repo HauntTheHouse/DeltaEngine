@@ -86,7 +86,33 @@ int Window::init(unsigned int aWindowWidth, unsigned int aWindowHeight, const ch
             }
             default:
                 break;
-            }
+        }
+    });
+
+    glfwSetMouseButtonCallback(mWindow, [](GLFWwindow* window, int button, int action, int mods)
+    {
+        const auto params = static_cast<WindowParameters*>(glfwGetWindowUserPointer(window));
+
+        double xPos, yPos;
+        glfwGetCursorPos(window, &xPos, &yPos);
+
+        switch (action)
+        {
+        case GLFW_PRESS:
+        {
+            MouseButtonPressedEvent event(static_cast<MouseButtonCode>(button), xPos, yPos);
+            params->eventCallback(event);
+            break;
+        }
+        case GLFW_RELEASE:
+        {
+            MouseButtonReleasedEvent event(static_cast<MouseButtonCode>(button), xPos, yPos);
+            params->eventCallback(event);
+            break;
+        }
+        default:
+            break;
+        }
     });
 
     glfwSetWindowCloseCallback(mWindow, [](GLFWwindow* window)
@@ -122,6 +148,13 @@ void Window::onUpdate()
 {
     glfwSwapBuffers(mWindow);
     glfwPollEvents();
+}
+
+Vec2 Window::getCursorPosition() const
+{
+    double xPos, yPos;
+    glfwGetCursorPos(mWindow, &xPos, &yPos);
+    return Vec2(static_cast<float>(xPos), static_cast<float>(yPos));
 }
 
 } // namespace Delta

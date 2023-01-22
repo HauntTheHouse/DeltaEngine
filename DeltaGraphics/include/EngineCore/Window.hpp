@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Vec2.hpp>
+
 struct GLFWwindow;
 
 namespace Delta
@@ -26,6 +28,7 @@ public:
 
     unsigned int getWidth() const { return mData.width; }
     unsigned int getHeight() const { return mData.height; }
+    Vec2 getCursorPosition() const;
 
     void setEventCallback(EventCallback aEventCallbeck) { mData.eventCallback = std::move(aEventCallbeck); }
 

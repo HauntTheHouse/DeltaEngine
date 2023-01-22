@@ -51,6 +51,16 @@ int Application::start(unsigned int aWindowWidth, unsigned int aWindowHeight, co
     {
         LOG_INFO("WindowResizeEvent: {0}x{1}", event.width, event.height);
     });
+    mEventDispatcher.addEventListener<MouseButtonPressedEvent>([this](MouseButtonPressedEvent& event)
+    {
+        Input::pressMouseButton(event.mMouseButton);
+        onMouseButtonEvent(event.mMouseButton, event.x, event.y, true);
+    });
+    mEventDispatcher.addEventListener<MouseButtonReleasedEvent>([this](MouseButtonReleasedEvent& event)
+    {
+        Input::releaseMouseButton(event.mMouseButton);
+        onMouseButtonEvent(event.mMouseButton, event.x, event.y, false);
+    });
     mEventDispatcher.addEventListener<MouseMoveEvent>([](MouseMoveEvent& event)
     {
         //LOG_INFO("MouseMovedEvent: x = {0}, y = {1}", event.x, event.y);
@@ -90,8 +100,6 @@ int Application::start(unsigned int aWindowWidth, unsigned int aWindowHeight, co
     mVAO.addVertexBuffer(mVBO);
     mVAO.setIndexBuffer(mEBO);
 
-    mCamera.init(Vec3(0.0f), Vec3(0.0f));
-
     while (!mIsShouldClose)
     {
         Renderer::clearColor(Vec4(mBackgroundColor.x, mBackgroundColor.y, mBackgroundColor.z, 1.0f));
@@ -103,7 +111,7 @@ int Application::start(unsigned int aWindowWidth, unsigned int aWindowHeight, co
         mShaderProgram.bind();
         {
             mShaderProgram.setMat4("uModel", transformMat);
-            mShaderProgram.setMat4("uViewProject", mCamera.getViewProjectionMatrix());
+            mShaderProgram.setMat4("uViewProject", mCamera.getViewProjection());
             Renderer::draw(mVAO);
         }
         mShaderProgram.unbind();
@@ -136,6 +144,11 @@ int Application::start(unsigned int aWindowWidth, unsigned int aWindowHeight, co
 
     mWindow.shutdown();
     return 0;
+}
+
+Vec2 Application::getCursorPosition() const
+{
+    return mWindow.getCursorPosition();
 }
 
 }

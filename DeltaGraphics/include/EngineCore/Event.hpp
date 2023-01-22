@@ -39,6 +39,32 @@ public:
     static const EventType type{ EventType::WINDOW_RESIZED };
 };
 
+class MouseButtonPressedEvent : public EventBase
+{
+public:
+    MouseButtonPressedEvent(MouseButtonCode aMouseButton, const double x, const double y) : mMouseButton(aMouseButton), x(x), y(y) {}
+    EventType getType() const override { return type; }
+
+    MouseButtonCode mMouseButton;
+    double x;
+    double y;
+
+    static const EventType type{ EventType::MOUSE_BUTTON_PRESSED };
+};
+
+class MouseButtonReleasedEvent : public EventBase
+{
+public:
+    MouseButtonReleasedEvent(MouseButtonCode aMouseButton, const double x, const double y) : mMouseButton(aMouseButton), x(x), y(y) {}
+    EventType getType() const override { return type; }
+
+    MouseButtonCode mMouseButton;
+    double x;
+    double y;
+
+    static const EventType type{ EventType::MOUSE_BUTTON_RELEASED };
+};
+
 class MouseMoveEvent : public EventBase
 {
 public:
