@@ -26,6 +26,7 @@ public:
     static void unbind();
 
     void setMat4(const char* aUniformName, const Mat4& aMat4);
+    void setInt(const char* aUniformName, const int aInt);
 
 private:
     static unsigned int compileShader(const char* aSourceCode, ShaderType aShaderType);

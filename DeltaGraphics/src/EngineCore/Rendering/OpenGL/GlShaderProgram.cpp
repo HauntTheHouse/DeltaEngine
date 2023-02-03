@@ -61,6 +61,11 @@ void ShaderProgram::setMat4(const char* aUniformName, const Mat4& aMat4)
     glUniformMatrix4fv(glGetUniformLocation(static_cast<GLuint>(mId), aUniformName), 1, GL_FALSE, aMat4.toPtr());
 }
 
+void ShaderProgram::setInt(const char* aUniformName, const int aInt)
+{
+    glUniform1i(glGetUniformLocation(static_cast<GLuint>(mId), aUniformName), aInt);
+}
+
 unsigned int ShaderProgram::compileShader(const char* aSourceCode, ShaderType aShaderType)
 {
     GLuint shader = glCreateShader(static_cast<GLenum>(getRendererCode(aShaderType)));

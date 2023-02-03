@@ -10,6 +10,7 @@
 #include "EngineCore/Rendering/OpenGL/VertexBuffer.hpp"
 #include "EngineCore/Rendering/OpenGL/IndexBuffer.hpp"
 #include "EngineCore/Rendering/OpenGL/VertexArray.hpp"
+#include "EngineCore/Rendering/OpenGL/Texture2D.hpp"
 
 #include "EngineCore/Rendering/OpenGL/Renderer.hpp"
 #include "EngineCore/Modules/GUIModule.hpp"
@@ -20,11 +21,11 @@ namespace Delta
 {
 
 std::vector<float> vertices = {
-    // position           // color
-    -0.5f, -0.5f, 0.0f,   1.0f, 1.0f, 0.0f,
-    -0.5f,  0.5f, 0.0f,   0.0f, 1.0f, 1.0f,
-     0.5f, -0.5f, 0.0f,   1.0f, 0.0f, 1.0f,
-     0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f
+    // position           // color            // tex coords
+    -0.5f, -0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 0.0f,
+    -0.5f,  0.5f, 0.0f,   0.0f, 1.0f, 1.0f,   0.0f, 1.0f,
+     0.5f, -0.5f, 0.0f,   1.0f, 0.0f, 1.0f,   1.0f, 0.0f,
+     0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   1.0f, 1.0f
 };
 
 std::vector<unsigned int> indices = {
@@ -36,6 +37,8 @@ ShaderProgram mShaderProgram;
 VertexBuffer mVBO;
 IndexBuffer mEBO;
 VertexArray mVAO;
+Texture2D mTextureCheckboard;
+Texture2D mTexturePink;
 
 Vec3 mBackgroundColor{ 0.2f, 0.2f, 0.2f };
 
@@ -91,7 +94,15 @@ int Application::start(unsigned int aWindowWidth, unsigned int aWindowHeight, co
     if (mShaderProgram.init(vertShader.begin(), fragShader.begin()) == false)
         return -4;
 
-    BufferLayout layout({ ShaderData::Type::FLOAT3, ShaderData::Type::FLOAT3 });
+    BufferLayout layout({ ShaderData::Type::FLOAT3, ShaderData::Type::FLOAT3, ShaderData::Type::FLOAT2 });
+
+    mShaderProgram.bind();
+
+    const unsigned int width = 512;
+    const unsigned int height = 512;
+
+    mTextureCheckboard.init(width, height, Texture2D::generateCheckboard(width, height, 3, 8).data());
+    mTexturePink.init(width, height, Texture2D::generateFillColor(width, height, 3, { 1.0f, 0.0f, 1.0f }).data());
 
     mVBO.init(vertices, layout);
     mEBO.init(indices);
@@ -112,6 +123,12 @@ int Application::start(unsigned int aWindowWidth, unsigned int aWindowHeight, co
         {
             mShaderProgram.setMat4("uModel", transformMat);
             mShaderProgram.setMat4("uViewProject", mCamera.getViewProjection());
+
+            mTextureCheckboard.bind(0);
+            mShaderProgram.setInt("uDefaultTexture", 0);
+            mTexturePink.bind(1);
+            mShaderProgram.setInt("uPink", 1);
+
             Renderer::draw(mVAO);
         }
         mShaderProgram.unbind();
@@ -141,6 +158,8 @@ int Application::start(unsigned int aWindowWidth, unsigned int aWindowHeight, co
     mVBO.clear();
     mVAO.clear();
     mShaderProgram.clear();
+    mTextureCheckboard.clear();
+    mTexturePink.clear();
 
     mWindow.shutdown();
     return 0;
