@@ -48,7 +48,15 @@ cmrc_add_resource_library(ShaderResources
         shaders/object.vert
         shaders/object.frag)
 
-target_link_libraries(${PROJECT_NAME} glfw glad spdlog imgui DeltaMath ShaderResources)
+target_link_libraries(${PROJECT_NAME}
+    glfw
+    glad
+    spdlog
+    imgui
+    stb_image
+    DeltaMath
+    ShaderResources)
+
 target_include_directories(${PROJECT_NAME} PUBLIC "include")
 
 target_precompile_headers(${PROJECT_NAME} PUBLIC "include/EngineCore/PCH.hpp")

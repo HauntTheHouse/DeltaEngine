@@ -11,3 +11,6 @@
 [submodule "vendor/cmrc"]
 	path = vendor/cmrc
 	url = https://github.com/vector-of-bool/cmrc.git
+[submodule "vendor/stb"]
+	path = vendor/stb
+	url = https://github.com/nothings/stb
