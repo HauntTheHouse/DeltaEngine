@@ -17,8 +17,8 @@ bool Texture2D::init(int aWidth, int aHeight, const unsigned char* aData)
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, mWidth, mHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, aData != nullptr ? aData : generateCheckboard(mWidth, mHeight, 3, 8).data());
     glGenerateMipmap(GL_TEXTURE_2D);
@@ -50,8 +50,8 @@ std::vector<unsigned char> Texture2D::generateCheckboard(int aWidth, int aHeight
     std::vector<unsigned char> result;
     result.reserve(aWidth * aHeight * aChannelsNum);
 
-    unsigned int xUnitSize = aWidth / aSeparationsNum + 1;
-    unsigned int yUnitSize = aHeight / aSeparationsNum + 1;
+    size_t xUnitSize = std::ceil(aWidth / static_cast<float>(aSeparationsNum));
+    size_t yUnitSize = std::ceil(aHeight / static_cast<float>(aSeparationsNum));
 
     for (size_t y = 0; y < aHeight; ++y)
     {
