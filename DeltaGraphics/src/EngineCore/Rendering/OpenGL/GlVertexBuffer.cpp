@@ -31,7 +31,7 @@ void VertexBuffer::unbind()
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-constexpr unsigned int VertexBuffer::getRendererCode(Usage aUsage)
+unsigned int VertexBuffer::getRendererCode(Usage aUsage)
 {
     switch (aUsage)
     {

@@ -39,7 +39,7 @@ public:
     const BufferLayout& getLayout() const { return mLayout; }
     int getVerticesCount() const { return mVerticesCount; }
 
-    constexpr static unsigned int getRendererCode(Usage aUsage);
+    static unsigned int getRendererCode(Usage aUsage);
 
 private:
     void initImpl(const void* aData, const size_t aSize, const BufferLayout& aLayout, const Usage aUsage);
