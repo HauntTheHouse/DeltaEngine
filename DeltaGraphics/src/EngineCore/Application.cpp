@@ -95,9 +95,9 @@ int Application::start(unsigned int aWindowWidth, unsigned int aWindowHeight, co
 {
     mWindow.init(aWindowWidth, aWindowHeight, aTitle);
 
-    mEventDispatcher.addEventListener<WindowResizeEvent>([](WindowResizeEvent& event)
+    mEventDispatcher.addEventListener<WindowResizeEvent>([this](WindowResizeEvent& event)
     {
-        LOG_INFO("WindowResizeEvent: {0}x{1}", event.width, event.height);
+        mCamera.setAspect(event.width / static_cast<float>(event.height));
     });
     mEventDispatcher.addEventListener<MouseButtonPressedEvent>([this](MouseButtonPressedEvent& event)
     {
@@ -111,7 +111,6 @@ int Application::start(unsigned int aWindowWidth, unsigned int aWindowHeight, co
     });
     mEventDispatcher.addEventListener<MouseMoveEvent>([](MouseMoveEvent& event)
     {
-        //LOG_INFO("MouseMovedEvent: x = {0}, y = {1}", event.x, event.y);
     });
     mEventDispatcher.addEventListener<KeyPressedEvent>([](KeyPressedEvent& event)
     {
@@ -155,6 +154,8 @@ int Application::start(unsigned int aWindowWidth, unsigned int aWindowHeight, co
     mVAO.init();
     mVAO.addVertexBuffer(mVBO);
     mVAO.setIndexBuffer(mEBO);
+
+    onCreate();
 
     Renderer::depthTesting(true);
 
@@ -227,6 +228,11 @@ int Application::start(unsigned int aWindowWidth, unsigned int aWindowHeight, co
 Vec2 Application::getCursorPosition() const
 {
     return mWindow.getCursorPosition();
+}
+
+Vec2 Application::getViewport() const
+{
+    return Vec2(mWindow.getWidth(), mWindow.getHeight());
 }
 
 void Application::shouldClose()

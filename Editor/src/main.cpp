@@ -8,10 +8,15 @@
 class Editor : public Delta::Application
 {
 public:
-    void init()
+    void onCreate() override
     {
         mCamera.init(mCameraPosition, mCameraRotation);
         mCamera.setProjectionMode(mIsPerspectiveCamera ? Delta::Camera::ProjectionMode::PERSPECTIVE : Delta::Camera::ProjectionMode::ORTHO);
+        const auto viewport = getViewport();
+        mCamera.setAspect(viewport.x / static_cast<float>(viewport.y));
+        mCamera.setFov(90.0f);
+        mCamera.setNearFarPlanes(0.1f, 100.0f);
+        mCamera.setOrthoPlanes(-8.0f, 8.0f, -8.0f, 8.0f);
     }
 
     void onUpdate() override
@@ -102,6 +107,5 @@ private:
 int main()
 {
     const auto app = std::make_unique<Editor>();
-    app->init();
     return app->start(1024, 768, "Editor");
 }

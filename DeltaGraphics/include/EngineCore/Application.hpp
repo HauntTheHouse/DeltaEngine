@@ -19,11 +19,13 @@ public:
     Application& operator=(const Application&&) = delete;
 
     virtual int start(unsigned int aWindowWidth, unsigned int aWindowHeight, const char* aTitle);
+    virtual void onCreate() {};
     virtual void onUpdate() {};
     virtual void onGuiDraw() {};
     virtual void onMouseButtonEvent(MouseButtonCode aMouseButtonCode, double aPosX, double aPosY, bool aPressed) {};
 
     Vec2 getCursorPosition() const;
+    Vec2 getViewport() const;
 
     void shouldClose();
 

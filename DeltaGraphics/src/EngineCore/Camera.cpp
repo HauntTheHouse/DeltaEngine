@@ -42,6 +42,34 @@ void Camera::setProjectionMode(ProjectionMode aProjectionMode)
     mUpdateProjection = true;
 }
 
+void Camera::setAspect(float aAspect)
+{
+    mAspect = aAspect;
+    mUpdateProjection = true;
+}
+
+void Camera::setFov(float aFovDegree)
+{
+    mFov = aFovDegree;
+    mUpdateProjection = true;
+}
+
+void Camera::setNearFarPlanes(float aNear, float aFar)
+{
+    mNearPlane = aNear;
+    mFarPlane = aFar;
+    mUpdateProjection = true;
+}
+
+void Camera::setOrthoPlanes(float aLeft, float aRight, float aDown, float aUp)
+{
+    mLeftPlane = aLeft;
+    mRightPlane = aRight;
+    mDownPlane = aDown;
+    mUpPlane = aUp;
+    mUpdateProjection = true;
+}
+
 const Mat4& Camera::getView()
 {
     if (mUpdateView) updateView();
@@ -91,8 +119,8 @@ void Camera::updateView()
 void Camera::updateProjection()
 {
     mProjectionMode == ProjectionMode::PERSPECTIVE
-        ? mProjection.perspectiveOpenGL(45.0f, 768.0f/1024.0f, 0.1f, 10.0f)
-        : mProjection.orthoOpenGL(-5.0f, 5.0f, -5.0f, 5.0f, 0.1f, 10.0f);
+        ? mProjection.perspectiveOpenGL(mFov, mAspect, mNearPlane, mFarPlane)
+        : mProjection.orthoOpenGL(mLeftPlane * mAspect, mRightPlane * mAspect, mDownPlane, mUpPlane, mNearPlane, mFarPlane);
 
     mUpdateProjection = false;
 }
