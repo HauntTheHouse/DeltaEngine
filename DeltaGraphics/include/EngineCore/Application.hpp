@@ -25,6 +25,8 @@ public:
 
     Vec2 getCursorPosition() const;
 
+    void shouldClose();
+
 protected:
     Camera mCamera;
 

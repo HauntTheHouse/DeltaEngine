@@ -13,8 +13,6 @@ public:
     static void onDrawBegin();
     static void onDrawEnd();
 
-    static void ShowExampleAppDockSpace();
-
 };
 
 } // namespace Delta

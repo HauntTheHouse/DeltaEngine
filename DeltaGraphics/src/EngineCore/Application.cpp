@@ -85,7 +85,7 @@ VertexArray mVAO;
 Texture2D mTextureCheckboard;
 Texture2D mTexturePink;
 
-Vec3 mBackgroundColor{ 0.2f, 0.2f, 0.2f };
+Vec3 mBackgroundColor{ 0.66f, 0.86f, 1.0f };
 
 Vec3 translate(0.0f);
 Vec3 angles(0.0f);
@@ -124,7 +124,7 @@ int Application::start(unsigned int aWindowWidth, unsigned int aWindowHeight, co
     mEventDispatcher.addEventListener<WindowCloseEvent>([this](WindowCloseEvent& event)
     {
         LOG_INFO("MouseCloseEvent");
-        mIsShouldClose = true;
+        shouldClose();
     });
 
     mWindow.setEventCallback([this](EventBase& event)
@@ -147,7 +147,7 @@ int Application::start(unsigned int aWindowWidth, unsigned int aWindowHeight, co
     const unsigned int height = 512;
 
     mTextureCheckboard.init(width, height, Texture2D::generateCheckboard(width, height, 3, 8).data());
-    mTexturePink.init(width, height, Texture2D::generateFillColor(width, height, 3, { 1.0f, 0.0f, 1.0f }).data());
+    mTexturePink.init(width, height, Texture2D::generateFillColor(width, height, 3, { 0.0f, 0.0f, 1.0f }).data());
 
     mVBO.init(vertices, layout);
     mEBO.init(indices);
@@ -180,23 +180,35 @@ int Application::start(unsigned int aWindowWidth, unsigned int aWindowHeight, co
         }
         mShaderProgram.unbind();
 
-        onUpdate();
-
         GUIModule::onDrawBegin();
         {
-            GUIModule::ShowExampleAppDockSpace();
-            //ImGui::ShowDemoWindow();
-            ImGui::Begin("General properties");
-            ImGui::ColorEdit3("Background color", mBackgroundColor.toPtr());
-            ImGui::Separator();
-            ImGui::SliderFloat3("Translate object", translate.toPtr(), -5.0f, 5.0f);
-            ImGui::SliderFloat3("Rotate object", angles.toPtr(), -180.0f, 180.0f);
-            ImGui::SliderFloat3("Scale object", scale.toPtr(), 0.0f, 2.0f);
-            ImGui::Separator();
-            ImGui::End();
+            ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize;
+            windowFlags |= ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoBackground;
+
+            const ImGuiViewport* viewport = ImGui::GetMainViewport();
+            ImGui::SetNextWindowPos(viewport->WorkPos);
+            ImGui::SetNextWindowSize(viewport->WorkSize);
+            ImGui::SetNextWindowViewport(viewport->ID);
+
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+
+            ImGui::Begin("DockSpace", nullptr, windowFlags);
+
+            ImGui::PopStyleVar(3);
+
+            ImGuiID dockspaceId = ImGui::GetID("MyDockSpace");
+            ImGui::DockSpace(dockspaceId, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode);
+
             onGuiDraw();
+
+            ImGui::End();
+
         }
         GUIModule::onDrawEnd();
+
+        onUpdate();
 
         mWindow.onUpdate();
     }
@@ -215,6 +227,11 @@ int Application::start(unsigned int aWindowWidth, unsigned int aWindowHeight, co
 Vec2 Application::getCursorPosition() const
 {
     return mWindow.getCursorPosition();
+}
+
+void Application::shouldClose()
+{
+    mIsShouldClose = true;
 }
 
 }
