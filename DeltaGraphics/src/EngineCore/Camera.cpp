@@ -91,7 +91,7 @@ void Camera::updateView()
 void Camera::updateProjection()
 {
     mProjectionMode == ProjectionMode::PERSPECTIVE
-        ? mProjection.perspectiveOpenGL(45.0f, 1.0f, 0.1f, 10.0f)
+        ? mProjection.perspectiveOpenGL(45.0f, 768.0f/1024.0f, 0.1f, 10.0f)
         : mProjection.orthoOpenGL(-5.0f, 5.0f, -5.0f, 5.0f, 0.1f, 10.0f);
 
     mUpdateProjection = false;

@@ -21,16 +21,61 @@ namespace Delta
 {
 
 std::vector<float> vertices = {
-    // position           // color            // tex coords
-    -0.5f, -0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 0.0f,
-    -0.5f,  0.5f, 0.0f,   0.0f, 1.0f, 1.0f,   0.0f, 1.0f,
-     0.5f, -0.5f, 0.0f,   1.0f, 0.0f, 1.0f,   1.0f, 0.0f,
-     0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   1.0f, 1.0f
+    // front side
+    -1.0f,  -1.0f,  1.0f,   0.0f, 0.0f,
+    -1.0f,   1.0f,  1.0f,   0.0f, 1.0f,
+     1.0f,   1.0f,  1.0f,   1.0f, 1.0f,
+     1.0f,  -1.0f,  1.0f,   1.0f, 0.0f,
+
+     // left side
+     -1.0f, -1.0f, -1.0f,   0.0f, 0.0f,
+     -1.0f,  1.0f, -1.0f,   0.0f, 1.0f,
+     -1.0f,  1.0f,  1.0f,   1.0f, 1.0f,
+     -1.0f, -1.0f,  1.0f,   1.0f, 0.0f,
+
+     // back side
+      1.0f, -1.0f, -1.0f,   0.0f, 0.0f,
+      1.0f,  1.0f, -1.0f,   0.0f, 1.0f,
+     -1.0f,  1.0f, -1.0f,   1.0f, 1.0f,
+     -1.0f, -1.0f, -1.0f,   1.0f, 0.0f,
+
+     // right side
+      1.0f, -1.0f,  1.0f,   0.0f, 0.0f,
+      1.0f,  1.0f,  1.0f,   0.0f, 1.0f,
+      1.0f,  1.0f, -1.0f,   1.0f, 1.0f,
+      1.0f, -1.0f, -1.0f,   1.0f, 0.0f,
+
+      // up side
+     -1.0f,  1.0f,  1.0f,   0.0f, 0.0f,
+     -1.0f,  1.0f, -1.0f,   0.0f, 1.0f,
+      1.0f,  1.0f, -1.0f,   1.0f, 1.0f,
+      1.0f,  1.0f,  1.0f,   1.0f, 0.0f,
+
+      // down side
+     -1.0f, -1.0f, -1.0f,   0.0f, 0.0f,
+     -1.0f, -1.0f,  1.0f,   0.0f, 1.0f,
+      1.0f, -1.0f,  1.0f,   1.0f, 1.0f,
+      1.0f, -1.0f, -1.0f,   1.0f, 0.0f,
 };
 
 std::vector<unsigned int> indices = {
-    0, 1, 2,
-    2, 1, 3
+    0,  2,  1,
+    0,  3,  2,
+
+    4,  6,  5,
+    4,  7,  6,
+
+    8,  10, 9,
+    8,  11, 10,
+
+    12, 14, 13,
+    12, 15, 14,
+
+    16, 18, 17,
+    16, 19, 18,
+
+    20, 22, 21,
+    20, 23, 22
 };
 
 ShaderProgram mShaderProgram;
@@ -94,7 +139,7 @@ int Application::start(unsigned int aWindowWidth, unsigned int aWindowHeight, co
     if (mShaderProgram.init(vertShader.begin(), fragShader.begin()) == false)
         return -4;
 
-    BufferLayout layout({ ShaderData::Type::FLOAT3, ShaderData::Type::FLOAT3, ShaderData::Type::FLOAT2 });
+    BufferLayout layout({ ShaderData::Type::FLOAT3, ShaderData::Type::FLOAT2 });
 
     mShaderProgram.bind();
 
@@ -110,6 +155,8 @@ int Application::start(unsigned int aWindowWidth, unsigned int aWindowHeight, co
     mVAO.init();
     mVAO.addVertexBuffer(mVBO);
     mVAO.setIndexBuffer(mEBO);
+
+    Renderer::depthTesting(true);
 
     while (!mIsShouldClose)
     {
