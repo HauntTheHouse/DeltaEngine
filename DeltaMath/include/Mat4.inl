@@ -251,7 +251,7 @@ inline void Mat4::perspectiveOpenGL(float fovy, float aspect, float near, float 
     const float fovyRadians = fovy * PI / 180.0f;
     const float f = 1.0f / std::tanf(fovyRadians * 0.5f);
     const float xScale = f;
-    const float yScale = f / aspect;
+    const float yScale = f * aspect;
 
     rows[0] = Vec4(xScale, 0.0f,    0.0f,                       0.0f);
     rows[1] = Vec4(0.0f,   yScale,  0.0f,                       0.0f);
