@@ -58,12 +58,22 @@ void ShaderProgram::unbind()
 
 void ShaderProgram::setMat4(const char* aUniformName, const Mat4& aMat4)
 {
-    glUniformMatrix4fv(glGetUniformLocation(static_cast<GLuint>(mId), aUniformName), 1, GL_FALSE, aMat4.toPtr());
+    glUniformMatrix4fv(getUniformLocation(aUniformName), 1, GL_FALSE, aMat4.toPtr());
 }
 
 void ShaderProgram::setInt(const char* aUniformName, const int aInt)
 {
-    glUniform1i(glGetUniformLocation(static_cast<GLuint>(mId), aUniformName), aInt);
+    glUniform1i(getUniformLocation(aUniformName), aInt);
+}
+
+int ShaderProgram::getUniformLocation(const char* aUniformName)
+{
+    const auto it = mUniformLocation.find(aUniformName);
+    if (it != mUniformLocation.end()) return it->second;
+
+    GLint uniformLocation = glGetUniformLocation(static_cast<GLuint>(mId), aUniformName);
+    mUniformLocation.insert({ aUniformName, uniformLocation });
+    return uniformLocation;
 }
 
 unsigned int ShaderProgram::compileShader(const char* aSourceCode, ShaderType aShaderType)

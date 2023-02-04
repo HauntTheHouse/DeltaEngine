@@ -28,13 +28,15 @@ public:
     void setMat4(const char* aUniformName, const Mat4& aMat4);
     void setInt(const char* aUniformName, const int aInt);
 
+    int getUniformLocation(const char* aUniformName);
+
 private:
     static unsigned int compileShader(const char* aSourceCode, ShaderType aShaderType);
     static const char* getShaderTypeStr(ShaderType aShaderType);
     constexpr static unsigned int getRendererCode(ShaderType aShaderType);
 
     unsigned int mId{ 0 };
-
+    std::unordered_map<std::string, int> mUniformLocation;
 };
 
 } // namespace Delta
