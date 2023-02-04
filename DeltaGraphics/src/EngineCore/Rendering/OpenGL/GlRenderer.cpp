@@ -51,6 +51,11 @@ void Renderer::viewport(int aWidth, int aHeight, int aLeftOffset, int aBottomOff
     glViewport(aLeftOffset, aBottomOffset, aWidth, aHeight);
 }
 
+void Renderer::depthTesting(bool aEnable)
+{
+    aEnable ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
+}
+
 const char* Renderer::getVendorInfo()
 {
     return reinterpret_cast<const char*>(glGetString(GL_VENDOR));

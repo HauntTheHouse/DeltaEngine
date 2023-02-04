@@ -18,6 +18,8 @@ public:
     static void clear();
     static void viewport(int aWidth, int aHeight, int aLeftOffset = 0, int aBottomOffset = 0);
 
+    static void depthTesting(bool aEnable);
+
     static const char* getVendorInfo();
     static const char* getRendererInfo();
     static const char* getVersionInfo();
