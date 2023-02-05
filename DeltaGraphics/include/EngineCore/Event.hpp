@@ -20,12 +20,46 @@ enum class EventType
     EVENTS_COUNT
 };
 
+
 class EventBase
 {
 public:
     virtual ~EventBase() = default;
     virtual EventType getType() const = 0;
+
+    bool isHandled{ false };
 };
+
+class EventDispatcher
+{
+public:
+    template<typename EventT>
+    void addEventListener(std::function<void(EventT&)> callback)
+    {
+        auto baseCallback = [func = std::move(callback)](EventBase& e)
+        {
+            if (e.getType() == EventT::type)
+            {
+                func(static_cast<EventT&>(e));
+            }
+        };
+        mEventCallbacks[static_cast<size_t>(EventT::type)] = std::move(baseCallback);
+    }
+
+    void dispatch(EventBase& event)
+    {
+        auto& callback = mEventCallbacks[static_cast<size_t>(event.getType())];
+        if (callback)
+        {
+            callback(event);
+            event.isHandled = true;
+        }
+    }
+
+private:
+    std::array<std::function<void(EventBase&)>, static_cast<size_t>(EventType::EVENTS_COUNT)> mEventCallbacks;
+};
+
 
 class WindowResizeEvent : public EventBase
 {
@@ -107,35 +141,6 @@ public:
     KeyCode mKeyCode;
 
     static const EventType type{ EventType::KEY_RESEASED };
-};
-
-class EventDispatcher
-{
-public:
-    template<typename EventT>
-    void addEventListener(std::function<void(EventT&)> callback)
-    {
-        auto baseCallback = [func = std::move(callback)](EventBase& e)
-        {
-            if (e.getType() == EventT::type)
-            {
-                func(static_cast<EventT&>(e));
-            }
-        };
-        mEventCallbacks[static_cast<size_t>(EventT::type)] = std::move(baseCallback);
-    }
-
-    void dispatch(EventBase& event)
-    {
-        auto& callback = mEventCallbacks[static_cast<size_t>(event.getType())];
-        if (callback)
-        {
-            callback(event);
-        }
-    }
-
-private:
-    std::array<std::function<void(EventBase&)>, static_cast<size_t>(EventType::EVENTS_COUNT)> mEventCallbacks;
 };
 
 } // namespace Delta
