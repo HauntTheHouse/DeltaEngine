@@ -1,5 +1,6 @@
 #include "EngineCore/Application.hpp"
-#include <EngineCore/Input.hpp>
+#include "EngineCore/EntryPoint.hpp"
+#include "EngineCore/Input.hpp"
 
 #include <imgui.h>
 #include <Vec2.hpp>
@@ -8,12 +9,11 @@
 class Editor : public Delta::Application
 {
 public:
-    void onCreate() override
+    Editor(unsigned int aWindowWidth, unsigned int aWindowHeight, const char* aTitle) : Application(aWindowWidth, aWindowHeight, aTitle)
     {
         mCamera.init(mCameraPosition, mCameraRotation);
         mCamera.setProjectionMode(mIsPerspectiveCamera ? Delta::Camera::ProjectionMode::PERSPECTIVE : Delta::Camera::ProjectionMode::ORTHO);
-        const auto viewport = getViewport();
-        mCamera.setAspect(viewport.x / static_cast<float>(viewport.y));
+        mCamera.setAspect(aWindowWidth / static_cast<float>(aWindowHeight));
         mCamera.setFov(90.0f);
         mCamera.setNearFarPlanes(0.1f, 100.0f);
         mCamera.setOrthoPlanes(-8.0f, 8.0f, -8.0f, 8.0f);
@@ -104,8 +104,7 @@ private:
 
 };
 
-int main()
+Delta::Application* Delta::createApplication()
 {
-    const auto app = std::make_unique<Editor>();
-    return app->start(1024, 768, "Editor");
+    return new Editor(1024, 768, "Editor");
 }

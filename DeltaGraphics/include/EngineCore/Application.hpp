@@ -10,22 +10,20 @@ namespace Delta
 class Application
 {
 public:
-    Application() = default;
-    virtual ~Application() = default;
+    Application(unsigned int aWindowWidth, unsigned int aWindowHeight, const char* aTitle);
+    virtual ~Application() {};
 
     Application(const Application&) = delete;
     Application(Application&&) = delete;
     Application& operator=(const Application&) = delete;
     Application& operator=(const Application&&) = delete;
 
-    virtual int start(unsigned int aWindowWidth, unsigned int aWindowHeight, const char* aTitle);
-    virtual void onCreate() {};
+    virtual void run();
     virtual void onUpdate() {};
     virtual void onGuiDraw() {};
     virtual void onMouseButtonEvent(MouseButtonCode aMouseButtonCode, double aPosX, double aPosY, bool aPressed) {};
 
     Vec2 getCursorPosition() const;
-    Vec2 getViewport() const;
 
     void shouldClose();
 
@@ -38,5 +36,7 @@ private:
     bool mIsShouldClose{ false };
 
 };
+
+Application* createApplication();
 
 } // namespace Delta

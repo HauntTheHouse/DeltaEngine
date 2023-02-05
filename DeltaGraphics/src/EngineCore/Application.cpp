@@ -91,7 +91,7 @@ Vec3 translate(0.0f);
 Vec3 angles(0.0f);
 Vec3 scale(1.0f);
 
-int Application::start(unsigned int aWindowWidth, unsigned int aWindowHeight, const char* aTitle)
+Application::Application(unsigned int aWindowWidth, unsigned int aWindowHeight, const char* aTitle)
 {
     mWindow.init(aWindowWidth, aWindowHeight, aTitle);
 
@@ -136,7 +136,7 @@ int Application::start(unsigned int aWindowWidth, unsigned int aWindowHeight, co
     const auto fragShader = fs.open("shaders/object.frag");
 
     if (mShaderProgram.init(vertShader.begin(), fragShader.begin()) == false)
-        return -4;
+        exit(-4);
 
     BufferLayout layout({ ShaderData::Type::FLOAT3, ShaderData::Type::FLOAT2 });
 
@@ -154,9 +154,10 @@ int Application::start(unsigned int aWindowWidth, unsigned int aWindowHeight, co
     mVAO.init();
     mVAO.addVertexBuffer(mVBO);
     mVAO.setIndexBuffer(mEBO);
+}
 
-    onCreate();
-
+void Application::run()
+{
     Renderer::depthTesting(true);
 
     while (!mIsShouldClose)
@@ -222,7 +223,6 @@ int Application::start(unsigned int aWindowWidth, unsigned int aWindowHeight, co
     mTexturePink.clear();
 
     mWindow.shutdown();
-    return 0;
 }
 
 Vec2 Application::getCursorPosition() const
@@ -230,14 +230,9 @@ Vec2 Application::getCursorPosition() const
     return mWindow.getCursorPosition();
 }
 
-Vec2 Application::getViewport() const
-{
-    return Vec2(mWindow.getWidth(), mWindow.getHeight());
-}
-
 void Application::shouldClose()
 {
     mIsShouldClose = true;
 }
 
-}
+} // namespace Delta
