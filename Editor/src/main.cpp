@@ -89,6 +89,11 @@ public:
         ImGui::End();
     }
 
+    void onWindowResizeEvent(unsigned int aNewWidth, unsigned int aNewHeight) override
+    {
+        mCamera.setAspect(aNewWidth / static_cast<float>(aNewHeight));
+    }
+
     void onMouseButtonEvent(Delta::MouseButtonCode aMouseButtonCode, double aPosX, double aPosY, bool aPressed) override
     {
         mInitCursorPosition.x = static_cast<float>(aPosX);

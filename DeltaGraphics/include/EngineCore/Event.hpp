@@ -16,6 +16,7 @@ enum class EventType
     MOUSE_BUTTON_PRESSED,
     MOUSE_BUTTON_RELEASED,
     MOUSE_MOVED,
+    MOUSE_SCROLLED,
 
     EVENTS_COUNT
 };
@@ -66,11 +67,10 @@ class WindowResizeEvent : public EventBase
 public:
     WindowResizeEvent(const unsigned int width, const int unsigned height) : width(width), height(height) {}
     EventType getType() const override { return type; }
+    static const EventType type{ EventType::WINDOW_RESIZED };
 
     unsigned int width;
     unsigned int height;
-
-    static const EventType type{ EventType::WINDOW_RESIZED };
 };
 
 class MouseButtonPressedEvent : public EventBase
@@ -78,12 +78,11 @@ class MouseButtonPressedEvent : public EventBase
 public:
     MouseButtonPressedEvent(MouseButtonCode aMouseButton, const double x, const double y) : mMouseButton(aMouseButton), x(x), y(y) {}
     EventType getType() const override { return type; }
+    static const EventType type{ EventType::MOUSE_BUTTON_PRESSED };
 
     MouseButtonCode mMouseButton;
     double x;
     double y;
-
-    static const EventType type{ EventType::MOUSE_BUTTON_PRESSED };
 };
 
 class MouseButtonReleasedEvent : public EventBase
@@ -91,12 +90,11 @@ class MouseButtonReleasedEvent : public EventBase
 public:
     MouseButtonReleasedEvent(MouseButtonCode aMouseButton, const double x, const double y) : mMouseButton(aMouseButton), x(x), y(y) {}
     EventType getType() const override { return type; }
+    static const EventType type{ EventType::MOUSE_BUTTON_RELEASED };
 
     MouseButtonCode mMouseButton;
     double x;
     double y;
-
-    static const EventType type{ EventType::MOUSE_BUTTON_RELEASED };
 };
 
 class MouseMoveEvent : public EventBase
@@ -104,11 +102,10 @@ class MouseMoveEvent : public EventBase
 public:
     MouseMoveEvent(const double x, const double y) : x(x), y(y) {}
     EventType getType() const override { return type; }
+    static const EventType type{ EventType::MOUSE_MOVED };
 
     double x;
     double y;
-
-    static const EventType type{ EventType::MOUSE_MOVED };
 };
 
 class WindowCloseEvent : public EventBase
@@ -116,31 +113,39 @@ class WindowCloseEvent : public EventBase
 public:
     WindowCloseEvent() = default;
     EventType getType() const override { return type; }
-
     static const EventType type{ EventType::WINDOW_CLOSED };
 };
 
 class KeyPressedEvent : public EventBase
 {
 public:
-    KeyPressedEvent(KeyCode aKeyCode, bool aRepeated) : mKeyCode(aKeyCode), mRepeated(aRepeated) {}
+    KeyPressedEvent(KeyCode keyCode, bool repeated) : keyCode(keyCode), repeated(repeated) {}
     EventType getType() const override { return type; }
-
-    KeyCode mKeyCode;
-    bool mRepeated;
-
     static const EventType type{ EventType::KEY_PRESSED };
+
+    KeyCode keyCode;
+    bool repeated;
 };
 
 class KeyReleasedEvent : public EventBase
 {
 public:
-    KeyReleasedEvent(KeyCode aKeyCode) : mKeyCode(aKeyCode) {}
+    KeyReleasedEvent(KeyCode keyCode) : keyCode(keyCode) {}
     EventType getType() const override { return type; }
-
-    KeyCode mKeyCode;
-
     static const EventType type{ EventType::KEY_RESEASED };
+
+    KeyCode keyCode;
+};
+
+class MouseScrolledEvent : public EventBase
+{
+public:
+    MouseScrolledEvent(double xOffset, double yOffset) : xOffset(xOffset), yOffset(yOffset) {}
+    EventType getType() const override { return type; }
+    static const EventType type{ EventType::MOUSE_SCROLLED };
+
+    double xOffset;
+    double yOffset;
 };
 
 } // namespace Delta

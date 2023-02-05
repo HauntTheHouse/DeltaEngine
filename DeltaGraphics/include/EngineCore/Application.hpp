@@ -18,14 +18,19 @@ public:
     Application& operator=(const Application&) = delete;
     Application& operator=(const Application&&) = delete;
 
-    virtual void run();
+    void run();
+    void shouldClose();
+
     virtual void onUpdate() {};
     virtual void onGuiDraw() {};
+
+    virtual void onWindowResizeEvent(unsigned int aNewWidth, unsigned int aNewHeight) {};
     virtual void onMouseButtonEvent(MouseButtonCode aMouseButtonCode, double aPosX, double aPosY, bool aPressed) {};
+    virtual void onKeyEvent(KeyCode aKeyCode, bool aPressed) {};
+    virtual void onMouseMoveEvent(double aNewPosX, double aNewPosY) {};
+    virtual void onMouseScrollEvent(double aOffsetX, double aOffsetY) {};
 
     Vec2 getCursorPosition() const;
-
-    void shouldClose();
 
 protected:
     Camera mCamera;

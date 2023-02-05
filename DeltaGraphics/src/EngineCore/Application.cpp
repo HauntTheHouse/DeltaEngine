@@ -97,7 +97,7 @@ Application::Application(unsigned int aWindowWidth, unsigned int aWindowHeight, 
 
     mEventDispatcher.addEventListener<WindowResizeEvent>([this](WindowResizeEvent& event)
     {
-        mCamera.setAspect(event.width / static_cast<float>(event.height));
+        onWindowResizeEvent(event.width, event.height);
     });
     mEventDispatcher.addEventListener<MouseButtonPressedEvent>([this](MouseButtonPressedEvent& event)
     {
@@ -109,16 +109,23 @@ Application::Application(unsigned int aWindowWidth, unsigned int aWindowHeight, 
         Input::releaseMouseButton(event.mMouseButton);
         onMouseButtonEvent(event.mMouseButton, event.x, event.y, false);
     });
-    mEventDispatcher.addEventListener<MouseMoveEvent>([](MouseMoveEvent& event)
+    mEventDispatcher.addEventListener<KeyPressedEvent>([this](KeyPressedEvent& event)
     {
+        Input::pressKey(event.keyCode);
+        onKeyEvent(event.keyCode, true);
     });
-    mEventDispatcher.addEventListener<KeyPressedEvent>([](KeyPressedEvent& event)
+    mEventDispatcher.addEventListener<KeyReleasedEvent>([this](KeyReleasedEvent& event)
     {
-        Input::pressKey(event.mKeyCode);
+        Input::releaseKey(event.keyCode);
+        onKeyEvent(event.keyCode, true);
     });
-    mEventDispatcher.addEventListener<KeyReleasedEvent>([](KeyReleasedEvent& event)
+    mEventDispatcher.addEventListener<MouseMoveEvent>([this](MouseMoveEvent& event)
     {
-        Input::releaseKey(event.mKeyCode);
+        onMouseMoveEvent(event.x, event.y);
+    });
+    mEventDispatcher.addEventListener<MouseScrolledEvent>([this](MouseScrolledEvent& event)
+    {
+        onMouseScrollEvent(event.xOffset, event.yOffset);
     });
     mEventDispatcher.addEventListener<WindowCloseEvent>([this](WindowCloseEvent& event)
     {

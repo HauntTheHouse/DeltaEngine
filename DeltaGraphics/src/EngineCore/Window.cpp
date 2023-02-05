@@ -115,6 +115,13 @@ int Window::init(unsigned int aWindowWidth, unsigned int aWindowHeight, const ch
         }
     });
 
+    glfwSetScrollCallback(mWindow, [](GLFWwindow* window, double xOffset, double yOffset)
+    {
+        const auto params = static_cast<WindowParameters*>(glfwGetWindowUserPointer(window));
+        MouseScrolledEvent event(xOffset, yOffset);
+        params->eventCallback(event);
+    });
+
     glfwSetWindowCloseCallback(mWindow, [](GLFWwindow* window)
     {
         const auto params = static_cast<WindowParameters*>(glfwGetWindowUserPointer(window));
