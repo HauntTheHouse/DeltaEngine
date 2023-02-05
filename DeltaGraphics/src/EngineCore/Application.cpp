@@ -121,6 +121,7 @@ Application::Application(unsigned int aWindowWidth, unsigned int aWindowHeight, 
     });
     mEventDispatcher.addEventListener<MouseMoveEvent>([this](MouseMoveEvent& event)
     {
+        Input::setCursorPosition(Vec2(event.x, event.y));
         onMouseMoveEvent(event.x, event.y);
     });
     mEventDispatcher.addEventListener<MouseScrolledEvent>([this](MouseScrolledEvent& event)
@@ -208,11 +209,6 @@ void Application::run()
     mTexturePink.clear();
 
     mWindow.shutdown();
-}
-
-Vec2 Application::getCursorPosition() const
-{
-    return mWindow.getCursorPosition();
 }
 
 void Application::shouldClose()

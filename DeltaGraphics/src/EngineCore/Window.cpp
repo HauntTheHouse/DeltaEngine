@@ -157,11 +157,4 @@ void Window::onUpdate()
     glfwPollEvents();
 }
 
-Vec2 Window::getCursorPosition() const
-{
-    double xPos, yPos;
-    glfwGetCursorPos(mWindow, &xPos, &yPos);
-    return Vec2(static_cast<float>(xPos), static_cast<float>(yPos));
-}
-
 } // namespace Delta

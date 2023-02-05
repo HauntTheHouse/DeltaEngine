@@ -30,8 +30,6 @@ public:
     virtual void onMouseMoveEvent(double aNewPosX, double aNewPosY) {};
     virtual void onMouseScrollEvent(double aOffsetX, double aOffsetY) {};
 
-    Vec2 getCursorPosition() const;
-
 protected:
     Camera mCamera;
 

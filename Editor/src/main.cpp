@@ -46,7 +46,7 @@ public:
         {
             if (Delta::Input::isMouseButtonPressed(Delta::MouseButtonCode::MOUSE_BUTTON_LEFT))
             {
-                Delta::Vec2 currentCursorPostion = getCursorPosition();
+                Delta::Vec2 currentCursorPostion = Delta::Input::getCursorPosition();
                 if (Delta::Input::isMouseButtonPressed(Delta::MouseButtonCode::MOUSE_BUTTON_RIGHT))
                 {
                     movementDelta.x += (mInitCursorPosition.x - currentCursorPostion.x) / 100.0f;

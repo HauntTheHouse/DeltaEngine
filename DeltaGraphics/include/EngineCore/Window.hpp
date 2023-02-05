@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Vec2.hpp>
+#include "Input.hpp"
 
 struct GLFWwindow;
 
@@ -28,7 +29,6 @@ public:
 
     unsigned int getWidth() const { return mData.width; }
     unsigned int getHeight() const { return mData.height; }
-    Vec2 getCursorPosition() const;
 
     void setEventCallback(EventCallback aEventCallbeck) { mData.eventCallback = std::move(aEventCallbeck); }
 
@@ -44,6 +44,7 @@ private:
     GLFWwindow* mWindow{ nullptr };
     WindowParameters mData;
 
+    friend class Input;
 };
 
 } // namespace Delta
