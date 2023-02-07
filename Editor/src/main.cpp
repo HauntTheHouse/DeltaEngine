@@ -1,6 +1,13 @@
 #include "EngineCore/Application.hpp"
 #include "EngineCore/EntryPoint.hpp"
 #include "EngineCore/Input.hpp"
+#include "EngineCore/Camera.hpp"
+#include "EngineCore/Rendering/OpenGL/ShaderProgram.hpp"
+#include "EngineCore/Rendering/OpenGL/VertexBuffer.hpp"
+#include "EngineCore/Rendering/OpenGL/IndexBuffer.hpp"
+#include "EngineCore/Rendering/OpenGL/VertexArray.hpp"
+#include "EngineCore/Rendering/OpenGL/Texture2D.hpp"
+#include "EngineCore/Rendering/OpenGL/Renderer.hpp"
 
 #include <imgui.h>
 #include <Vec2.hpp>
@@ -11,12 +18,15 @@ class Editor : public Delta::Application
 public:
     Editor(unsigned int aWindowWidth, unsigned int aWindowHeight, const char* aTitle) : Application(aWindowWidth, aWindowHeight, aTitle)
     {
-        mCamera.init(mCameraPosition, mCameraRotation);
+        mCamera.init({ 0.0f, 0.0f, 8.0f }, { 0.0f, 0.0f, 0.0f });
         mCamera.setProjectionMode(mIsPerspectiveCamera ? Delta::Camera::ProjectionMode::PERSPECTIVE : Delta::Camera::ProjectionMode::ORTHO);
         mCamera.setAspect(aWindowWidth / static_cast<float>(aWindowHeight));
         mCamera.setFov(90.0f);
         mCamera.setNearFarPlanes(0.1f, 100.0f);
         mCamera.setOrthoPlanes(-8.0f, 8.0f, -8.0f, 8.0f);
+
+        std::cout << std::string(CURRENT_SOURCE_DIR) << std::endl;
+        //mShaderProgram.init("shaders/object.vert", "shaders/object.frag");
     }
 
     void onUpdate() override
@@ -101,12 +111,17 @@ public:
     }
 
 private:
-    Delta::Vec3 mCameraPosition{ 0.0f, 0.0f, 8.0f };
-    Delta::Vec3 mCameraRotation{ 0.0f, 0.0f, 0.0f };
+    //Delta::Camera mCamera;
     bool mIsPerspectiveCamera{ true };
 
     Delta::Vec2 mInitCursorPosition;
 
+    Delta::ShaderProgram mShaderProgram;
+    Delta::VertexBuffer mVBO;
+    Delta::IndexBuffer mEBO;
+    Delta::VertexArray mVAO;
+    Delta::Texture2D mTextureCheckboard;
+    Delta::Texture2D mTexturePink;
 };
 
 Delta::Application* Delta::createApplication()
