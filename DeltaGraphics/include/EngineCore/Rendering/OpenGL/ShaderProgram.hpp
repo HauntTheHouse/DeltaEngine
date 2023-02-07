@@ -19,7 +19,8 @@ public:
     ShaderProgram(ShaderProgram&) = delete;
     ShaderProgram& operator=(ShaderProgram&) = delete;
 
-    bool init(const char* aVertexShaderSrc, const char* aFragmentShaderSrc);
+    bool init(const char* aVertexShaderPath, const char* aFragmentShaderPath);
+    bool initFromSrc(const char* aVertexShaderSrc, const char* aFragmentShaderSrc);
     void clear();
 
     void bind() const;

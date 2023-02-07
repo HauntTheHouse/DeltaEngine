@@ -6,7 +6,23 @@
 namespace Delta
 {
 
-bool ShaderProgram::init(const char* aVertexShaderSrc, const char* aFragmentShaderSrc)
+bool ShaderProgram::init(const char* aVertexShaderPath, const char* aFragmentShaderPath)
+{
+    auto const readFile = [](const char* path)
+    {
+        std::fstream file(path);
+        std::stringstream stream;
+        stream << file.rdbuf();
+        return stream.str();
+    };
+
+    std::string vsStr = readFile(aVertexShaderPath);
+    std::string fsStr = readFile(aFragmentShaderPath);
+
+    return initFromSrc(vsStr.c_str(), fsStr.c_str());
+}
+
+bool ShaderProgram::initFromSrc(const char* aVertexShaderSrc, const char* aFragmentShaderSrc)
 {
     if (mId != 0) return false;
 

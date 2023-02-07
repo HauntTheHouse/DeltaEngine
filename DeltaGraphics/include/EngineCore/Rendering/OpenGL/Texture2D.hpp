@@ -23,7 +23,7 @@ public:
     static std::vector<unsigned char> generateFillColor(int aWidth, int aHeight, int aChannelsNum, const Vec3& aColor);
 
 private:
-    unsigned int mId;
+    unsigned int mId{ 0 };
     int mWidth;
     int mHeight;
 
