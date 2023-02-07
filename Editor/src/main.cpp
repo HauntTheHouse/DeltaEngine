@@ -12,12 +12,71 @@
 #include <imgui.h>
 #include <Vec2.hpp>
 #include <Vec3.hpp>
+#include <Mat4.hpp>
 
 class Editor : public Delta::Application
 {
 public:
     Editor(unsigned int aWindowWidth, unsigned int aWindowHeight, const char* aTitle) : Application(aWindowWidth, aWindowHeight, aTitle)
     {
+        std::vector<float> vertices = {
+            // front side
+           -1.0f,  -1.0f,  1.0f,  0.0f, 0.0f,
+           -1.0f,   1.0f,  1.0f,  0.0f, 1.0f,
+            1.0f,   1.0f,  1.0f,  1.0f, 1.0f,
+            1.0f,  -1.0f,  1.0f,  1.0f, 0.0f,
+
+            // left side
+           -1.0f, -1.0f, -1.0f,   0.0f, 0.0f,
+           -1.0f,  1.0f, -1.0f,   0.0f, 1.0f,
+           -1.0f,  1.0f,  1.0f,   1.0f, 1.0f,
+           -1.0f, -1.0f,  1.0f,   1.0f, 0.0f,
+
+            // back side
+            1.0f, -1.0f, -1.0f,   0.0f, 0.0f,
+            1.0f,  1.0f, -1.0f,   0.0f, 1.0f,
+           -1.0f,  1.0f, -1.0f,   1.0f, 1.0f,
+           -1.0f, -1.0f, -1.0f,   1.0f, 0.0f,
+
+           // right side
+            1.0f, -1.0f,  1.0f,   0.0f, 0.0f,
+            1.0f,  1.0f,  1.0f,   0.0f, 1.0f,
+            1.0f,  1.0f, -1.0f,   1.0f, 1.0f,
+            1.0f, -1.0f, -1.0f,   1.0f, 0.0f,
+
+             // up side
+           -1.0f,  1.0f,  1.0f,   0.0f, 0.0f,
+           -1.0f,  1.0f, -1.0f,   0.0f, 1.0f,
+            1.0f,  1.0f, -1.0f,   1.0f, 1.0f,
+            1.0f,  1.0f,  1.0f,   1.0f, 0.0f,
+
+            // down side
+           -1.0f, -1.0f, -1.0f,   0.0f, 0.0f,
+           -1.0f, -1.0f,  1.0f,   0.0f, 1.0f,
+            1.0f, -1.0f,  1.0f,   1.0f, 1.0f,
+            1.0f, -1.0f, -1.0f,   1.0f, 0.0f,
+        };
+
+        std::vector<unsigned int> indices = {
+            0,  2,  1,
+            0,  3,  2,
+
+            4,  6,  5,
+            4,  7,  6,
+
+            8,  10, 9,
+            8,  11, 10,
+
+            12, 14, 13,
+            12, 15, 14,
+
+            16, 18, 17,
+            16, 19, 18,
+
+            20, 22, 21,
+            20, 23, 22
+        };
+
         mCamera.init({ 0.0f, 0.0f, 8.0f }, { 0.0f, 0.0f, 0.0f });
         mCamera.setProjectionMode(mIsPerspectiveCamera ? Delta::Camera::ProjectionMode::PERSPECTIVE : Delta::Camera::ProjectionMode::ORTHO);
         mCamera.setAspect(aWindowWidth / static_cast<float>(aWindowHeight));
@@ -25,8 +84,33 @@ public:
         mCamera.setNearFarPlanes(0.1f, 100.0f);
         mCamera.setOrthoPlanes(-8.0f, 8.0f, -8.0f, 8.0f);
 
-        std::cout << std::string(CURRENT_SOURCE_DIR) << std::endl;
-        //mShaderProgram.init("shaders/object.vert", "shaders/object.frag");
+        mShaderProgram.init("assets/shaders/object.vert", "assets/shaders/object.frag");
+        mShaderProgram.bind();
+
+        Delta::BufferLayout layout({ Delta::ShaderData::Type::FLOAT3, Delta::ShaderData::Type::FLOAT2 });
+
+        mVBO.init(vertices, layout);
+        mEBO.init(indices);
+
+        mVAO.init();
+        mVAO.addVertexBuffer(mVBO);
+        mVAO.setIndexBuffer(mEBO);
+
+        const unsigned int width = 512;
+        const unsigned int height = 512;
+
+        mTextureCheckboard.init(width, height, Delta::Texture2D::generateCheckboard(width, height, 3, 8).data());
+        mTexturePink.init(width, height, Delta::Texture2D::generateFillColor(width, height, 3, { 0.0f, 0.0f, 1.0f }).data());
+    }
+
+    ~Editor() override
+    {
+        mEBO.clear();
+        mVBO.clear();
+        mVAO.clear();
+        mShaderProgram.clear();
+        mTextureCheckboard.clear();
+        mTexturePink.clear();
     }
 
     void onUpdate() override
@@ -72,6 +156,30 @@ public:
         }
 
         mCamera.move(movementDelta, rotationDelta);
+
+        Delta::Renderer::clearColor(Delta::Vec4(mBackgroundColor.x, mBackgroundColor.y, mBackgroundColor.z, 1.0f));
+        Delta::Renderer::clear();
+
+        static Delta::Vec3 translate(0.0f);
+        static Delta::Vec3 angles(0.0f);
+        static Delta::Vec3 scale(1.0f);
+
+        Delta::Mat4 transformMat;
+        transformMat.transform(translate, angles, scale);
+
+        mShaderProgram.bind();
+        {
+            mShaderProgram.setMat4("uModel", transformMat);
+            mShaderProgram.setMat4("uViewProject", mCamera.getViewProjection());
+
+            mTextureCheckboard.bind(0);
+            mShaderProgram.setInt("uDefaultTexture", 0);
+            mTexturePink.bind(1);
+            mShaderProgram.setInt("uPink", 1);
+
+            Delta::Renderer::draw(mVAO);
+        }
+        mShaderProgram.unbind();
     }
 
     void onGuiDraw() override
@@ -111,10 +219,7 @@ public:
     }
 
 private:
-    //Delta::Camera mCamera;
-    bool mIsPerspectiveCamera{ true };
-
-    Delta::Vec2 mInitCursorPosition;
+    Delta::Camera mCamera;
 
     Delta::ShaderProgram mShaderProgram;
     Delta::VertexBuffer mVBO;
@@ -122,6 +227,12 @@ private:
     Delta::VertexArray mVAO;
     Delta::Texture2D mTextureCheckboard;
     Delta::Texture2D mTexturePink;
+
+    Delta::Vec3 mBackgroundColor{ 0.66f, 0.86f, 1.0f };
+
+    bool mIsPerspectiveCamera{ true };
+    Delta::Vec2 mInitCursorPosition;
+
 };
 
 Delta::Application* Delta::createApplication()

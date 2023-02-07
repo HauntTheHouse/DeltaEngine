@@ -30,12 +30,10 @@ public:
     virtual void onMouseMoveEvent(double aNewPosX, double aNewPosY) {};
     virtual void onMouseScrollEvent(double aOffsetX, double aOffsetY) {};
 
-protected:
-    Camera mCamera;
-
 private:
     Window mWindow;
     EventDispatcher mEventDispatcher;
+
     bool mIsShouldClose{ false };
 
 };
