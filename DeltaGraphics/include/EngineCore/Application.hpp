@@ -3,6 +3,7 @@
 #include "Window.hpp"
 #include "Event.hpp"
 #include "Camera.hpp"
+#include "Time.hpp"
 
 namespace Delta
 {
@@ -21,7 +22,7 @@ public:
     void run();
     void shouldClose();
 
-    virtual void onUpdate() {};
+    virtual void onUpdate(Timestep aTimestep) {};
     virtual void onGuiDraw() {};
 
     virtual void onWindowResizeEvent(unsigned int aNewWidth, unsigned int aNewHeight) {};

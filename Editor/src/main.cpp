@@ -1,6 +1,7 @@
 #include "EngineCore/Application.hpp"
 #include "EngineCore/EntryPoint.hpp"
 #include "EngineCore/Input.hpp"
+#include "EngineCore/Time.hpp"
 #include "EngineCore/Camera.hpp"
 #include "EngineCore/Rendering/OpenGL/ShaderProgram.hpp"
 #include "EngineCore/Rendering/OpenGL/VertexBuffer.hpp"
@@ -101,6 +102,8 @@ public:
 
         mTextureCheckboard.init(width, height, Delta::Texture2D::generateCheckboard(width, height, 3, 8).data());
         mTexturePink.init(width, height, Delta::Texture2D::generateFillColor(width, height, 3, { 0.0f, 0.0f, 1.0f }).data());
+
+        Delta::Renderer::depthTesting(true);
     }
 
     ~Editor() override
@@ -113,28 +116,28 @@ public:
         mTexturePink.clear();
     }
 
-    void onUpdate() override
+    void onUpdate(Delta::Timestep aTimestep) override
     {
         Delta::Vec3 movementDelta{ 0.0f, 0.0f, 0.0f };
         Delta::Vec3 rotationDelta{ 0.0f, 0.0f, 0.0f };
 
         if (Delta::Input::isKeyPressed(Delta::KeyCode::KEY_W))
-            movementDelta.z += 0.05f;
+            movementDelta.z += 2.0f * static_cast<float>(aTimestep);
         else if (Delta::Input::isKeyPressed(Delta::KeyCode::KEY_S))
-            movementDelta.z -= 0.05f;
+            movementDelta.z -= 2.0f * static_cast<float>(aTimestep);
         if (Delta::Input::isKeyPressed(Delta::KeyCode::KEY_D))
-            movementDelta.x += 0.05f;
+            movementDelta.x += 2.0f * static_cast<float>(aTimestep);
         else if (Delta::Input::isKeyPressed(Delta::KeyCode::KEY_A))
-            movementDelta.x -= 0.05f;
+            movementDelta.x -= 2.0f * static_cast<float>(aTimestep);
 
         if (Delta::Input::isKeyPressed(Delta::KeyCode::KEY_UP))
-            rotationDelta.x -= 0.5f;
+            rotationDelta.x -= 40.0f * static_cast<float>(aTimestep);
         else if (Delta::Input::isKeyPressed(Delta::KeyCode::KEY_DOWN))
-            rotationDelta.x += 0.5f;
+            rotationDelta.x += 40.0f * static_cast<float>(aTimestep);
         if (Delta::Input::isKeyPressed(Delta::KeyCode::KEY_RIGHT))
-            rotationDelta.y += 0.5f;
+            rotationDelta.y += 40.0f * static_cast<float>(aTimestep);
         else if (Delta::Input::isKeyPressed(Delta::KeyCode::KEY_LEFT))
-            rotationDelta.y -= 0.5f;
+            rotationDelta.y -= 40.0f * static_cast<float>(aTimestep);
 
         if (!ImGui::IsAnyItemActive())
         {

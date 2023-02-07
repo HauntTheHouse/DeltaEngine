@@ -2,16 +2,8 @@
 #include "EngineCore/Application.hpp"
 
 #include <imgui.h>
-#include <cmrc/cmrc.hpp>
 
-#include "EngineCore/Camera.hpp"
 #include "EngineCore/Input.hpp"
-#include "EngineCore/Rendering/OpenGL/ShaderProgram.hpp"
-#include "EngineCore/Rendering/OpenGL/VertexBuffer.hpp"
-#include "EngineCore/Rendering/OpenGL/IndexBuffer.hpp"
-#include "EngineCore/Rendering/OpenGL/VertexArray.hpp"
-#include "EngineCore/Rendering/OpenGL/Texture2D.hpp"
-
 #include "EngineCore/Rendering/OpenGL/Renderer.hpp"
 #include "EngineCore/Modules/GUIModule.hpp"
 
@@ -68,11 +60,15 @@ Application::Application(unsigned int aWindowWidth, unsigned int aWindowHeight, 
 
 void Application::run()
 {
-    Renderer::depthTesting(true);
 
     while (!mIsShouldClose)
     {
-        onUpdate();
+        static double lastFrameTime = 0.0;
+        double time = Time::get();
+        Timestep timestep = time - lastFrameTime;
+        lastFrameTime = time;
+
+        onUpdate(timestep);
 
         GUIModule::onDrawBegin();
         onGuiDraw();
