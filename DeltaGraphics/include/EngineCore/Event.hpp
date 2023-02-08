@@ -76,36 +76,36 @@ public:
 class MouseButtonPressedEvent : public EventBase
 {
 public:
-    MouseButtonPressedEvent(MouseButtonCode aMouseButton, const double x, const double y) : mMouseButton(aMouseButton), x(x), y(y) {}
+    MouseButtonPressedEvent(MouseButtonCode aMouseButton, const float x, const float y) : mMouseButton(aMouseButton), x(x), y(y) {}
     EventType getType() const override { return type; }
     static const EventType type{ EventType::MOUSE_BUTTON_PRESSED };
 
     MouseButtonCode mMouseButton;
-    double x;
-    double y;
+    float x;
+    float y;
 };
 
 class MouseButtonReleasedEvent : public EventBase
 {
 public:
-    MouseButtonReleasedEvent(MouseButtonCode aMouseButton, const double x, const double y) : mMouseButton(aMouseButton), x(x), y(y) {}
+    MouseButtonReleasedEvent(MouseButtonCode aMouseButton, const float x, const float y) : mMouseButton(aMouseButton), x(x), y(y) {}
     EventType getType() const override { return type; }
     static const EventType type{ EventType::MOUSE_BUTTON_RELEASED };
 
     MouseButtonCode mMouseButton;
-    double x;
-    double y;
+    float x;
+    float y;
 };
 
 class MouseMoveEvent : public EventBase
 {
 public:
-    MouseMoveEvent(const double x, const double y) : x(x), y(y) {}
+    MouseMoveEvent(const float x, const float y) : x(x), y(y) {}
     EventType getType() const override { return type; }
     static const EventType type{ EventType::MOUSE_MOVED };
 
-    double x;
-    double y;
+    float x;
+    float y;
 };
 
 class WindowCloseEvent : public EventBase
@@ -140,12 +140,12 @@ public:
 class MouseScrolledEvent : public EventBase
 {
 public:
-    MouseScrolledEvent(double xOffset, double yOffset) : xOffset(xOffset), yOffset(yOffset) {}
+    MouseScrolledEvent(float xOffset, float yOffset) : xOffset(xOffset), yOffset(yOffset) {}
     EventType getType() const override { return type; }
     static const EventType type{ EventType::MOUSE_SCROLLED };
 
-    double xOffset;
-    double yOffset;
+    float xOffset;
+    float yOffset;
 };
 
 } // namespace Delta

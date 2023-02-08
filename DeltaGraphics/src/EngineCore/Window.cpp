@@ -56,7 +56,7 @@ int Window::init(unsigned int aWindowWidth, unsigned int aWindowHeight, const ch
     glfwSetCursorPosCallback(mWindow, [](GLFWwindow* window, double xpos, double ypos)
     {
         const auto params = static_cast<WindowParameters*>(glfwGetWindowUserPointer(window));
-        MouseMoveEvent event(xpos, ypos);
+        MouseMoveEvent event(static_cast<float>(xpos), static_cast<float>(ypos));
         params->eventCallback(event);
     });
 
@@ -93,20 +93,20 @@ int Window::init(unsigned int aWindowWidth, unsigned int aWindowHeight, const ch
     {
         const auto params = static_cast<WindowParameters*>(glfwGetWindowUserPointer(window));
 
-        double xPos, yPos;
-        glfwGetCursorPos(window, &xPos, &yPos);
+        double xpos, ypos;
+        glfwGetCursorPos(window, &xpos, &ypos);
 
         switch (action)
         {
         case GLFW_PRESS:
         {
-            MouseButtonPressedEvent event(static_cast<MouseButtonCode>(button), xPos, yPos);
+            MouseButtonPressedEvent event(static_cast<MouseButtonCode>(button), static_cast<float>(xpos), static_cast<float>(ypos));
             params->eventCallback(event);
             break;
         }
         case GLFW_RELEASE:
         {
-            MouseButtonReleasedEvent event(static_cast<MouseButtonCode>(button), xPos, yPos);
+            MouseButtonReleasedEvent event(static_cast<MouseButtonCode>(button), static_cast<float>(xpos), static_cast<float>(ypos));
             params->eventCallback(event);
             break;
         }
@@ -118,7 +118,7 @@ int Window::init(unsigned int aWindowWidth, unsigned int aWindowHeight, const ch
     glfwSetScrollCallback(mWindow, [](GLFWwindow* window, double xOffset, double yOffset)
     {
         const auto params = static_cast<WindowParameters*>(glfwGetWindowUserPointer(window));
-        MouseScrolledEvent event(xOffset, yOffset);
+        MouseScrolledEvent event(static_cast<float>(xOffset), static_cast<float>(yOffset));
         params->eventCallback(event);
     });
 

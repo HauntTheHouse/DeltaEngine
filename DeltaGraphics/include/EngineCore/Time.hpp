@@ -6,22 +6,21 @@ namespace Delta
 class Time
 {
 public:
-    static double get();
+    static float get();
 
 };
 
 class Timestep
 {
 public:
-    Timestep(double aTime = 0.0) : mTime(aTime) {}
-    explicit operator double() const { return mTime; }
-    explicit operator float() const { return static_cast<float>(mTime); }
+    Timestep(float aTime = 0.0f) : mTime(aTime) {}
+    operator float() const { return mTime; }
 
-    double getSeconds() const { return mTime; }
-    double getMilliseconds() const { return mTime * 1000.0; }
+    float getSeconds() const { return mTime; }
+    float getMilliseconds() const { return mTime * 1000.0f; }
 
 private:
-    double mTime;
+    float mTime;
 
 };
 

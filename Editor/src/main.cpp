@@ -122,22 +122,22 @@ public:
         Delta::Vec3 rotationDelta{ 0.0f, 0.0f, 0.0f };
 
         if (Delta::Input::isKeyPressed(Delta::KeyCode::KEY_W))
-            movementDelta.z += 2.0f * static_cast<float>(aTimestep);
+            movementDelta.z += 2.0f * aTimestep;
         else if (Delta::Input::isKeyPressed(Delta::KeyCode::KEY_S))
-            movementDelta.z -= 2.0f * static_cast<float>(aTimestep);
+            movementDelta.z -= 2.0f * aTimestep;
         if (Delta::Input::isKeyPressed(Delta::KeyCode::KEY_D))
-            movementDelta.x += 2.0f * static_cast<float>(aTimestep);
+            movementDelta.x += 2.0f * aTimestep;
         else if (Delta::Input::isKeyPressed(Delta::KeyCode::KEY_A))
-            movementDelta.x -= 2.0f * static_cast<float>(aTimestep);
+            movementDelta.x -= 2.0f * aTimestep;
 
         if (Delta::Input::isKeyPressed(Delta::KeyCode::KEY_UP))
-            rotationDelta.x -= 40.0f * static_cast<float>(aTimestep);
+            rotationDelta.x -= 40.0f * aTimestep;
         else if (Delta::Input::isKeyPressed(Delta::KeyCode::KEY_DOWN))
-            rotationDelta.x += 40.0f * static_cast<float>(aTimestep);
+            rotationDelta.x += 40.0f * aTimestep;
         if (Delta::Input::isKeyPressed(Delta::KeyCode::KEY_RIGHT))
-            rotationDelta.y += 40.0f * static_cast<float>(aTimestep);
+            rotationDelta.y += 40.0f * aTimestep;
         else if (Delta::Input::isKeyPressed(Delta::KeyCode::KEY_LEFT))
-            rotationDelta.y -= 40.0f * static_cast<float>(aTimestep);
+            rotationDelta.y -= 40.0f * aTimestep;
 
         if (!ImGui::IsAnyItemActive())
         {
@@ -215,10 +215,10 @@ public:
         mCamera.setAspect(aNewWidth / static_cast<float>(aNewHeight));
     }
 
-    void onMouseButtonEvent(Delta::MouseButtonCode aMouseButtonCode, double aPosX, double aPosY, bool aPressed) override
+    void onMouseButtonEvent(Delta::MouseButtonCode aMouseButtonCode, float aPosX, float aPosY, bool aPressed) override
     {
-        mInitCursorPosition.x = static_cast<float>(aPosX);
-        mInitCursorPosition.y = static_cast<float>(aPosY);
+        mInitCursorPosition.x = aPosX;
+        mInitCursorPosition.y = aPosY;
     }
 
 private:

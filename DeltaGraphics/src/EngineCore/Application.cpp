@@ -63,8 +63,8 @@ void Application::run()
 
     while (!mIsShouldClose)
     {
-        static double lastFrameTime = 0.0;
-        double time = Time::get();
+        static float lastFrameTime = 0.0f;
+        float time = Time::get();
         Timestep timestep = time - lastFrameTime;
         lastFrameTime = time;
 

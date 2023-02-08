@@ -26,10 +26,10 @@ public:
     virtual void onGuiDraw() {};
 
     virtual void onWindowResizeEvent(unsigned int aNewWidth, unsigned int aNewHeight) {};
-    virtual void onMouseButtonEvent(MouseButtonCode aMouseButtonCode, double aPosX, double aPosY, bool aPressed) {};
+    virtual void onMouseButtonEvent(MouseButtonCode aMouseButtonCode, float aPosX, float aPosY, bool aPressed) {};
     virtual void onKeyEvent(KeyCode aKeyCode, bool aPressed) {};
-    virtual void onMouseMoveEvent(double aNewPosX, double aNewPosY) {};
-    virtual void onMouseScrollEvent(double aOffsetX, double aOffsetY) {};
+    virtual void onMouseMoveEvent(float aNewPosX, float aNewPosY) {};
+    virtual void onMouseScrollEvent(float aOffsetX, float aOffsetY) {};
 
 private:
     Window mWindow;
