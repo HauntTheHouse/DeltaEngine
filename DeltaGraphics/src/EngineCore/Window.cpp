@@ -7,7 +7,7 @@
 
 #include "EngineCore/Event.hpp"
 #include "EngineCore/Rendering/OpenGL/Renderer.hpp"
-#include "EngineCore/Modules/GUIModule.hpp"
+#include "EngineCore/Gui.hpp"
 
 namespace Delta
 {
@@ -147,14 +147,14 @@ int Window::init(unsigned int aWindowWidth, unsigned int aWindowHeight, const ch
 
     Renderer::viewport(mData.width, mData.height);
 
-    GUIModule::onWindowCreate(mWindow);
+    Gui::onWindowCreate(mWindow);
 
     return 0;
 }
 
 void Window::shutdown()
 {
-    GUIModule::onWindowClose();
+    Gui::onWindowClose();
 
     glfwDestroyWindow(mWindow);
     glfwTerminate();

@@ -5,7 +5,7 @@ struct GLFWwindow;
 namespace Delta
 {
 
-class GUIModule
+class Gui
 {
 public:
     static void onWindowCreate(GLFWwindow* aWindow);

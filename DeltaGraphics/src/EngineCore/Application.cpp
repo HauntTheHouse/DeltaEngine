@@ -5,7 +5,7 @@
 
 #include "EngineCore/Input.hpp"
 #include "EngineCore/Rendering/OpenGL/Renderer.hpp"
-#include "EngineCore/Modules/GUIModule.hpp"
+#include "EngineCore/Gui.hpp"
 
 namespace Delta
 {
@@ -60,7 +60,6 @@ Application::Application(unsigned int aWindowWidth, unsigned int aWindowHeight, 
 
 void Application::run()
 {
-
     while (!mIsShouldClose)
     {
         static float lastFrameTime = 0.0f;
@@ -70,9 +69,9 @@ void Application::run()
 
         onUpdate(timestep);
 
-        GUIModule::onDrawBegin();
+        Gui::onDrawBegin();
         onGuiDraw();
-        GUIModule::onDrawEnd();
+        Gui::onDrawEnd();
 
         mWindow.onUpdate();
     }

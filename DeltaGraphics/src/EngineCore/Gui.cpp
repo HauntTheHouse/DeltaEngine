@@ -1,15 +1,21 @@
-#include "EngineCore/Modules/GUIModule.hpp"
+#include "EngineCore/Gui.hpp"
 
 #include <GLFW/glfw3.h>
 #include <imgui.h>
+#if USING_OPENGL
 #include <backends/imgui_impl_opengl3.h>
 #include <backends/imgui_impl_glfw.h>
+#elif USING_VULKAN
+#include <backends/imgui_impl_vulkan.h>
+#include <backends/imgui_impl_vulkan.h>
+#endif
 
 namespace Delta
 {
 
-void GUIModule::onWindowCreate(GLFWwindow* aWindow)
+void Gui::onWindowCreate(GLFWwindow* aWindow)
 {
+#if USING_OPENGL
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
 
@@ -20,17 +26,21 @@ void GUIModule::onWindowCreate(GLFWwindow* aWindow)
     ImGui_ImplOpenGL3_Init("#version 330 core");
     ImGui_ImplGlfw_InitForOpenGL(aWindow, true);
     LOG_INFO("ImGui initialized succesfully");
+#endif
 }
 
-void GUIModule::onWindowClose()
+void Gui::onWindowClose()
 {
+#if USING_OPENGL
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
+#endif
 }
 
-void GUIModule::onDrawBegin()
+void Gui::onDrawBegin()
 {
+#if USING_OPENGL
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
@@ -53,10 +63,12 @@ void GUIModule::onDrawBegin()
 
     ImGuiID dockspaceId = ImGui::GetID("MyDockSpace");
     ImGui::DockSpace(dockspaceId, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode);
+#endif
 }
 
-void GUIModule::onDrawEnd()
+void Gui::onDrawEnd()
 {
+#if USING_OPENGL
     ImGui::End();
 
     ImGui::Render();
@@ -69,6 +81,7 @@ void GUIModule::onDrawEnd()
         ImGui::RenderPlatformWindowsDefault();
         glfwMakeContextCurrent(backupCurrentContext);
     }
+#endif
 }
 
 } // namespace Delta
