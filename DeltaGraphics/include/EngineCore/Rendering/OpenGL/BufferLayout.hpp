@@ -38,6 +38,7 @@ public:
     };
 
     BufferLayout() = default;
+    BufferLayout(std::initializer_list<ShaderData::Type> aInitList);
     BufferLayout(const std::vector<ShaderData::Type>& aShaderDataTypes);
 
     void init(const std::vector<ShaderData::Type>& aShaderDataTypes);
