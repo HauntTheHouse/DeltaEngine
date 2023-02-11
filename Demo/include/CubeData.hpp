@@ -1,6 +1,6 @@
 #pragma once
 
-#include <EngineCore/Rendering/OpenGL/BufferLayout.hpp>
+#include <EngineCore/Rendering/BufferLayout.hpp>
 
 class CubeData
 {

@@ -1,4 +1,4 @@
-#include "EngineCore/Rendering/OpenGL/VertexBuffer.hpp"
+#include "EngineCore/Rendering/VertexBuffer.hpp"
 
 namespace Delta
 {

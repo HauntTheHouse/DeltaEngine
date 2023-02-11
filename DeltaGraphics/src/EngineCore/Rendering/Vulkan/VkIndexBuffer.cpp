@@ -1,4 +1,4 @@
-#include "EngineCore/Rendering/OpenGL/IndexBuffer.hpp"
+#include "EngineCore/Rendering/IndexBuffer.hpp"
 
 namespace Delta
 {

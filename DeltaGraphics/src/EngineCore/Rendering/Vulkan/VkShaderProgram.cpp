@@ -1,4 +1,4 @@
-#include "EngineCore/Rendering/OpenGL/ShaderProgram.hpp"
+#include "EngineCore/Rendering/ShaderProgram.hpp"
 
 #include <Mat4.hpp>
 

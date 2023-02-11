@@ -6,7 +6,7 @@
 #include <GLFW/glfw3.h>
 
 #include "EngineCore/Event.hpp"
-#include "EngineCore/Rendering/OpenGL/Renderer.hpp"
+#include "EngineCore/Rendering/Renderer.hpp"
 #include "EngineCore/Gui.hpp"
 
 namespace Delta

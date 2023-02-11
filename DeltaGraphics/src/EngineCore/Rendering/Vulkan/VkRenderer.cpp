@@ -1,6 +1,6 @@
-#include "EngineCore/Rendering/OpenGL/Renderer.hpp"
+#include "EngineCore/Rendering/Renderer.hpp"
 
-#include "EngineCore/Rendering/OpenGL/VertexArray.hpp"
+#include "EngineCore/Rendering/VertexArray.hpp"
 
 namespace Delta
 {

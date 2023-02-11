@@ -1,4 +1,4 @@
-#include "EngineCore/Rendering/OpenGL/Texture2D.hpp"
+#include "EngineCore/Rendering/Texture2D.hpp"
 
 namespace Delta
 {

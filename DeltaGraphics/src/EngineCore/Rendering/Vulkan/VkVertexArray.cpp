@@ -1,4 +1,4 @@
-#include "EngineCore/Rendering/OpenGL/VertexArray.hpp"
+#include "EngineCore/Rendering/VertexArray.hpp"
 
 namespace Delta
 {

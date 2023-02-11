@@ -1,4 +1,4 @@
-#include "EngineCore/Rendering/OpenGL/BufferLayout.hpp"
+#include "EngineCore/Rendering/BufferLayout.hpp"
 
 namespace Delta
 {

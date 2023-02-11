@@ -3,12 +3,12 @@
 #include "EngineCore/Input.hpp"
 #include "EngineCore/Time.hpp"
 #include "EngineCore/Camera.hpp"
-#include "EngineCore/Rendering/OpenGL/ShaderProgram.hpp"
-#include "EngineCore/Rendering/OpenGL/VertexBuffer.hpp"
-#include "EngineCore/Rendering/OpenGL/IndexBuffer.hpp"
-#include "EngineCore/Rendering/OpenGL/VertexArray.hpp"
-#include "EngineCore/Rendering/OpenGL/Texture2D.hpp"
-#include "EngineCore/Rendering/OpenGL/Renderer.hpp"
+#include "EngineCore/Rendering/ShaderProgram.hpp"
+#include "EngineCore/Rendering/VertexBuffer.hpp"
+#include "EngineCore/Rendering/IndexBuffer.hpp"
+#include "EngineCore/Rendering/VertexArray.hpp"
+#include "EngineCore/Rendering/Texture2D.hpp"
+#include "EngineCore/Rendering/Renderer.hpp"
 
 #include <imgui.h>
 #include <Vec2.hpp>

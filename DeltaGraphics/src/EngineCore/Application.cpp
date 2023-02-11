@@ -4,7 +4,7 @@
 #include <imgui.h>
 
 #include "EngineCore/Input.hpp"
-#include "EngineCore/Rendering/OpenGL/Renderer.hpp"
+#include "EngineCore/Rendering/Renderer.hpp"
 #include "EngineCore/Gui.hpp"
 
 namespace Delta
