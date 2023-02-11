@@ -15,69 +15,13 @@
 #include <Vec3.hpp>
 #include <Mat4.hpp>
 
+#include "CubeData.hpp"
+
 class Editor : public Delta::Application
 {
 public:
     Editor(unsigned int aWindowWidth, unsigned int aWindowHeight, const char* aTitle) : Application(aWindowWidth, aWindowHeight, aTitle)
     {
-        std::vector<float> vertices = {
-            // front side
-           -1.0f,  -1.0f,  1.0f,  0.0f, 0.0f,
-           -1.0f,   1.0f,  1.0f,  0.0f, 1.0f,
-            1.0f,   1.0f,  1.0f,  1.0f, 1.0f,
-            1.0f,  -1.0f,  1.0f,  1.0f, 0.0f,
-
-            // left side
-           -1.0f, -1.0f, -1.0f,   0.0f, 0.0f,
-           -1.0f,  1.0f, -1.0f,   0.0f, 1.0f,
-           -1.0f,  1.0f,  1.0f,   1.0f, 1.0f,
-           -1.0f, -1.0f,  1.0f,   1.0f, 0.0f,
-
-            // back side
-            1.0f, -1.0f, -1.0f,   0.0f, 0.0f,
-            1.0f,  1.0f, -1.0f,   0.0f, 1.0f,
-           -1.0f,  1.0f, -1.0f,   1.0f, 1.0f,
-           -1.0f, -1.0f, -1.0f,   1.0f, 0.0f,
-
-           // right side
-            1.0f, -1.0f,  1.0f,   0.0f, 0.0f,
-            1.0f,  1.0f,  1.0f,   0.0f, 1.0f,
-            1.0f,  1.0f, -1.0f,   1.0f, 1.0f,
-            1.0f, -1.0f, -1.0f,   1.0f, 0.0f,
-
-             // up side
-           -1.0f,  1.0f,  1.0f,   0.0f, 0.0f,
-           -1.0f,  1.0f, -1.0f,   0.0f, 1.0f,
-            1.0f,  1.0f, -1.0f,   1.0f, 1.0f,
-            1.0f,  1.0f,  1.0f,   1.0f, 0.0f,
-
-            // down side
-           -1.0f, -1.0f, -1.0f,   0.0f, 0.0f,
-           -1.0f, -1.0f,  1.0f,   0.0f, 1.0f,
-            1.0f, -1.0f,  1.0f,   1.0f, 1.0f,
-            1.0f, -1.0f, -1.0f,   1.0f, 0.0f,
-        };
-
-        std::vector<unsigned int> indices = {
-            0,  2,  1,
-            0,  3,  2,
-
-            4,  6,  5,
-            4,  7,  6,
-
-            8,  10, 9,
-            8,  11, 10,
-
-            12, 14, 13,
-            12, 15, 14,
-
-            16, 18, 17,
-            16, 19, 18,
-
-            20, 22, 21,
-            20, 23, 22
-        };
-
         mCamera.init({ 0.0f, 0.0f, 8.0f }, { 0.0f, 0.0f, 0.0f });
         mCamera.setProjectionMode(mIsPerspectiveCamera ? Delta::Camera::ProjectionMode::PERSPECTIVE : Delta::Camera::ProjectionMode::ORTHO);
         mCamera.setAspect(aWindowWidth / static_cast<float>(aWindowHeight));
@@ -88,10 +32,8 @@ public:
         mShaderProgram.init("assets/shaders/object.vert", "assets/shaders/object.frag");
         mShaderProgram.bind();
 
-        Delta::BufferLayout layout({ Delta::ShaderData::Type::FLOAT3, Delta::ShaderData::Type::FLOAT2 });
-
-        mVBO.init(vertices, layout);
-        mEBO.init(indices);
+        mVBO.init(CubeData::getVertices(), CubeData::getLayout());
+        mEBO.init(CubeData::getIndices());
 
         mVAO.init();
         mVAO.addVertexBuffer(mVBO);
