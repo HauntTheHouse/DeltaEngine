@@ -1,5 +1,8 @@
 #include "EngineCore/Window.hpp"
 
+#ifdef USING_VULKAN
+#include <vulkan/vulkan.h>
+#endif
 #include <GLFW/glfw3.h>
 
 #include "EngineCore/Event.hpp"
@@ -11,11 +14,10 @@ namespace Delta
 
 int Window::init(unsigned int aWindowWidth, unsigned int aWindowHeight, const char* aTitle)
 {
+    LOG_INFO("Creating window {0} ({1}, {2})", aTitle, aWindowWidth, aWindowHeight);
     mData.width = aWindowWidth;
     mData.height = aWindowHeight;
     mData.title = std::string(aTitle);
-
-    LOG_INFO("Creating window {0} ({1}, {2})", mData.title, mData.width, mData.height);
 
     glfwSetErrorCallback([](int errorCode, const char* description)
     {
@@ -29,6 +31,9 @@ int Window::init(unsigned int aWindowWidth, unsigned int aWindowHeight, const ch
     }
     LOG_INFO("GLFW initialized succesfully");
 
+#ifdef USING_VULKAN
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+#endif
     mWindow = glfwCreateWindow(aWindowWidth, aWindowHeight, aTitle, nullptr, nullptr);
     if (!mWindow)
     {
@@ -37,6 +42,12 @@ int Window::init(unsigned int aWindowWidth, unsigned int aWindowHeight, const ch
         return -2;
     }
     LOG_INFO("GLFW window created succesfully");
+
+#ifdef USING_VULKAN
+    uint32_t extensionCount = 0;
+    vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
+    std::cout << extensionCount << " extensions supported\n";
+#endif
 
     if (!Renderer::init(mWindow))
         return -3;
