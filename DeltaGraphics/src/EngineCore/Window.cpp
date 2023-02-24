@@ -33,6 +33,7 @@ int Window::init(unsigned int aWindowWidth, unsigned int aWindowHeight, const ch
 
 #ifdef USING_VULKAN
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 #endif
     mWindow = glfwCreateWindow(aWindowWidth, aWindowHeight, aTitle, nullptr, nullptr);
     if (!mWindow)
@@ -43,11 +44,11 @@ int Window::init(unsigned int aWindowWidth, unsigned int aWindowHeight, const ch
     }
     LOG_INFO("GLFW window created succesfully");
 
-#ifdef USING_VULKAN
-    uint32_t extensionCount = 0;
-    vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
-    std::cout << extensionCount << " extensions supported\n";
-#endif
+//#ifdef USING_VULKAN
+//    uint32_t extensionCount = 0;
+//    vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
+//    std::cout << extensionCount << " extensions supported\n";
+//#endif
 
     if (!Renderer::init(mWindow))
         return -3;
@@ -154,6 +155,7 @@ int Window::init(unsigned int aWindowWidth, unsigned int aWindowHeight, const ch
 
 void Window::shutdown()
 {
+    Renderer::cleanup();
     Gui::onWindowClose();
 
     glfwDestroyWindow(mWindow);
@@ -164,7 +166,7 @@ void Window::shutdown()
 
 void Window::onUpdate()
 {
-    glfwSwapBuffers(mWindow);
+    //glfwSwapBuffers(mWindow);
     glfwPollEvents();
 }
 
