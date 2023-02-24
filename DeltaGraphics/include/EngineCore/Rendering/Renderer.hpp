@@ -17,6 +17,7 @@ public:
     static void clearColor(const Vec4& aClearColor);
     static void clear();
     static void viewport(int aWidth, int aHeight, int aLeftOffset = 0, int aBottomOffset = 0);
+    static void cleanup();
 
     static void depthTesting(bool aEnable);
 

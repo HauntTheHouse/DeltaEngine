@@ -21,6 +21,7 @@
 #include <numeric>
 #include <limits>
 #include <cassert>
+#include <optional>
 #include <cmath>
 
 #include "Log.hpp"
