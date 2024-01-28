@@ -13,7 +13,7 @@
 namespace Delta
 {
 
-void Gui::onWindowCreate(GLFWwindow* aWindow)
+void Gui::OnWindowCreate(GLFWwindow* window)
 {
 #if USING_OPENGL
     IMGUI_CHECKVERSION();
@@ -24,12 +24,12 @@ void Gui::onWindowCreate(GLFWwindow* aWindow)
     io.ConfigFlags |= ImGuiConfigFlags_::ImGuiConfigFlags_ViewportsEnable;
 
     ImGui_ImplOpenGL3_Init("#version 330 core");
-    ImGui_ImplGlfw_InitForOpenGL(aWindow, true);
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
     LOG_INFO("ImGui initialized succesfully");
 #endif
 }
 
-void Gui::onWindowClose()
+void Gui::OnWindowClose()
 {
 #if USING_OPENGL
     ImGui_ImplOpenGL3_Shutdown();
@@ -38,7 +38,7 @@ void Gui::onWindowClose()
 #endif
 }
 
-void Gui::onDrawBegin()
+void Gui::OnDrawBegin()
 {
 #if USING_OPENGL
     ImGui_ImplOpenGL3_NewFrame();
@@ -66,7 +66,7 @@ void Gui::onDrawBegin()
 #endif
 }
 
-void Gui::onDrawEnd()
+void Gui::OnDrawEnd()
 {
 #if USING_OPENGL
     ImGui::End();

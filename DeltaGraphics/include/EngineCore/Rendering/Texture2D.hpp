@@ -13,19 +13,19 @@ public:
     Texture2D(Texture2D&) = delete;
     Texture2D& operator=(Texture2D&) = delete;
 
-    bool init(int aWidth, int aHeight, const unsigned char* aData = nullptr);
-    void clear();
-    void bind(unsigned int aUnit) const;
+    bool Init(int width, int height, const unsigned char* data = nullptr);
+    void Clear();
+    void Bind(unsigned int unit) const;
 
-    void setData(const unsigned char* aData);
+    void SetData(const unsigned char* data);
 
-    static std::vector<unsigned char> generateCheckboard(int aWidth, int aHeight, int aChannelsNum, int aSeparationsNum);
-    static std::vector<unsigned char> generateFillColor(int aWidth, int aHeight, int aChannelsNum, const Vec3& aColor);
+    static std::vector<unsigned char> GenerateCheckboard(int width, int height, int channelsNum, int separationsNum);
+    static std::vector<unsigned char> GenerateFillColor(int width, int height, int channelsNum, const Vec3& color);
 
 private:
-    unsigned int mId{ 0 };
-    int mWidth;
-    int mHeight;
+    unsigned int m_Id{ 0 };
+    int m_Width{};
+    int m_Height{};
 
 };
 

@@ -1,6 +1,6 @@
 #include "CubeData.hpp"
 
-const std::vector<float> CubeData::mVertices = {
+const std::vector<float> CubeData::m_Vertices = {
     // front side
    -1.0f,  -1.0f,  1.0f,   0.0f, 0.0f,
    -1.0f,   1.0f,  1.0f,   0.0f, 1.0f,
@@ -38,7 +38,7 @@ const std::vector<float> CubeData::mVertices = {
      1.0f, -1.0f, -1.0f,   1.0f, 0.0f
 };
 
-const std::vector<unsigned int> CubeData::mIndices = {
+const std::vector<unsigned int> CubeData::m_Indices = {
     0,  2,  1,
     0,  3,  2,
 
@@ -58,7 +58,7 @@ const std::vector<unsigned int> CubeData::mIndices = {
     20, 23, 22
 };
 
-const Delta::BufferLayout CubeData::mLayout = {
+const Delta::BufferLayout CubeData::m_Layout = {
     Delta::ShaderData::Type::FLOAT3,
     Delta::ShaderData::Type::FLOAT2
 };

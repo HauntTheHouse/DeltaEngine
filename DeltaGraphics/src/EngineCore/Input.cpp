@@ -3,50 +3,50 @@
 namespace Delta
 {
 
-std::array<bool, static_cast<size_t>(KeyCode::KEY_LAST) + 1> Input::mPressedKeys = {};
-std::array<bool, static_cast<size_t>(MouseButtonCode::MOUSE_BUTTON_LAST) + 1> Input::mPressedMouseButtons = {};
-Vec2 Input::mCursorPosition{};
+std::array<bool, static_cast<size_t>(KeyCode::KEY_LAST) + 1> Input::m_PressedKeys = {};
+std::array<bool, static_cast<size_t>(MouseButtonCode::MOUSE_BUTTON_LAST) + 1> Input::m_PressedMouseButtons = {};
+Vec2 Input::m_CursorPosition{};
 
 
-bool Delta::Input::isKeyPressed(KeyCode aKeyCode)
+bool Delta::Input::IsKeyPressed(KeyCode keyCode)
 {
-    return mPressedKeys[static_cast<size_t>(aKeyCode)];
+    return m_PressedKeys[static_cast<size_t>(keyCode)];
 }
 
-bool Input::isMouseButtonPressed(MouseButtonCode aMouseButtonCode)
+bool Input::IsMouseButtonPressed(MouseButtonCode mouseButtonCode)
 {
-    return mPressedMouseButtons[static_cast<size_t>(aMouseButtonCode)];
+    return m_PressedMouseButtons[static_cast<size_t>(mouseButtonCode)];
 }
 
-Vec2 Input::getCursorPosition()
+Vec2 Input::GetCursorPosition()
 {
-    return mCursorPosition;
+    return m_CursorPosition;
 }
 
 
-void Input::pressKey(KeyCode aKeyCode)
+void Input::PressKey(KeyCode keyCode)
 {
-    mPressedKeys[static_cast<size_t>(aKeyCode)] = true;
+    m_PressedKeys[static_cast<size_t>(keyCode)] = true;
 }
 
-void Input::releaseKey(KeyCode aKeyCode)
+void Input::ReleaseKey(KeyCode keyCode)
 {
-    mPressedKeys[static_cast<size_t>(aKeyCode)] = false;
+    m_PressedKeys[static_cast<size_t>(keyCode)] = false;
 }
 
-void Input::pressMouseButton(MouseButtonCode aMouseButtonCode)
+void Input::PressMouseButton(MouseButtonCode mouseButtonCode)
 {
-    mPressedMouseButtons[static_cast<size_t>(aMouseButtonCode)] = true;
+    m_PressedMouseButtons[static_cast<size_t>(mouseButtonCode)] = true;
 }
 
-void Input::releaseMouseButton(MouseButtonCode aMouseButtonCode)
+void Input::ReleaseMouseButton(MouseButtonCode mouseButtonCode)
 {
-    mPressedMouseButtons[static_cast<size_t>(aMouseButtonCode)] = false;
+    m_PressedMouseButtons[static_cast<size_t>(mouseButtonCode)] = false;
 }
 
-void Input::setCursorPosition(Vec2 aNewPosition)
+void Input::SetCursorPosition(Vec2 newPosition)
 {
-    mCursorPosition = aNewPosition;
+    m_CursorPosition = newPosition;
 }
 
 } // namespace Delta

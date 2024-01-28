@@ -1,17 +1,17 @@
-#include "EngineCore/Rendering/OpenGL/Renderer.hpp"
+#include "EngineCore/Rendering/Renderer.hpp"
+
+#include "EngineCore/Rendering/VertexArray.hpp"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <Vec4.hpp>
 
-#include "EngineCore/Rendering/OpenGL/VertexArray.hpp"
-
 namespace Delta
 {
 
-bool Renderer::init(GLFWwindow* aWindow)
+bool Renderer::Init(GLFWwindow* window)
 {
-    glfwMakeContextCurrent(aWindow);
+    glfwMakeContextCurrent(window);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
@@ -20,53 +20,53 @@ bool Renderer::init(GLFWwindow* aWindow)
     }
 
     LOG_INFO("OpenGL context initialized succesfully");
-    LOG_INFO("| Vendor: {0}", getVendorInfo());
-    LOG_INFO("| Renderer: {0}", getRendererInfo());
-    LOG_INFO("| Version: {0}", getVersionInfo());
+    LOG_INFO("| Vendor: {0}", GetVendorInfo());
+    LOG_INFO("| Renderer: {0}", GetRendererInfo());
+    LOG_INFO("| Version: {0}", GetVersionInfo());
 
     return true;
 }
 
-void Renderer::draw(const VertexArray& aVertexArray)
+void Renderer::Draw(const VertexArray& vertexArray)
 {
-    aVertexArray.bind();
-    aVertexArray.getIndicesCount() > 0
-        ? glDrawElements(GL_TRIANGLES, aVertexArray.getIndicesCount(), GL_UNSIGNED_INT, nullptr)
-        : glDrawArrays(GL_TRIANGLES, 0, aVertexArray.getVerticesCount());
-    aVertexArray.unbind();
+    vertexArray.Bind();
+    vertexArray.GetIndicesCount() > 0
+        ? glDrawElements(GL_TRIANGLES, vertexArray.GetIndicesCount(), GL_UNSIGNED_INT, nullptr)
+        : glDrawArrays(GL_TRIANGLES, 0, vertexArray.GetVerticesCount());
+    vertexArray.Unbind();
 }
 
-void Renderer::clearColor(const Vec4& aClearColor)
+void Renderer::ClearColor(const Vec4& clearColor)
 {
-    glClearColor(aClearColor.x, aClearColor.y, aClearColor.z, aClearColor.w);
+    glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
 }
 
-void Renderer::clear()
+void Renderer::Clear()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
 
-void Renderer::viewport(int aWidth, int aHeight, int aLeftOffset, int aBottomOffset)
+void Renderer::Viewport(int width, int height, int leftOffset, int bottomOffset)
 {
-    glViewport(aLeftOffset, aBottomOffset, aWidth, aHeight);
+    glViewport(leftOffset, bottomOffset, width, height);
 }
 
-void Renderer::depthTesting(bool aEnable)
+void Renderer::DepthTesting(bool enable)
 {
-    aEnable ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
+    enable ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
 }
 
-const char* Renderer::getVendorInfo()
+const char* Renderer::GetVendorInfo()
 {
     return reinterpret_cast<const char*>(glGetString(GL_VENDOR));
 }
 
-const char* Renderer::getRendererInfo()
+const char* Renderer::GetRendererInfo()
 {
     return reinterpret_cast<const char*>(glGetString(GL_RENDERER));
 }
 
-const char* Renderer::getVersionInfo()
+const char* Renderer::GetVersionInfo()
 {
     return reinterpret_cast<const char*>(glGetString(GL_VERSION));
 }

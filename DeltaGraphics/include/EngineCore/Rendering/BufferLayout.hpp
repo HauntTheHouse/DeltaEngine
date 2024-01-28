@@ -15,16 +15,16 @@ public:
 
     ShaderData() = default;
 
-    void construct(Type aShaderDataType);
+    void Construct(Type shaderDataType);
 
-    unsigned int getRendererCodeType() const { return type; }
-    int getCount() const { return count; }
-    int getSize() const { return size; }
+    int GetCount() const { return m_Count; }
+    int GetSize() const { return m_Size; }
+    unsigned int GetRendererCodeType() const { return m_Type; }
 
 private:
-    unsigned int type{ 0 };
-    int count{ 0 };
-    int size{ 0 };
+    unsigned int m_Type{ 0 };
+    int m_Count{ 0 };
+    int m_Size{ 0 };
 
 };
 
@@ -38,17 +38,17 @@ public:
     };
 
     BufferLayout() = default;
-    BufferLayout(std::initializer_list<ShaderData::Type> aInitList);
-    BufferLayout(const std::vector<ShaderData::Type>& aShaderDataTypes);
+    BufferLayout(std::initializer_list<ShaderData::Type> initList);
+    BufferLayout(const std::vector<ShaderData::Type>& shaderDataTypes);
 
-    void init(const std::vector<ShaderData::Type>& aShaderDataTypes);
+    void Init(const std::vector<ShaderData::Type>& shaderDataTypes);
 
-    const std::vector<BufferElement>& getElements() const { return mElements; }
-    int getStride() const { return mStride; }
+    const std::vector<BufferElement>& GetElements() const { return m_Elements; }
+    int GetStride() const { return m_Stride; }
 
 private:
-    std::vector<BufferElement> mElements;
-    int mStride{ 0 };
+    std::vector<BufferElement> m_Elements;
+    int m_Stride{ 0 };
 
 };
 

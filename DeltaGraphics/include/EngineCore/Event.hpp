@@ -26,7 +26,7 @@ class EventBase
 {
 public:
     virtual ~EventBase() = default;
-    virtual EventType getType() const = 0;
+    virtual EventType GetType() const = 0;
 
     bool isHandled{ false };
 };
@@ -35,11 +35,11 @@ class EventDispatcher
 {
 public:
     template<typename EventT>
-    void addEventListener(std::function<void(EventT&)> callback)
+    void AddEventListener(std::function<void(EventT&)> callback)
     {
         auto baseCallback = [func = std::move(callback)](EventBase& e)
         {
-            if (e.getType() == EventT::type)
+            if (e.GetType() == EventT::type)
             {
                 func(static_cast<EventT&>(e));
             }
@@ -47,9 +47,9 @@ public:
         mEventCallbacks[static_cast<size_t>(EventT::type)] = std::move(baseCallback);
     }
 
-    void dispatch(EventBase& event)
+    void Dispatch(EventBase& event)
     {
-        auto& callback = mEventCallbacks[static_cast<size_t>(event.getType())];
+        auto& callback = mEventCallbacks[static_cast<size_t>(event.GetType())];
         if (callback)
         {
             callback(event);
@@ -66,7 +66,7 @@ class WindowResizeEvent : public EventBase
 {
 public:
     WindowResizeEvent(const unsigned int width, const int unsigned height) : width(width), height(height) {}
-    EventType getType() const override { return type; }
+    EventType GetType() const override { return type; }
     static const EventType type{ EventType::WINDOW_RESIZED };
 
     unsigned int width;
@@ -77,7 +77,7 @@ class MouseButtonPressedEvent : public EventBase
 {
 public:
     MouseButtonPressedEvent(MouseButtonCode aMouseButton, const float x, const float y) : mMouseButton(aMouseButton), x(x), y(y) {}
-    EventType getType() const override { return type; }
+    EventType GetType() const override { return type; }
     static const EventType type{ EventType::MOUSE_BUTTON_PRESSED };
 
     MouseButtonCode mMouseButton;
@@ -89,7 +89,7 @@ class MouseButtonReleasedEvent : public EventBase
 {
 public:
     MouseButtonReleasedEvent(MouseButtonCode aMouseButton, const float x, const float y) : mMouseButton(aMouseButton), x(x), y(y) {}
-    EventType getType() const override { return type; }
+    EventType GetType() const override { return type; }
     static const EventType type{ EventType::MOUSE_BUTTON_RELEASED };
 
     MouseButtonCode mMouseButton;
@@ -101,7 +101,7 @@ class MouseMoveEvent : public EventBase
 {
 public:
     MouseMoveEvent(const float x, const float y) : x(x), y(y) {}
-    EventType getType() const override { return type; }
+    EventType GetType() const override { return type; }
     static const EventType type{ EventType::MOUSE_MOVED };
 
     float x;
@@ -112,7 +112,7 @@ class WindowCloseEvent : public EventBase
 {
 public:
     WindowCloseEvent() = default;
-    EventType getType() const override { return type; }
+    EventType GetType() const override { return type; }
     static const EventType type{ EventType::WINDOW_CLOSED };
 };
 
@@ -120,7 +120,7 @@ class KeyPressedEvent : public EventBase
 {
 public:
     KeyPressedEvent(KeyCode keyCode, bool repeated) : keyCode(keyCode), repeated(repeated) {}
-    EventType getType() const override { return type; }
+    EventType GetType() const override { return type; }
     static const EventType type{ EventType::KEY_PRESSED };
 
     KeyCode keyCode;
@@ -131,7 +131,7 @@ class KeyReleasedEvent : public EventBase
 {
 public:
     KeyReleasedEvent(KeyCode keyCode) : keyCode(keyCode) {}
-    EventType getType() const override { return type; }
+    EventType GetType() const override { return type; }
     static const EventType type{ EventType::KEY_RESEASED };
 
     KeyCode keyCode;
@@ -141,7 +141,7 @@ class MouseScrolledEvent : public EventBase
 {
 public:
     MouseScrolledEvent(float xOffset, float yOffset) : xOffset(xOffset), yOffset(yOffset) {}
-    EventType getType() const override { return type; }
+    EventType GetType() const override { return type; }
     static const EventType type{ EventType::MOUSE_SCROLLED };
 
     float xOffset;

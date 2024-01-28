@@ -23,14 +23,14 @@ public:
     Window& operator=(const Window&) = delete;
     Window& operator=(const Window&&) = delete;
 
-    int init(unsigned int aWindowWidth, unsigned int aWindowHeight, const char* aTitle);
-    void shutdown();
-    void onUpdate();
+    int Init(unsigned int windowWidth, unsigned int windowHeight, const char* title);
+    void Shutdown();
+    void OnUpdate();
 
-    unsigned int getWidth() const { return mData.width; }
-    unsigned int getHeight() const { return mData.height; }
+    unsigned int GetWidth() const { return m_Data.width; }
+    unsigned int GetHeight() const { return m_Data.height; }
 
-    void setEventCallback(EventCallback aEventCallbeck) { mData.eventCallback = std::move(aEventCallbeck); }
+    void SetEventCallback(EventCallback eventCallbeck) { m_Data.eventCallback = std::move(eventCallbeck); }
 
 private:
     struct WindowParameters
@@ -41,8 +41,8 @@ private:
         EventCallback eventCallback;
     };
 
-    GLFWwindow* mWindow{ nullptr };
-    WindowParameters mData;
+    GLFWwindow* m_Window{ nullptr };
+    WindowParameters m_Data;
 
     friend class Input;
 };

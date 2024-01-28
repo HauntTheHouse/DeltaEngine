@@ -11,18 +11,18 @@ class Vec4;
 class Renderer
 {
 public:
-    static bool init(GLFWwindow* aWindow);
+    static bool Init(GLFWwindow* window);
 
-    static void draw(const VertexArray& aVertexArray);
-    static void clearColor(const Vec4& aClearColor);
-    static void clear();
-    static void viewport(int aWidth, int aHeight, int aLeftOffset = 0, int aBottomOffset = 0);
+    static void Draw(const VertexArray& vertexArray);
+    static void ClearColor(const Vec4& clearColor);
+    static void Clear();
+    static void Viewport(int width, int height, int leftOffset = 0, int bottomOffset = 0);
 
-    static void depthTesting(bool aEnable);
+    static void DepthTesting(bool enable);
 
-    static const char* getVendorInfo();
-    static const char* getRendererInfo();
-    static const char* getVersionInfo();
+    static const char* GetVendorInfo();
+    static const char* GetRendererInfo();
+    static const char* GetVersionInfo();
 
 };
 

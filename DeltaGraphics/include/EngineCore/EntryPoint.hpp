@@ -2,12 +2,12 @@
 
 #include "Application.hpp"
 
-extern Delta::Application* Delta::createApplication();
+extern Delta::Application* Delta::CreateApplication();
 
 int main(int argc, char** argv)
 {
-    auto app = Delta::createApplication();
-    app->run();
+    auto app = Delta::CreateApplication();
+    app->Run();
     delete app;
     return 0;
 }

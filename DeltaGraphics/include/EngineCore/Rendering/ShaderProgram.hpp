@@ -19,25 +19,25 @@ public:
     ShaderProgram(ShaderProgram&) = delete;
     ShaderProgram& operator=(ShaderProgram&) = delete;
 
-    bool init(const char* aVertexShaderPath, const char* aFragmentShaderPath);
-    bool initFromSrc(const char* aVertexShaderSrc, const char* aFragmentShaderSrc);
-    void clear();
+    bool Init(const char* vertexShaderPath, const char* fragmentShaderPath);
+    bool InitFromSrc(const char* vertexShaderSrc, const char* fragmentShaderSrc);
+    void Clear();
 
-    void bind() const;
-    static void unbind();
+    void Bind() const;
+    static void Unbind();
 
-    void setMat4(const char* aUniformName, const Mat4& aMat4);
-    void setInt(const char* aUniformName, const int aInt);
+    void SetMat4(const char* uniformName, const Mat4& mat4);
+    void SetInt(const char* uniformName, const int val);
 
-    int getUniformLocation(const char* aUniformName);
+    int GetUniformLocation(const char* uniformName);
 
 private:
-    static unsigned int compileShader(const char* aSourceCode, ShaderType aShaderType);
-    static const char* getShaderTypeStr(ShaderType aShaderType);
-    constexpr static unsigned int getRendererCode(ShaderType aShaderType);
+    static unsigned int CompileShader(const char* sourceCode, ShaderType shaderType);
+    static const char* GetShaderTypeStr(ShaderType shaderType);
+    constexpr static unsigned int GetRendererCode(ShaderType shaderType);
 
-    unsigned int mId{ 0 };
-    std::unordered_map<std::string, int> mUniformLocation;
+    unsigned int m_Id{ 0 };
+    std::unordered_map<std::string, int> m_UniformLocation;
 };
 
 } // namespace Delta

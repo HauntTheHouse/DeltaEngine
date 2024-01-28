@@ -3,126 +3,126 @@
 namespace Delta
 {
 
-const Vec3 Camera::sWorldForward = Vec3{ 0.0f, 0.0f, -1.0f };
-const Vec3 Camera::sWorldRight = Vec3{ 1.0f, 0.0f, 0.0f };
-const Vec3 Camera::sWorldUp = Vec3{ 0.0f, 1.0f, 0.0f };
+const Vec3 Camera::s_WorldForward = Vec3{ 0.0f, 0.0f, -1.0f };
+const Vec3 Camera::s_WorldRight = Vec3{ 1.0f, 0.0f, 0.0f };
+const Vec3 Camera::s_WorldUp = Vec3{ 0.0f, 1.0f, 0.0f };
 
-void Camera::init(const Vec3& aPosition, const Vec3& aRotation, ProjectionMode aProjectionMode)
+void Camera::Init(const Vec3& position, const Vec3& rotation, ProjectionMode projectionMode)
 {
-    mPosition = aPosition;
-    mRotation = aRotation;
-    mProjectionMode = aProjectionMode;
+    m_Position = position;
+    m_Rotation = rotation;
+    m_ProjectionMode = projectionMode;
 
-    mUpdateView = true;
-    mUpdateProjection = true;
+    m_UpdateView = true;
+    m_UpdateProjection = true;
 }
 
-void Camera::setPosition(const Vec3& aPosition)
+void Camera::SetPosition(const Vec3& position)
 {
-    mPosition = aPosition;
-    mUpdateView = true;
+    m_Position = position;
+    m_UpdateView = true;
 }
 
-void Camera::setRotation(const Vec3& aRotation)
+void Camera::SetRotation(const Vec3& rotation)
 {
-    mRotation = aRotation;
-    mUpdateView = true;
+    m_Rotation = rotation;
+    m_UpdateView = true;
 }
 
-void Camera::setTransform(const Vec3& aPosition, const Vec3& aRotation)
+void Camera::SetTransform(const Vec3& position, const Vec3& rotation)
 {
-    mPosition = aPosition;
-    mRotation = aRotation;
-    mUpdateView = true;
+    m_Position = position;
+    m_Rotation = rotation;
+    m_UpdateView = true;
 }
 
-void Camera::setProjectionMode(ProjectionMode aProjectionMode)
+void Camera::SetProjectionMode(ProjectionMode projectionMode)
 {
-    mProjectionMode = aProjectionMode;
-    mUpdateProjection = true;
+    m_ProjectionMode = projectionMode;
+    m_UpdateProjection = true;
 }
 
-void Camera::setAspect(float aAspect)
+void Camera::SetAspect(float aspect)
 {
-    mAspect = aAspect;
-    mUpdateProjection = true;
+    m_Aspect = aspect;
+    m_UpdateProjection = true;
 }
 
-void Camera::setFov(float aFovDegree)
+void Camera::SetFov(float fovDegree)
 {
-    mFov = aFovDegree;
-    mUpdateProjection = true;
+    m_Fov = fovDegree;
+    m_UpdateProjection = true;
 }
 
-void Camera::setNearFarPlanes(float aNear, float aFar)
+void Camera::SetNearFarPlanes(float near, float far)
 {
-    mNearPlane = aNear;
-    mFarPlane = aFar;
-    mUpdateProjection = true;
+    m_NearPlane = near;
+    m_FarPlane = far;
+    m_UpdateProjection = true;
 }
 
-void Camera::setOrthoPlanes(float aLeft, float aRight, float aDown, float aUp)
+void Camera::SetOrthoPlanes(float left, float right, float down, float up)
 {
-    mLeftPlane = aLeft;
-    mRightPlane = aRight;
-    mDownPlane = aDown;
-    mUpPlane = aUp;
-    mUpdateProjection = true;
+    m_LeftPlane = left;
+    m_RightPlane = right;
+    m_DownPlane = down;
+    m_UpPlane = up;
+    m_UpdateProjection = true;
 }
 
-const Mat4& Camera::getView()
+const Mat4& Camera::GetView()
 {
-    if (mUpdateView) updateView();
-    return mView;
+    if (m_UpdateView) UpdateView();
+    return m_View;
 }
 
-const Mat4& Camera::getProjection()
+const Mat4& Camera::GetProjection()
 {
-    if (mUpdateProjection) updateProjection();
-    return mProjection;
+    if (m_UpdateProjection) UpdateProjection();
+    return m_Projection;
 }
 
-Mat4 Camera::getViewProjection()
+Mat4 Camera::GetViewProjection()
 {
-    return getView() * getProjection();
+    return GetView() * GetProjection();
 }
 
-void Camera::move(const Vec3& aMovementDelta, const Vec3& aRotationDelta)
+void Camera::Move(const Vec3& movementDelta, const Vec3& rotationDelta)
 {
-    mPosition += mDirection * aMovementDelta.z;
-    mPosition += mRight * aMovementDelta.x;
-    mPosition += mUp * aMovementDelta.y;
-    mRotation += aRotationDelta;
+    m_Position += m_Direction * movementDelta.z;
+    m_Position += m_Right * movementDelta.x;
+    m_Position += m_Up * movementDelta.y;
+    m_Rotation += rotationDelta;
 
-    mUpdateView = true;
+    m_UpdateView = true;
 }
 
-void Camera::updateView()
+void Camera::UpdateView()
 {
     Mat3 eulerRotate;
     eulerRotate.identity();
-    eulerRotate.rotate(mRotation);
+    eulerRotate.rotate(m_Rotation);
 
-    mDirection = eulerRotate * sWorldForward;
-    mDirection.normalize();
+    m_Direction = eulerRotate * s_WorldForward;
+    m_Direction.normalize();
 
-    mRight = eulerRotate * sWorldRight;
-    mRight.normalize();
+    m_Right = eulerRotate * s_WorldRight;
+    m_Right.normalize();
 
-    mUp = mRight.cross(mDirection);
+    m_Up = m_Right.cross(m_Direction);
 
-    mView.lookAt(mPosition, mDirection + mPosition, mUp);
+    m_View.lookAt(m_Position, m_Direction + m_Position, m_Up);
 
-    mUpdateView = false;
+    m_UpdateView = false;
 }
 
-void Camera::updateProjection()
+void Camera::UpdateProjection()
 {
-    mProjectionMode == ProjectionMode::PERSPECTIVE
-        ? mProjection.perspectiveOpenGL(mFov, mAspect, mNearPlane, mFarPlane)
-        : mProjection.orthoOpenGL(mLeftPlane * mAspect, mRightPlane * mAspect, mDownPlane, mUpPlane, mNearPlane, mFarPlane);
+    m_ProjectionMode == ProjectionMode::PERSPECTIVE
+        ? m_Projection.perspectiveOpenGL(m_Fov, m_Aspect, m_NearPlane, m_FarPlane)
+        : m_Projection.orthoOpenGL(m_LeftPlane * m_Aspect, m_RightPlane * m_Aspect, m_DownPlane, m_UpPlane, m_NearPlane, m_FarPlane);
 
-    mUpdateProjection = false;
+    m_UpdateProjection = false;
 }
 
 } // namespace Delta

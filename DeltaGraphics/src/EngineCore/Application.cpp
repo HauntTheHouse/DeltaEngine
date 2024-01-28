@@ -10,78 +10,78 @@
 namespace Delta
 {
 
-Application::Application(unsigned int aWindowWidth, unsigned int aWindowHeight, const char* aTitle)
+Application::Application(unsigned int windowWidth, unsigned int windowHeight, const char* title)
 {
-    mWindow.init(aWindowWidth, aWindowHeight, aTitle);
+    m_Window.Init(windowWidth, windowHeight, title);
 
-    mEventDispatcher.addEventListener<WindowResizeEvent>([this](WindowResizeEvent& event)
+    m_EventDispatcher.AddEventListener<WindowResizeEvent>([this](WindowResizeEvent& event)
     {
-        onWindowResizeEvent(event.width, event.height);
+        OnWindowResizeEvent(event.width, event.height);
     });
-    mEventDispatcher.addEventListener<MouseButtonPressedEvent>([this](MouseButtonPressedEvent& event)
+    m_EventDispatcher.AddEventListener<MouseButtonPressedEvent>([this](MouseButtonPressedEvent& event)
     {
-        Input::pressMouseButton(event.mMouseButton);
-        onMouseButtonEvent(event.mMouseButton, event.x, event.y, true);
+        Input::PressMouseButton(event.mMouseButton);
+        OnMouseButtonEvent(event.mMouseButton, event.x, event.y, true);
     });
-    mEventDispatcher.addEventListener<MouseButtonReleasedEvent>([this](MouseButtonReleasedEvent& event)
+    m_EventDispatcher.AddEventListener<MouseButtonReleasedEvent>([this](MouseButtonReleasedEvent& event)
     {
-        Input::releaseMouseButton(event.mMouseButton);
-        onMouseButtonEvent(event.mMouseButton, event.x, event.y, false);
+        Input::ReleaseMouseButton(event.mMouseButton);
+        OnMouseButtonEvent(event.mMouseButton, event.x, event.y, false);
     });
-    mEventDispatcher.addEventListener<KeyPressedEvent>([this](KeyPressedEvent& event)
+    m_EventDispatcher.AddEventListener<KeyPressedEvent>([this](KeyPressedEvent& event)
     {
-        Input::pressKey(event.keyCode);
-        onKeyEvent(event.keyCode, true);
+        Input::PressKey(event.keyCode);
+        OnKeyEvent(event.keyCode, true);
     });
-    mEventDispatcher.addEventListener<KeyReleasedEvent>([this](KeyReleasedEvent& event)
+    m_EventDispatcher.AddEventListener<KeyReleasedEvent>([this](KeyReleasedEvent& event)
     {
-        Input::releaseKey(event.keyCode);
-        onKeyEvent(event.keyCode, true);
+        Input::ReleaseKey(event.keyCode);
+        OnKeyEvent(event.keyCode, true);
     });
-    mEventDispatcher.addEventListener<MouseMoveEvent>([this](MouseMoveEvent& event)
+    m_EventDispatcher.AddEventListener<MouseMoveEvent>([this](MouseMoveEvent& event)
     {
-        Input::setCursorPosition(Vec2(event.x, event.y));
-        onMouseMoveEvent(event.x, event.y);
+        Input::SetCursorPosition(Vec2(event.x, event.y));
+        OnMouseMoveEvent(event.x, event.y);
     });
-    mEventDispatcher.addEventListener<MouseScrolledEvent>([this](MouseScrolledEvent& event)
+    m_EventDispatcher.AddEventListener<MouseScrolledEvent>([this](MouseScrolledEvent& event)
     {
-        onMouseScrollEvent(event.xOffset, event.yOffset);
+        OnMouseScrollEvent(event.xOffset, event.yOffset);
     });
-    mEventDispatcher.addEventListener<WindowCloseEvent>([this](WindowCloseEvent& event)
+    m_EventDispatcher.AddEventListener<WindowCloseEvent>([this](WindowCloseEvent& event)
     {
-        shouldClose();
+        ShouldClose();
     });
 
-    mWindow.setEventCallback([this](EventBase& event)
+    m_Window.SetEventCallback([this](EventBase& event)
     {
-        mEventDispatcher.dispatch(event);
+        m_EventDispatcher.Dispatch(event);
     });
 }
 
-void Application::run()
+void Application::Run()
 {
-    while (!mIsShouldClose)
+    while (!m_IsShouldClose)
     {
         static float lastFrameTime = 0.0f;
-        float time = Time::get();
+        float time = Time::Get();
         Timestep timestep = time - lastFrameTime;
         lastFrameTime = time;
 
-        onUpdate(timestep);
+        OnUpdate(timestep);
 
-        Gui::onDrawBegin();
-        onGuiDraw();
-        Gui::onDrawEnd();
+        Gui::OnDrawBegin();
+        OnGuiDraw();
+        Gui::OnDrawEnd();
 
-        mWindow.onUpdate();
+        m_Window.OnUpdate();
     }
 
-    mWindow.shutdown();
+    m_Window.Shutdown();
 }
 
-void Application::shouldClose()
+void Application::ShouldClose()
 {
-    mIsShouldClose = true;
+    m_IsShouldClose = true;
 }
 
 } // namespace Delta

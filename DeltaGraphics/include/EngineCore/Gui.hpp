@@ -8,10 +8,10 @@ namespace Delta
 class Gui
 {
 public:
-    static void onWindowCreate(GLFWwindow* aWindow);
-    static void onWindowClose();
-    static void onDrawBegin();
-    static void onDrawEnd();
+    static void OnWindowCreate(GLFWwindow* window);
+    static void OnWindowClose();
+    static void OnDrawBegin();
+    static void OnDrawEnd();
 
 };
 

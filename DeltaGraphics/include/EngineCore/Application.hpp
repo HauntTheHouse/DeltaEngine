@@ -11,7 +11,7 @@ namespace Delta
 class Application
 {
 public:
-    Application(unsigned int aWindowWidth, unsigned int aWindowHeight, const char* aTitle);
+    Application(unsigned int windowWidth, unsigned int windowHeight, const char* title);
     virtual ~Application() {};
 
     Application(const Application&) = delete;
@@ -19,26 +19,26 @@ public:
     Application& operator=(const Application&) = delete;
     Application& operator=(const Application&&) = delete;
 
-    void run();
-    void shouldClose();
+    void Run();
+    void ShouldClose();
 
-    virtual void onUpdate(Timestep aTimestep) {};
-    virtual void onGuiDraw() {};
+    virtual void OnUpdate(Timestep timestep) {};
+    virtual void OnGuiDraw() {};
 
-    virtual void onWindowResizeEvent(unsigned int aNewWidth, unsigned int aNewHeight) {};
-    virtual void onMouseButtonEvent(MouseButtonCode aMouseButtonCode, float aPosX, float aPosY, bool aPressed) {};
-    virtual void onKeyEvent(KeyCode aKeyCode, bool aPressed) {};
-    virtual void onMouseMoveEvent(float aNewPosX, float aNewPosY) {};
-    virtual void onMouseScrollEvent(float aOffsetX, float aOffsetY) {};
+    virtual void OnWindowResizeEvent(unsigned int newWidth, unsigned int newHeight) {};
+    virtual void OnMouseButtonEvent(MouseButtonCode mouseButtonCode, float posX, float posY, bool pressed) {};
+    virtual void OnKeyEvent(KeyCode keyCode, bool pressed) {};
+    virtual void OnMouseMoveEvent(float newPosX, float newPosY) {};
+    virtual void OnMouseScrollEvent(float offsetX, float offsetY) {};
 
 private:
-    Window mWindow;
-    EventDispatcher mEventDispatcher;
+    Window m_Window;
+    EventDispatcher m_EventDispatcher;
 
-    bool mIsShouldClose{ false };
+    bool m_IsShouldClose{ false };
 
 };
 
-Application* createApplication();
+Application* CreateApplication();
 
 } // namespace Delta

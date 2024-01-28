@@ -1,61 +1,61 @@
-#include "EngineCore/Rendering/OpenGL/VertexArray.hpp"
+#include "EngineCore/Rendering/VertexArray.hpp"
 
 #include <glad/glad.h>
 
 namespace Delta
 {
 
-bool VertexArray::init()
+bool VertexArray::Init()
 {
-    if (static_cast<GLuint>(mId) != 0) return false;
+    if (static_cast<GLuint>(m_Id) != 0) return false;
 
-    glGenVertexArrays(1, static_cast<GLuint*>(&mId));
+    glGenVertexArrays(1, static_cast<GLuint*>(&m_Id));
     return true;
 }
 
-void VertexArray::clear()
+void VertexArray::Clear()
 {
-    glDeleteVertexArrays(1, static_cast<GLuint*>(&mId));
-    mId = 0;
+    glDeleteVertexArrays(1, static_cast<GLuint*>(&m_Id));
+    m_Id = 0;
 }
 
-void VertexArray::addVertexBuffer(const VertexBuffer& aVertexBuffer)
+void VertexArray::AddVertexBuffer(const VertexBuffer& vertexBuffer)
 {
-    bind();
-    aVertexBuffer.bind();
+    Bind();
+    vertexBuffer.Bind();
 
-    mVerticesCount += aVertexBuffer.getVerticesCount();
+    m_VerticesCount += vertexBuffer.GetVerticesCount();
 
-    const auto& layout = aVertexBuffer.getLayout();
-    for (const auto& element : layout.getElements())
+    const auto& layout = vertexBuffer.GetLayout();
+    for (const auto& element : layout.GetElements())
     {
-        glEnableVertexAttribArray(static_cast<GLuint>(mAttributesCount));
+        glEnableVertexAttribArray(static_cast<GLuint>(m_AttributesCount));
         glVertexAttribPointer(
-            static_cast<GLuint>(mAttributesCount),
-            static_cast<GLint>(element.shaderData.getCount()),
-            static_cast<GLenum>(element.shaderData.getRendererCodeType()),
+            static_cast<GLuint>(m_AttributesCount),
+            static_cast<GLint>(element.shaderData.GetCount()),
+            static_cast<GLenum>(element.shaderData.GetRendererCodeType()),
             GL_FALSE,
-            static_cast<GLsizei>(layout.getStride()),
+            static_cast<GLsizei>(layout.GetStride()),
             reinterpret_cast<const void*>(element.offset));
-        mAttributesCount++;
+        m_AttributesCount++;
     }
 }
 
-void VertexArray::setIndexBuffer(const IndexBuffer& aIndexBuffer)
+void VertexArray::SetIndexBuffer(const IndexBuffer& indexBuffer)
 {
-    bind();
-    aIndexBuffer.bind();
+    Bind();
+    indexBuffer.Bind();
 
-    mIndicesCount = aIndexBuffer.getIndicesCount();
+    m_IndicesCount = indexBuffer.GetIndicesCount();
 }
 
-void VertexArray::bind() const
+void VertexArray::Bind() const
 {
-    assert(mId != 0);
-    glBindVertexArray(static_cast<GLuint>(mId));
+    assert(m_Id != 0);
+    glBindVertexArray(static_cast<GLuint>(m_Id));
 }
 
-void VertexArray::unbind()
+void VertexArray::Unbind()
 {
     glBindVertexArray(0);
 }

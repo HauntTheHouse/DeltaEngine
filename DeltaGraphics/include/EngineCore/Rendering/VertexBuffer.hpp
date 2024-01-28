@@ -21,33 +21,33 @@ public:
     VertexBuffer& operator=(VertexBuffer&) = delete;
 
     template<typename T>
-    bool init(const std::vector<T>& aVertices, const BufferLayout& aLayout, const Usage aUsage = Usage::STATIC)
+    bool Init(const std::vector<T>& vertices, const BufferLayout& layout, const Usage usage = Usage::STATIC)
     {
-        if (mId != 0) return false;
+        if (m_Id != 0) return false;
 
-        size_t size = aVertices.size() * sizeof(T);
-        mVerticesCount = size / aLayout.getStride();
+        size_t size = vertices.size() * sizeof(T);
+        m_VerticesCount = size / layout.GetStride();
 
-        initImpl(aVertices.data(), size, aLayout, aUsage);
+        InitImpl(vertices.data(), size, layout, usage);
         return true;
     }
-    void clear();
+    void Clear();
 
-    void bind() const;
-    static void unbind();
+    void Bind() const;
+    static void Unbind();
 
-    const BufferLayout& getLayout() const { return mLayout; }
-    int getVerticesCount() const { return mVerticesCount; }
+    const BufferLayout& GetLayout() const { return m_Layout; }
+    int GetVerticesCount() const { return m_VerticesCount; }
 
-    static unsigned int getRendererCode(Usage aUsage);
+    static unsigned int GetRendererCode(Usage usage);
 
 private:
-    void initImpl(const void* aData, const size_t aSize, const BufferLayout& aLayout, const Usage aUsage);
+    void InitImpl(const void* data, const size_t size, const BufferLayout& layout, const Usage usage);
 
-    unsigned int mId{ 0 };
-    BufferLayout mLayout;
+    unsigned int m_Id{ 0 };
+    BufferLayout m_Layout;
 
-    int mVerticesCount{ 0 };
+    int m_VerticesCount{ 0 };
 
 };
 

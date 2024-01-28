@@ -1,4 +1,4 @@
-#include "EngineCore/Rendering/OpenGL/ShaderProgram.hpp"
+#include "EngineCore/Rendering/ShaderProgram.hpp"
 
 #include <glad/glad.h>
 #include <Mat4.hpp>
@@ -6,7 +6,7 @@
 namespace Delta
 {
 
-bool ShaderProgram::init(const char* aVertexShaderPath, const char* aFragmentShaderPath)
+bool ShaderProgram::Init(const char* vertexShaderPath, const char* fragmentShaderPath)
 {
     auto const readFile = [](const char* path)
     {
@@ -16,86 +16,86 @@ bool ShaderProgram::init(const char* aVertexShaderPath, const char* aFragmentSha
         return stream.str();
     };
 
-    std::string vsStr = readFile(aVertexShaderPath);
-    std::string fsStr = readFile(aFragmentShaderPath);
+    std::string vsStr = readFile(vertexShaderPath);
+    std::string fsStr = readFile(fragmentShaderPath);
 
-    return initFromSrc(vsStr.c_str(), fsStr.c_str());
+    return InitFromSrc(vsStr.c_str(), fsStr.c_str());
 }
 
-bool ShaderProgram::initFromSrc(const char* aVertexShaderSrc, const char* aFragmentShaderSrc)
+bool ShaderProgram::InitFromSrc(const char* vertexShaderSrc, const char* fragmentShaderSrc)
 {
-    if (mId != 0) return false;
+    if (m_Id != 0) return false;
 
-    const GLuint vs = compileShader(aVertexShaderSrc, ShaderType::VERTEX);
+    const GLuint vs = CompileShader(vertexShaderSrc, ShaderType::VERTEX);
     if (vs == 0) return false;
-    const GLuint fs = compileShader(aFragmentShaderSrc, ShaderType::FRAGMENT);
+    const GLuint fs = CompileShader(fragmentShaderSrc, ShaderType::FRAGMENT);
     if (fs == 0) return false;
 
-    mId = static_cast<unsigned int>(glCreateProgram());
-    glAttachShader(static_cast<GLuint>(mId), vs);
-    glAttachShader(static_cast<GLuint>(mId), fs);
-    glLinkProgram(static_cast<GLuint>(mId));
+    m_Id = static_cast<unsigned int>(glCreateProgram());
+    glAttachShader(static_cast<GLuint>(m_Id), vs);
+    glAttachShader(static_cast<GLuint>(m_Id), fs);
+    glLinkProgram(static_cast<GLuint>(m_Id));
 
     GLint success;
     const GLsizei logSize = 256;
     GLchar infoLog[logSize];
-    glGetProgramiv(static_cast<GLuint>(mId), GL_LINK_STATUS, &success);
+    glGetProgramiv(static_cast<GLuint>(m_Id), GL_LINK_STATUS, &success);
     if (!success)
     {
-        glGetProgramInfoLog(static_cast<GLuint>(mId), logSize, nullptr, infoLog);
+        glGetProgramInfoLog(static_cast<GLuint>(m_Id), logSize, nullptr, infoLog);
         LOG_ERROR("Program linking failed\n{0}", infoLog);
         return false;
     }
 
-    glDetachShader(static_cast<GLuint>(mId), vs);
-    glDetachShader(static_cast<GLuint>(mId), fs);
+    glDetachShader(static_cast<GLuint>(m_Id), vs);
+    glDetachShader(static_cast<GLuint>(m_Id), fs);
     glDeleteShader(vs);
     glDeleteShader(fs);
 
     return true;
 }
 
-void ShaderProgram::clear()
+void ShaderProgram::Clear()
 {
-    glDeleteProgram(static_cast<GLuint>(mId));
-    mId = 0;
+    glDeleteProgram(static_cast<GLuint>(m_Id));
+    m_Id = 0;
 }
 
-void ShaderProgram::bind() const
+void ShaderProgram::Bind() const
 {
-    assert(mId != 0);
-    glUseProgram(static_cast<GLuint>(mId));
+    assert(m_Id != 0);
+    glUseProgram(static_cast<GLuint>(m_Id));
 }
 
-void ShaderProgram::unbind()
+void ShaderProgram::Unbind()
 {
     glUseProgram(0);
 }
 
-void ShaderProgram::setMat4(const char* aUniformName, const Mat4& aMat4)
+void ShaderProgram::SetMat4(const char* uniformName, const Mat4& mat4)
 {
-    glUniformMatrix4fv(getUniformLocation(aUniformName), 1, GL_FALSE, aMat4.toPtr());
+    glUniformMatrix4fv(GetUniformLocation(uniformName), 1, GL_FALSE, mat4.toPtr());
 }
 
-void ShaderProgram::setInt(const char* aUniformName, const int aInt)
+void ShaderProgram::SetInt(const char* uniformName, const int val)
 {
-    glUniform1i(getUniformLocation(aUniformName), aInt);
+    glUniform1i(GetUniformLocation(uniformName), val);
 }
 
-int ShaderProgram::getUniformLocation(const char* aUniformName)
+int ShaderProgram::GetUniformLocation(const char* uniformName)
 {
-    const auto it = mUniformLocation.find(aUniformName);
-    if (it != mUniformLocation.end()) return it->second;
+    const auto it = m_UniformLocation.find(uniformName);
+    if (it != m_UniformLocation.end()) return it->second;
 
-    GLint uniformLocation = glGetUniformLocation(static_cast<GLuint>(mId), aUniformName);
-    mUniformLocation.insert({ aUniformName, uniformLocation });
+    GLint uniformLocation = glGetUniformLocation(static_cast<GLuint>(m_Id), uniformName);
+    m_UniformLocation.insert({ uniformName, uniformLocation });
     return uniformLocation;
 }
 
-unsigned int ShaderProgram::compileShader(const char* aSourceCode, ShaderType aShaderType)
+unsigned int ShaderProgram::CompileShader(const char* sourceCode, ShaderType shaderType)
 {
-    GLuint shader = glCreateShader(static_cast<GLenum>(getRendererCode(aShaderType)));
-    glShaderSource(shader, 1, &aSourceCode, nullptr);
+    GLuint shader = glCreateShader(static_cast<GLenum>(GetRendererCode(shaderType)));
+    glShaderSource(shader, 1, &sourceCode, nullptr);
     glCompileShader(shader);
 
     GLint success;
@@ -105,16 +105,16 @@ unsigned int ShaderProgram::compileShader(const char* aSourceCode, ShaderType aS
     if (!success)
     {
         glGetShaderInfoLog(shader, logSize, nullptr, infoLog);
-        LOG_ERROR("{0} compilation failed\n{1}", getShaderTypeStr(aShaderType), infoLog);
+        LOG_ERROR("{0} compilation failed\n{1}", GetShaderTypeStr(shaderType), infoLog);
         return 0;
     }
 
     return static_cast<unsigned int>(shader);
 }
 
-const char* ShaderProgram::getShaderTypeStr(ShaderType aShaderType)
+const char* ShaderProgram::GetShaderTypeStr(ShaderType shaderType)
 {
-    switch (aShaderType)
+    switch (shaderType)
     {
         case ShaderType::VERTEX: return "Vertex shader";
         case ShaderType::FRAGMENT: return "Fragment shader";
@@ -122,9 +122,9 @@ const char* ShaderProgram::getShaderTypeStr(ShaderType aShaderType)
     }
 }
 
-constexpr unsigned int ShaderProgram::getRendererCode(ShaderType aShaderType)
+constexpr unsigned int ShaderProgram::GetRendererCode(ShaderType shaderType)
 {
-    switch (aShaderType)
+    switch (shaderType)
     {
         case ShaderType::VERTEX: return GL_VERTEX_SHADER;
         case ShaderType::FRAGMENT: return GL_FRAGMENT_SHADER;

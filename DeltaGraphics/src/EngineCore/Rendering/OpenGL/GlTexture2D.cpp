@@ -1,64 +1,64 @@
-#include "EngineCore/Rendering/OpenGL/Texture2D.hpp"
+#include "EngineCore/Rendering/Texture2D.hpp"
 
 #include <glad/glad.h>
 
 namespace Delta
 {
 
-bool Texture2D::init(int aWidth, int aHeight, const unsigned char* aData)
+bool Texture2D::Init(int width, int height, const unsigned char* data)
 {
-    if (mId != 0) return false;
+    if (m_Id != 0) return false;
 
-    mWidth = aWidth;
-    mHeight = aHeight;
+    m_Width = width;
+    m_Height = height;
 
-    glGenTextures(1, static_cast<GLuint*>(&mId));
-    glBindTexture(GL_TEXTURE_2D, static_cast<GLuint>(mId));
+    glGenTextures(1, static_cast<GLuint*>(&m_Id));
+    glBindTexture(GL_TEXTURE_2D, static_cast<GLuint>(m_Id));
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, mWidth, mHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, aData != nullptr ? aData : generateCheckboard(mWidth, mHeight, 3, 8).data());
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_Width, m_Height, 0, GL_RGB, GL_UNSIGNED_BYTE, data != nullptr ? data : GenerateCheckboard(m_Width, m_Height, 3, 8).data());
     glGenerateMipmap(GL_TEXTURE_2D);
 
     return true;
 }
 
-void Texture2D::clear()
+void Texture2D::Clear()
 {
-    glDeleteTextures(1, static_cast<GLuint*>(&mId));
-    mId = 0;
+    glDeleteTextures(1, static_cast<GLuint*>(&m_Id));
+    m_Id = 0;
 }
 
-void Texture2D::bind(unsigned int aUnit) const
+void Texture2D::Bind(unsigned int unit) const
 {
-    glActiveTexture(GL_TEXTURE0 + aUnit);
-    glBindTexture(GL_TEXTURE_2D, static_cast<GLuint>(mId));
+    glActiveTexture(GL_TEXTURE0 + unit);
+    glBindTexture(GL_TEXTURE_2D, static_cast<GLuint>(m_Id));
 }
 
-void Texture2D::setData(const unsigned char* aData)
+void Texture2D::SetData(const unsigned char* data)
 {
-    glBindTexture(GL_TEXTURE_2D, static_cast<GLuint>(mId));
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, mWidth, mHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, aData);
+    glBindTexture(GL_TEXTURE_2D, static_cast<GLuint>(m_Id));
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_Width, m_Height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(GL_TEXTURE_2D);
 }
 
-std::vector<unsigned char> Texture2D::generateCheckboard(int aWidth, int aHeight, int aChannelsNum, int aSeparationsNum)
+std::vector<unsigned char> Texture2D::GenerateCheckboard(int width, int height, int channelsNum, int separationsNum)
 {
     std::vector<unsigned char> result;
-    result.reserve(aWidth * aHeight * aChannelsNum);
+    result.reserve(width * height * channelsNum);
 
-    size_t xUnitSize = std::ceil(aWidth / static_cast<float>(aSeparationsNum));
-    size_t yUnitSize = std::ceil(aHeight / static_cast<float>(aSeparationsNum));
+    size_t xUnitSize = std::ceil(width / static_cast<float>(separationsNum));
+    size_t yUnitSize = std::ceil(height / static_cast<float>(separationsNum));
 
-    for (size_t y = 0; y < aHeight; ++y)
+    for (size_t y = 0; y < height; ++y)
     {
-        for (size_t x = 0; x < aWidth; ++x)
+        for (size_t x = 0; x < width; ++x)
         {
             unsigned char cellColor = (((x / xUnitSize) + (y / yUnitSize)) % 2 == 0) ? 94 : 118;
-            for (size_t i = 0; i < aChannelsNum; ++i)
+            for (size_t i = 0; i < channelsNum; ++i)
             {
                 result.push_back(cellColor);
             }
@@ -68,18 +68,18 @@ std::vector<unsigned char> Texture2D::generateCheckboard(int aWidth, int aHeight
     return result;
 }
 
-std::vector<unsigned char> Texture2D::generateFillColor(int aWidth, int aHeight, int aChannelsNum, const Vec3& aColor)
+std::vector<unsigned char> Texture2D::GenerateFillColor(int width, int height, int channelsNum, const Vec3& color)
 {
     std::vector<unsigned char> result;
-    result.reserve(aWidth * aHeight * aChannelsNum);
+    result.reserve(width * height * channelsNum);
 
-    for (size_t y = 0; y < aHeight; ++y)
+    for (size_t y = 0; y < height; ++y)
     {
-        for (size_t x = 0; x < aWidth; ++x)
+        for (size_t x = 0; x < width; ++x)
         {
-            result.push_back(static_cast<unsigned char>(aColor.x * 255.0f));
-            result.push_back(static_cast<unsigned char>(aColor.y * 255.0f));
-            result.push_back(static_cast<unsigned char>(aColor.z * 255.0f));
+            result.push_back(static_cast<unsigned char>(color.x * 255.0f));
+            result.push_back(static_cast<unsigned char>(color.y * 255.0f));
+            result.push_back(static_cast<unsigned char>(color.z * 255.0f));
         }
     }
 

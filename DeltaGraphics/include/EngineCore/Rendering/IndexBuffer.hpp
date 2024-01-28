@@ -14,27 +14,27 @@ public:
     IndexBuffer& operator=(IndexBuffer&) = delete;
 
     template<typename T>
-    bool init(const std::vector<T>& aIndices, const VertexBuffer::Usage aUsage = VertexBuffer::Usage::STATIC)
+    bool Init(const std::vector<T>& indices, const VertexBuffer::Usage usage = VertexBuffer::Usage::STATIC)
     {
-        if (mId != 0) return false;
+        if (m_Id != 0) return false;
 
-        mIndicesCount = aIndices.size();
+        m_IndicesCount = indices.size();
 
-        initImpl(aIndices.data(), mIndicesCount * sizeof(T), aUsage);
+        InitImpl(indices.data(), m_IndicesCount * sizeof(T), usage);
         return true;
     }
-    void clear();
+    void Clear();
 
-    void bind() const;
-    static void unbind();
+    void Bind() const;
+    static void Unbind();
 
-    int getIndicesCount() const { return mIndicesCount; }
+    int GetIndicesCount() const { return m_IndicesCount; }
 
 private:
-    void initImpl(const void* aData, const size_t aSize, const VertexBuffer::Usage aUsage);
+    void InitImpl(const void* data, const size_t size, const VertexBuffer::Usage usage);
 
-    unsigned int mId{ 0 };
-    int mIndicesCount{ 0 };
+    unsigned int m_Id{ 0 };
+    int m_IndicesCount{ 0 };
 
 };
 

@@ -12,12 +12,12 @@
 namespace Delta
 {
 
-int Window::init(unsigned int aWindowWidth, unsigned int aWindowHeight, const char* aTitle)
+int Window::Init(unsigned int windowWidth, unsigned int windowHeight, const char* title)
 {
-    LOG_INFO("Creating window {0} ({1}, {2})", aTitle, aWindowWidth, aWindowHeight);
-    mData.width = aWindowWidth;
-    mData.height = aWindowHeight;
-    mData.title = std::string(aTitle);
+    LOG_INFO("Creating window {0} ({1}, {2})", title, windowWidth, windowHeight);
+    m_Data.width = windowWidth;
+    m_Data.height = windowHeight;
+    m_Data.title = std::string(title);
 
     glfwSetErrorCallback([](int errorCode, const char* description)
     {
@@ -34,8 +34,8 @@ int Window::init(unsigned int aWindowWidth, unsigned int aWindowHeight, const ch
 #ifdef USING_VULKAN
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 #endif
-    mWindow = glfwCreateWindow(aWindowWidth, aWindowHeight, aTitle, nullptr, nullptr);
-    if (!mWindow)
+    m_Window = glfwCreateWindow(windowWidth, windowHeight, title, nullptr, nullptr);
+    if (!m_Window)
     {
         LOG_ERROR("GLFW window creation failed");
         glfwTerminate();
@@ -49,12 +49,12 @@ int Window::init(unsigned int aWindowWidth, unsigned int aWindowHeight, const ch
     std::cout << extensionCount << " extensions supported\n";
 #endif
 
-    if (!Renderer::init(mWindow))
+    if (!Renderer::Init(m_Window))
         return -3;
 
-    glfwSetWindowUserPointer(mWindow, &mData);
+    glfwSetWindowUserPointer(m_Window, &m_Data);
 
-    glfwSetWindowSizeCallback(mWindow, [](GLFWwindow* window, int width, int height)
+    glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
     {
         const auto params = static_cast<WindowParameters*>(glfwGetWindowUserPointer(window));
         params->width = width;
@@ -64,14 +64,14 @@ int Window::init(unsigned int aWindowWidth, unsigned int aWindowHeight, const ch
         params->eventCallback(event);
     });
 
-    glfwSetCursorPosCallback(mWindow, [](GLFWwindow* window, double xpos, double ypos)
+    glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double xpos, double ypos)
     {
         const auto params = static_cast<WindowParameters*>(glfwGetWindowUserPointer(window));
         MouseMoveEvent event(static_cast<float>(xpos), static_cast<float>(ypos));
         params->eventCallback(event);
     });
 
-    glfwSetKeyCallback(mWindow, [](GLFWwindow* window, int key, int scancode, int action, int mods)
+    glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
     {
         const auto params = static_cast<WindowParameters*>(glfwGetWindowUserPointer(window));
 
@@ -100,7 +100,7 @@ int Window::init(unsigned int aWindowWidth, unsigned int aWindowHeight, const ch
         }
     });
 
-    glfwSetMouseButtonCallback(mWindow, [](GLFWwindow* window, int button, int action, int mods)
+    glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods)
     {
         const auto params = static_cast<WindowParameters*>(glfwGetWindowUserPointer(window));
 
@@ -126,45 +126,45 @@ int Window::init(unsigned int aWindowWidth, unsigned int aWindowHeight, const ch
         }
     });
 
-    glfwSetScrollCallback(mWindow, [](GLFWwindow* window, double xOffset, double yOffset)
+    glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double xOffset, double yOffset)
     {
         const auto params = static_cast<WindowParameters*>(glfwGetWindowUserPointer(window));
         MouseScrolledEvent event(static_cast<float>(xOffset), static_cast<float>(yOffset));
         params->eventCallback(event);
     });
 
-    glfwSetWindowCloseCallback(mWindow, [](GLFWwindow* window)
+    glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window)
     {
         const auto params = static_cast<WindowParameters*>(glfwGetWindowUserPointer(window));
         WindowCloseEvent event;
         params->eventCallback(event);
     });
 
-    glfwSetFramebufferSizeCallback(mWindow, [](GLFWwindow* window, int width, int height)
+    glfwSetFramebufferSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
     {
-        Renderer::viewport(width, height);
+        Renderer::Viewport(width, height);
     });
 
-    Renderer::viewport(mData.width, mData.height);
+    Renderer::Viewport(m_Data.width, m_Data.height);
 
-    Gui::onWindowCreate(mWindow);
+    Gui::OnWindowCreate(m_Window);
 
     return 0;
 }
 
-void Window::shutdown()
+void Window::Shutdown()
 {
-    Gui::onWindowClose();
+    Gui::OnWindowClose();
 
-    glfwDestroyWindow(mWindow);
+    glfwDestroyWindow(m_Window);
     glfwTerminate();
 
     LOG_INFO("Window terminated");
 }
 
-void Window::onUpdate()
+void Window::OnUpdate()
 {
-    glfwSwapBuffers(mWindow);
+    glfwSwapBuffers(m_Window);
     glfwPollEvents();
 }
 

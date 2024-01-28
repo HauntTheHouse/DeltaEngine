@@ -1,66 +1,66 @@
-#include "EngineCore/Rendering/OpenGL/BufferLayout.hpp"
+#include "EngineCore/Rendering/BufferLayout.hpp"
 
 #include <glad/glad.h>
 
 namespace Delta
 {
 
-void ShaderData::construct(Type aShaderDataType)
+void ShaderData::Construct(Type shaderDataType)
 {
-    switch (aShaderDataType)
+    switch (shaderDataType)
     {
     case Type::INT:
     case Type::INT2:
     case Type::INT3:
     case Type::INT4:
-        type = GL_INT;
-        count = ((GLint)aShaderDataType - (GLint)Type::INT + 1);
-        size = sizeof(GLint) * count;
+        m_Type = GL_INT;
+        m_Count = ((GLint)shaderDataType - (GLint)Type::INT + 1);
+        m_Size = sizeof(GLint) * m_Count;
         break;
     case Type::UINT:
     case Type::UINT2:
     case Type::UINT3:
     case Type::UINT4:
-        type = GL_UNSIGNED_INT;
-        count = ((GLint)aShaderDataType - (GLint)Type::UINT + 1);
-        size = sizeof(GLuint) * count;
+        m_Type = GL_UNSIGNED_INT;
+        m_Count = ((GLint)shaderDataType - (GLint)Type::UINT + 1);
+        m_Size = sizeof(GLuint) * m_Count;
         break;
     case Type::FLOAT:
     case Type::FLOAT2:
     case Type::FLOAT3:
     case Type::FLOAT4:
-        type = GL_FLOAT;
-        count = ((GLint)aShaderDataType - (GLint)Type::FLOAT + 1);
-        size = sizeof(GLfloat) * count;
+        m_Type = GL_FLOAT;
+        m_Count = ((GLint)shaderDataType - (GLint)Type::FLOAT + 1);
+        m_Size = sizeof(GLfloat) * m_Count;
         break;
     }
 }
 
-BufferLayout::BufferLayout(std::initializer_list<ShaderData::Type> aInitList)
+BufferLayout::BufferLayout(std::initializer_list<ShaderData::Type> initList)
 {
-    init(aInitList);
+    Init(initList);
 }
 
-BufferLayout::BufferLayout(const std::vector<ShaderData::Type>& aShaderDataTypes)
+BufferLayout::BufferLayout(const std::vector<ShaderData::Type>& shaderDataTypes)
 {
-    init(aShaderDataTypes);
+    Init(shaderDataTypes);
 }
 
-void BufferLayout::init(const std::vector<ShaderData::Type>& aShaderDataTypes)
+void BufferLayout::Init(const std::vector<ShaderData::Type>& shaderDataTypes)
 {
-    mElements.reserve(aShaderDataTypes.size());
+    m_Elements.reserve(shaderDataTypes.size());
 
     GLint offset = 0;
-    for (const auto& shaderDataType : aShaderDataTypes)
+    for (const auto& shaderDataType : shaderDataTypes)
     {
         BufferElement element;
-        element.shaderData.construct(shaderDataType);
+        element.shaderData.Construct(shaderDataType);
         element.offset = offset;
 
-        offset += element.shaderData.getSize();
-        mStride += element.shaderData.getSize();
+        offset += element.shaderData.GetSize();
+        m_Stride += element.shaderData.GetSize();
 
-        mElements.push_back(std::move(element));
+        m_Elements.push_back(std::move(element));
     }
 }
 

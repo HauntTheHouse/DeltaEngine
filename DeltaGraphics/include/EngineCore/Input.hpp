@@ -9,22 +9,22 @@ namespace Delta
 class Input
 {
 public:
-    static bool isKeyPressed(KeyCode aKeyCode);
-    static bool isMouseButtonPressed(MouseButtonCode aMouseButtonCode);
-    static Vec2 getCursorPosition();
+    static bool IsKeyPressed(KeyCode keyCode);
+    static bool IsMouseButtonPressed(MouseButtonCode mouseButtonCode);
+    static Vec2 GetCursorPosition();
 
 private:
-    static void pressKey(KeyCode aKeyCode);
-    static void releaseKey(KeyCode aKeyCode);
+    static void PressKey(KeyCode keyCode);
+    static void ReleaseKey(KeyCode keyCode);
 
-    static void pressMouseButton(MouseButtonCode aMouseButtonCode);
-    static void releaseMouseButton(MouseButtonCode aMouseButtonCode);
+    static void PressMouseButton(MouseButtonCode mouseButtonCode);
+    static void ReleaseMouseButton(MouseButtonCode mouseButtonCode);
 
-    static void setCursorPosition(Vec2 aNewPosition);
+    static void SetCursorPosition(Vec2 newPosition);
 
-    static std::array<bool, static_cast<size_t>(KeyCode::KEY_LAST) + 1> mPressedKeys;
-    static std::array<bool, static_cast<size_t>(MouseButtonCode::MOUSE_BUTTON_LAST) + 1> mPressedMouseButtons;
-    static Vec2 mCursorPosition;
+    static std::array<bool, static_cast<size_t>(KeyCode::KEY_LAST) + 1> m_PressedKeys;
+    static std::array<bool, static_cast<size_t>(MouseButtonCode::MOUSE_BUTTON_LAST) + 1> m_PressedMouseButtons;
+    static Vec2 m_CursorPosition;
 
     friend class Application;
 
