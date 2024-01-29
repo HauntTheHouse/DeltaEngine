@@ -43,11 +43,18 @@ public:
         m_VAO.AddVertexBuffer(m_VBO);
         m_VAO.SetIndexBuffer(m_EBO);
 
-        const unsigned int width = 512;
-        const unsigned int height = 512;
 
-        m_TextureCheckboard.Init(width, height, Delta::Texture2D::GenerateCheckboard(width, height, 3, 8).data());
-        m_TexturePink.Init(width, height, Delta::Texture2D::GenerateFillColor(width, height, 3, { 0.0f, 0.0f, 1.0f }).data());
+        //Delta::Texture2D::GenerateCheckboard(8);
+
+        Delta::SamplingParams samplingParams{};
+        samplingParams.minFilter = Delta::Filter::LINEAR_MIPMAP_LINEAR;
+        samplingParams.magFilter = Delta::Filter::LINEAR;
+
+        Delta::ImageParams imageParams = Delta::Texture2D::Load("assets/textures/brick_wall.png");
+        m_TextureCheckboard.Init(imageParams, samplingParams);
+
+        imageParams = Delta::Texture2D::GenerateFillColor({ 0.0f, 0.0f, 1.0f });
+        m_TexturePink.Init(imageParams);
 
         Delta::Renderer::DepthTesting(true);
     }

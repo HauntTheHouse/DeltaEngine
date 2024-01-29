@@ -29,4 +29,7 @@ project "DeltaGraphics"
         "spdlog",
         "imgui",
     }
-    defines { "USING_OPENGL=1" }
+    defines {
+      "STB_IMAGE_IMPLEMENTATION",
+      "USING_OPENGL=1"
+    }
