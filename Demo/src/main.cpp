@@ -1,14 +1,18 @@
+#include "PCH.hpp"
+
 #include "EngineCore/Application.hpp"
 #include "EngineCore/EntryPoint.hpp"
-#include "EngineCore/Input.hpp"
-#include "EngineCore/Time.hpp"
+
 #include "EngineCore/Camera.hpp"
+#include "EngineCore/Time.hpp"
+#include "EngineCore/Rendering/VertexArray.hpp"
+#include "EngineCore/Rendering/Renderer.hpp"
+
+#include "EngineCore/Input.hpp"
 #include "EngineCore/Rendering/ShaderProgram.hpp"
 #include "EngineCore/Rendering/VertexBuffer.hpp"
 #include "EngineCore/Rendering/IndexBuffer.hpp"
-#include "EngineCore/Rendering/VertexArray.hpp"
 #include "EngineCore/Rendering/Texture2D.hpp"
-#include "EngineCore/Rendering/Renderer.hpp"
 
 #include <imgui.h>
 #include <Vec2.hpp>

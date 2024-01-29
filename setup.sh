@@ -1,4 +1,4 @@
 #!/bin/bash
 
-git submodule update --init
-cmake -S . -B build/
+# git submodule update --init
+External/premake5.exe vs2022

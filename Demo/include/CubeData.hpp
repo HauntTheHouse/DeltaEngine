@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 #include <EngineCore/Rendering/BufferLayout.hpp>
 
 class CubeData

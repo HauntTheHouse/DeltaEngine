@@ -1,4 +1,4 @@
 @echo off
 git submodule update --init
-cmake -S . -B build/
+External/premake5.exe vs2022
 PAUSE

@@ -1,16 +1,16 @@
-[submodule "vendor/glfw"]
-	path = vendor/glfw
+[submodule "DeltaEngine/Vendor/glfw"]
+	path = DeltaEngine/Vendor/glfw
 	url = https://github.com/glfw/glfw.git
-[submodule "vendor/spdlog"]
-	path = vendor/spdlog
+[submodule "DeltaEngine/Vendor/spdlog"]
+	path = DeltaEngine/Vendor/spdlog
 	url = https://github.com/gabime/spdlog.git
-[submodule "vendor/imgui"]
-	path = vendor/imgui
+[submodule "DeltaEngine/Vendor/imgui"]
+	path = DeltaEngine/Vendor/imgui
 	url = https://github.com/ocornut/imgui.git
 	branch = docking
-[submodule "vendor/cmrc"]
-	path = vendor/cmrc
+[submodule "DeltaEngine/Vendor/cmrc"]
+	path = DeltaEngine/Vendor/cmrc
 	url = https://github.com/vector-of-bool/cmrc.git
-[submodule "vendor/stb"]
-	path = vendor/stb
+[submodule "DeltaEngine/Vendor/stb"]
+	path = DeltaEngine/Vendor/stb
 	url = https://github.com/nothings/stb
