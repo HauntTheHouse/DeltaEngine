@@ -1,6 +1,6 @@
-#include "PCH.hpp"
 #include "EngineCore/Rendering/VertexArray.hpp"
 
+#include "EngineCore/Log.hpp"
 #include <glad/glad.h>
 
 namespace Delta
@@ -52,7 +52,7 @@ void VertexArray::SetIndexBuffer(const IndexBuffer& indexBuffer)
 
 void VertexArray::Bind() const
 {
-    assert(m_Id != 0);
+    ASSERT(m_Id != 0);
     glBindVertexArray(static_cast<GLuint>(m_Id));
 }
 

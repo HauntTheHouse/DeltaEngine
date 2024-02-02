@@ -1,6 +1,6 @@
-#include "PCH.hpp"
 #include "EngineCore/Rendering/IndexBuffer.hpp"
 
+#include <EngineCore/Log.hpp>
 #include <glad/glad.h>
 
 namespace Delta
@@ -21,7 +21,7 @@ void IndexBuffer::Clear()
 
 void IndexBuffer::Bind() const
 {
-    assert(m_Id != 0);
+    ASSERT(m_Id != 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, static_cast<GLuint>(m_Id));
 }
 

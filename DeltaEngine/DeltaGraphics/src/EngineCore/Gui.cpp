@@ -1,6 +1,6 @@
-#include "PCH.hpp"
 #include "EngineCore/Gui.hpp"
 
+#include "EngineCore/Log.hpp"
 #include <GLFW/glfw3.h>
 #include <imgui.h>
 #if USING_OPENGL

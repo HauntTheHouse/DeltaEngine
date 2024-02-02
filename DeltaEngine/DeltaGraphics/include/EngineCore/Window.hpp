@@ -1,7 +1,9 @@
 #pragma once
 
-#include <Vec2.hpp>
 #include "Input.hpp"
+#include <Vec2.hpp>
+#include <functional>
+#include <string>
 
 struct GLFWwindow;
 

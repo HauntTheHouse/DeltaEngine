@@ -1,4 +1,3 @@
-#include "PCH.hpp"
 #include "EngineCore/Window.hpp"
 
 #ifdef USING_VULKAN
@@ -9,6 +8,7 @@
 #include "EngineCore/Event.hpp"
 #include "EngineCore/Rendering/Renderer.hpp"
 #include "EngineCore/Gui.hpp"
+#include "EngineCore/Log.hpp"
 
 namespace Delta
 {

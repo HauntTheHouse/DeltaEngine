@@ -1,4 +1,3 @@
-#include "PCH.hpp"
 #include "EngineCore/Application.hpp"
 
 #include <imgui.h>

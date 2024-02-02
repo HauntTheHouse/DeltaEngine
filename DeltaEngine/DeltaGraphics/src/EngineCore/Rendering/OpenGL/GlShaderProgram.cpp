@@ -1,8 +1,11 @@
-#include "PCH.hpp"
 #include "EngineCore/Rendering/ShaderProgram.hpp"
 
+#include "EngineCore/Log.hpp"
 #include <glad/glad.h>
 #include <Mat4.hpp>
+
+#include <fstream>
+#include <sstream>
 
 namespace Delta
 {

@@ -1,4 +1,3 @@
-#include "PCH.hpp"
 #include "EngineCore/Rendering/Texture2D.hpp"
 
 #include <stb_image.h>
@@ -56,10 +55,10 @@ bool Texture2D::Init(const ImageParams& imageParams, const SamplingParams& sampl
         tmpParams = GenerateCheckboard(8);
     }
 
-    m_Width = imageParams.width;
-    m_Height = imageParams.height;
+    m_Width = tmpParams.width;
+    m_Height = tmpParams.height;
 
-    GLint format = toGlFormat(imageParams.format);
+    GLint format = toGlFormat(tmpParams.format);
 
     glGenTextures(1, static_cast<GLuint*>(&m_Id));
     glBindTexture(GL_TEXTURE_2D, static_cast<GLuint>(m_Id));

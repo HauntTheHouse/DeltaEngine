@@ -46,7 +46,7 @@ project "glfw"
             "glfw/src/nsgl_context.m",
             "glfw/src/egl_context.c",
             "glfw/src/nsgl_context.m",
-            "glfw/src/osmesa_context.c",                       
+            "glfw/src/osmesa_context.c",
         }
 
     filter "action:vs*"
@@ -56,7 +56,7 @@ project "glfw"
 project "spdlog"
     kind "StaticLib"
     language "C++"
-    cppdialect "C++11"
+    cppdialect "C++17"
     files {
         "spdlog/src/spdlog.cpp",
         "spdlog/src/stdout_sinks.cpp",
@@ -69,11 +69,17 @@ project "spdlog"
     includedirs {
         "spdlog/include"
     }
-    defines { "SPDLOG_COMPILED_LIB" }
+    defines {
+        "SPDLOG_COMPILED_LIB",
+        "SPDLOG_BUILD_WARNINGS=OFF",
+        "_SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING"
+    }
 
     filter "action:vs*"
         buildoptions { "/Zc:__cplusplus" }
-        defines "_CRT_SECURE_NO_WARNINGS"
+        defines {
+            "_CRT_SECURE_NO_WARNINGS",
+        }
 
 
 project "glad"

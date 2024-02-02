@@ -1,4 +1,3 @@
-#include "PCH.hpp"
 #include "EngineCore/Time.hpp"
 
 #include <GLFW/glfw3.h>

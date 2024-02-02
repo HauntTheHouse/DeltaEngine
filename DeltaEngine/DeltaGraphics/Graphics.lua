@@ -3,13 +3,7 @@ project "DeltaGraphics"
     language "C++"
     cppdialect "C++17"
 
-
-    pchheader("PCH.hpp")
-    pchsource("include/PCH.cpp")
-
     files {
-      "include/PCH.hpp",
-      "include/PCH.cpp",
       "include/EngineCore/**.hpp",
       "src/EngineCore/*.cpp",
       "src/EngineCore/Rendering/OpenGL/*.cpp"

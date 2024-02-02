@@ -1,6 +1,6 @@
-#include "PCH.hpp"
 #include "EngineCore/Rendering/Renderer.hpp"
 
+#include "EngineCore/Log.hpp"
 #include "EngineCore/Rendering/VertexArray.hpp"
 
 #include <glad/glad.h>
@@ -32,8 +32,8 @@ void Renderer::Draw(const VertexArray& vertexArray)
 {
     vertexArray.Bind();
     vertexArray.GetIndicesCount() > 0
-        ? glDrawElements(GL_TRIANGLES, vertexArray.GetIndicesCount(), GL_UNSIGNED_INT, nullptr)
-        : glDrawArrays(GL_TRIANGLES, 0, vertexArray.GetVerticesCount());
+        ? glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(vertexArray.GetIndicesCount()), GL_UNSIGNED_INT, nullptr)
+        : glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(vertexArray.GetVerticesCount()));
     vertexArray.Unbind();
 }
 

@@ -37,7 +37,7 @@ public:
     static void Unbind();
 
     const BufferLayout& GetLayout() const { return m_Layout; }
-    int GetVerticesCount() const { return m_VerticesCount; }
+    size_t GetVerticesCount() const { return m_VerticesCount; }
 
     static unsigned int GetRendererCode(Usage usage);
 
@@ -47,7 +47,7 @@ private:
     unsigned int m_Id{ 0 };
     BufferLayout m_Layout;
 
-    int m_VerticesCount{ 0 };
+    size_t m_VerticesCount{ 0 };
 
 };
 

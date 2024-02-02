@@ -1,5 +1,3 @@
-#include "PCH.hpp"
-
 #include "EngineCore/Application.hpp"
 #include "EngineCore/EntryPoint.hpp"
 
@@ -24,11 +22,11 @@
 class Editor : public Delta::Application
 {
 public:
-    Editor(unsigned int aWindowWidth, unsigned int aWindowHeight, const char* aTitle) : Application(aWindowWidth, aWindowHeight, aTitle)
+    Editor(unsigned int windowWidth, unsigned int windowHeight, const char* title) : Application(windowWidth, windowHeight, title)
     {
         m_Camera.Init({ 0.0f, 0.0f, 8.0f }, { 0.0f, 0.0f, 0.0f });
         m_Camera.SetProjectionMode(m_IsPerspectiveCamera ? Delta::Camera::ProjectionMode::PERSPECTIVE : Delta::Camera::ProjectionMode::ORTHO);
-        m_Camera.SetAspect(aWindowWidth / static_cast<float>(aWindowHeight));
+        m_Camera.SetAspect(windowWidth / static_cast<float>(windowHeight));
         m_Camera.SetFov(90.0f);
         m_Camera.SetNearFarPlanes(0.1f, 100.0f);
         m_Camera.SetOrthoPlanes(-8.0f, 8.0f, -8.0f, 8.0f);
@@ -51,10 +49,10 @@ public:
         samplingParams.magFilter = Delta::Filter::LINEAR;
 
         Delta::ImageParams imageParams = Delta::Texture2D::Load("assets/textures/brick_wall.png");
-        m_TextureCheckboard.Init(imageParams, samplingParams);
+        m_BrickWallTex.Init(imageParams, samplingParams);
 
         imageParams = Delta::Texture2D::GenerateFillColor({ 0.0f, 0.0f, 1.0f });
-        m_TexturePink.Init(imageParams);
+        m_PinkTex.Init(imageParams);
 
         Delta::Renderer::DepthTesting(true);
     }
@@ -65,8 +63,8 @@ public:
         m_VBO.Clear();
         m_VAO.Clear();
         m_ShaderProgram.Clear();
-        m_TextureCheckboard.Clear();
-        m_TexturePink.Clear();
+        m_BrickWallTex.Clear();
+        m_PinkTex.Clear();
     }
 
     void OnUpdate(Delta::Timestep aTimestep) override
@@ -128,9 +126,9 @@ public:
             m_ShaderProgram.SetMat4("uModel", transformMat);
             m_ShaderProgram.SetMat4("uViewProject", m_Camera.GetViewProjection());
 
-            m_TextureCheckboard.Bind(0);
+            m_BrickWallTex.Bind(0);
             m_ShaderProgram.SetInt("uDefaultTexture", 0);
-            m_TexturePink.Bind(1);
+            m_PinkTex.Bind(1);
             m_ShaderProgram.SetInt("uPink", 1);
 
             Delta::Renderer::Draw(m_VAO);
@@ -181,8 +179,8 @@ private:
     Delta::VertexBuffer m_VBO;
     Delta::IndexBuffer m_EBO;
     Delta::VertexArray m_VAO;
-    Delta::Texture2D m_TextureCheckboard;
-    Delta::Texture2D m_TexturePink;
+    Delta::Texture2D m_BrickWallTex;
+    Delta::Texture2D m_PinkTex;
 
     Delta::Vec3 m_BackgroundColor{ 0.66f, 0.86f, 1.0f };
 

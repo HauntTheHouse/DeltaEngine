@@ -1,6 +1,6 @@
-#include "PCH.hpp"
 #include "EngineCore/Rendering/VertexBuffer.hpp"
 
+#include "EngineCore/Log.hpp"
 #include <glad/glad.h>
 
 namespace Delta
@@ -23,7 +23,7 @@ void VertexBuffer::Clear()
 
 void VertexBuffer::Bind() const
 {
-    assert(m_Id != 0);
+    ASSERT(m_Id != 0);
     glBindBuffer(GL_ARRAY_BUFFER, static_cast<GLuint>(m_Id));
 }
 

@@ -23,15 +23,15 @@ public:
     void Bind() const;
     static void Unbind();
 
-    unsigned int GetVerticesCount() const { return m_VerticesCount; }
-    int GetIndicesCount() const { return m_IndicesCount; }
+    size_t GetVerticesCount() const { return m_VerticesCount; }
+    size_t GetIndicesCount() const { return m_IndicesCount; }
 
 private:
     unsigned int m_Id{ 0 };
 
-    unsigned int m_AttributesCount{ 0 };
-    int m_VerticesCount{ 0 };
-    int m_IndicesCount{ 0 };
+    size_t m_AttributesCount{ 0 };
+    size_t m_VerticesCount{ 0 };
+    size_t m_IndicesCount{ 0 };
 
 };
 

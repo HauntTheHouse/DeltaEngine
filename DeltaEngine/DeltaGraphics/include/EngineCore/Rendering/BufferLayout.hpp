@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 namespace Delta
 {
 
@@ -17,14 +19,14 @@ public:
 
     void Construct(Type shaderDataType);
 
-    int GetCount() const { return m_Count; }
-    int GetSize() const { return m_Size; }
+    size_t GetCount() const { return m_Count; }
+    size_t GetSize() const { return m_Size; }
     unsigned int GetRendererCodeType() const { return m_Type; }
 
 private:
     unsigned int m_Type{ 0 };
-    int m_Count{ 0 };
-    int m_Size{ 0 };
+    size_t m_Count{ 0 };
+    size_t m_Size{ 0 };
 
 };
 
@@ -34,7 +36,7 @@ public:
     struct BufferElement
     {
         ShaderData shaderData;
-        int offset{ 0 };
+        size_t offset{ 0 };
     };
 
     BufferLayout() = default;
@@ -44,11 +46,11 @@ public:
     void Init(const std::vector<ShaderData::Type>& shaderDataTypes);
 
     const std::vector<BufferElement>& GetElements() const { return m_Elements; }
-    int GetStride() const { return m_Stride; }
+    size_t GetStride() const { return m_Stride; }
 
 private:
     std::vector<BufferElement> m_Elements;
-    int m_Stride{ 0 };
+    size_t m_Stride{ 0 };
 
 };
 

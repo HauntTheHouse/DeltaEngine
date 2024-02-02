@@ -26,7 +26,7 @@ public:
 
     void SetAspect(float aspect);
     void SetFov(float fovDegree);
-    void SetNearFarPlanes(float near, float far);
+    void SetNearFarPlanes(float nearPlane, float farPlane);
     void SetOrthoPlanes(float left, float right, float down, float up);
 
     float GetAspect() const { return m_Aspect; }

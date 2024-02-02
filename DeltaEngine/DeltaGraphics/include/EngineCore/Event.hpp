@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Keys.hpp"
+#include <functional>
 
 namespace Delta
 {

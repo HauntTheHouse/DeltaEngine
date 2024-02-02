@@ -28,13 +28,13 @@ public:
     void Bind() const;
     static void Unbind();
 
-    int GetIndicesCount() const { return m_IndicesCount; }
+    size_t GetIndicesCount() const { return m_IndicesCount; }
 
 private:
     void InitImpl(const void* data, const size_t size, const VertexBuffer::Usage usage);
 
     unsigned int m_Id{ 0 };
-    int m_IndicesCount{ 0 };
+    size_t m_IndicesCount{ 0 };
 
 };
 
