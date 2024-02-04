@@ -6,13 +6,18 @@
 namespace Delta
 {
 
-void VertexBuffer::InitImpl(const void* data, const size_t size, const BufferLayout& layout, const Usage usage)
+bool VertexBuffer::Init(const void* data, const size_t size, const BufferLayout& layout, const Usage usage)
 {
+    if (m_Id != 0) return false;
+
+    m_VerticesCount = size / layout.GetStride();
     m_Layout = layout;
 
     glGenBuffers(1, static_cast<GLuint*>(&m_Id));
     glBindBuffer(GL_ARRAY_BUFFER, static_cast<GLuint>(m_Id));
     glBufferData(GL_ARRAY_BUFFER, static_cast<GLsizeiptr>(size), data, static_cast<GLenum>(GetRendererCode(usage)));
+
+    return true;
 }
 
 void VertexBuffer::Clear()

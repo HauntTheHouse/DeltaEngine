@@ -1,6 +1,7 @@
 #pragma once
 
 #include "BufferLayout.hpp"
+#include "EngineCore/Utils.hpp"
 
 namespace Delta
 {
@@ -20,17 +21,12 @@ public:
     VertexBuffer(VertexBuffer&) = delete;
     VertexBuffer& operator=(VertexBuffer&) = delete;
 
-    template<typename T>
-    bool Init(const std::vector<T>& vertices, const BufferLayout& layout, const Usage usage = Usage::STATIC)
+    template<typename Container>
+    bool Init(Container&& vertices, const BufferLayout& layout, const Usage usage = Usage::STATIC)
     {
-        if (m_Id != 0) return false;
-
-        size_t size = vertices.size() * sizeof(T);
-        m_VerticesCount = size / layout.GetStride();
-
-        InitImpl(vertices.data(), size, layout, usage);
-        return true;
+        return Init(vertices.data(), Utils::getSizeInBytes(vertices), layout, usage);
     }
+    bool Init(const void* data, const size_t size, const BufferLayout& layout, const Usage usage);
     void Clear();
 
     void Bind() const;
@@ -42,8 +38,6 @@ public:
     static unsigned int GetRendererCode(Usage usage);
 
 private:
-    void InitImpl(const void* data, const size_t size, const BufferLayout& layout, const Usage usage);
-
     unsigned int m_Id{ 0 };
     BufferLayout m_Layout;
 

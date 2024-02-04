@@ -48,6 +48,7 @@ void VertexArray::SetIndexBuffer(const IndexBuffer& indexBuffer)
     indexBuffer.Bind();
 
     m_IndicesCount = indexBuffer.GetIndicesCount();
+    m_IndexDataType = indexBuffer.GetDataType();
 }
 
 void VertexArray::Bind() const

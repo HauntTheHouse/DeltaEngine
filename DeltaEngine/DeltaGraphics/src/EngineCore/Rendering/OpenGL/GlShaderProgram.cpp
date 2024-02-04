@@ -10,6 +10,37 @@
 namespace Delta
 {
 
+namespace
+{
+    GLenum toGlType(ShaderProgram::ShaderType shaderType)
+    {
+        switch (shaderType)
+        {
+        case ShaderProgram::ShaderType::VERTEX: return GL_VERTEX_SHADER;
+        case ShaderProgram::ShaderType::FRAGMENT: return GL_FRAGMENT_SHADER;
+        case ShaderProgram::ShaderType::GEOMETRY: return GL_GEOMETRY_SHADER;
+        case ShaderProgram::ShaderType::TESS_EVALUATION: return GL_TESS_EVALUATION_SHADER;
+        case ShaderProgram::ShaderType::TESS_CONTROL: return GL_TESS_CONTROL_SHADER;
+        case ShaderProgram::ShaderType::COMPUTE: return GL_COMPUTE_SHADER;
+        default: return GL_NONE;
+        }
+    }
+
+    const char* toStrType(ShaderProgram::ShaderType shaderType)
+    {
+        switch (shaderType)
+        {
+        case ShaderProgram::ShaderType::VERTEX: return "Vertex shader";
+        case ShaderProgram::ShaderType::FRAGMENT: return "Fragment shader";
+        case ShaderProgram::ShaderType::GEOMETRY: return "Geometry shader";
+        case ShaderProgram::ShaderType::TESS_EVALUATION: return "Tessellation evaluation shader";
+        case ShaderProgram::ShaderType::TESS_CONTROL: return "Tessellation control shader";
+        case ShaderProgram::ShaderType::COMPUTE: return "Compute shader";
+        default: return "Unknown shader";
+        }
+    }
+}
+
 bool ShaderProgram::Init(const char* vertexShaderPath, const char* fragmentShaderPath)
 {
     auto const readFile = [](const char* path)
@@ -98,7 +129,7 @@ int ShaderProgram::GetUniformLocation(const char* uniformName)
 
 unsigned int ShaderProgram::CompileShader(const char* sourceCode, ShaderType shaderType)
 {
-    GLuint shader = glCreateShader(static_cast<GLenum>(GetRendererCode(shaderType)));
+    GLuint shader = glCreateShader(static_cast<GLenum>(toGlType(shaderType)));
     glShaderSource(shader, 1, &sourceCode, nullptr);
     glCompileShader(shader);
 
@@ -109,31 +140,11 @@ unsigned int ShaderProgram::CompileShader(const char* sourceCode, ShaderType sha
     if (!success)
     {
         glGetShaderInfoLog(shader, logSize, nullptr, infoLog);
-        LOG_ERROR("{0} compilation failed\n{1}", GetShaderTypeStr(shaderType), infoLog);
+        LOG_ERROR("{0} compilation failed\n{1}", toStrType(shaderType), infoLog);
         return 0;
     }
 
     return static_cast<unsigned int>(shader);
-}
-
-const char* ShaderProgram::GetShaderTypeStr(ShaderType shaderType)
-{
-    switch (shaderType)
-    {
-        case ShaderType::VERTEX: return "Vertex shader";
-        case ShaderType::FRAGMENT: return "Fragment shader";
-        default: return "Unknown shader";
-    }
-}
-
-constexpr unsigned int ShaderProgram::GetRendererCode(ShaderType shaderType)
-{
-    switch (shaderType)
-    {
-        case ShaderType::VERTEX: return GL_VERTEX_SHADER;
-        case ShaderType::FRAGMENT: return GL_FRAGMENT_SHADER;
-        default: return GL_NONE;
-    }
 }
 
 } // namespace Delta

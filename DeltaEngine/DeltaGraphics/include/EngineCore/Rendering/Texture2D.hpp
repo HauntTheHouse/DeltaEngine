@@ -16,7 +16,7 @@ enum class Filter
     LINEAR_MIPMAP_LINEAR
 };
 
-enum class Wrap
+enum class WrapMode
 {
     REPEAT,
     CLAMP_TO_EDGE,
@@ -34,7 +34,7 @@ struct SamplingParams
 {
     Filter minFilter{ Filter::NEAREST_MIPMAP_NEAREST };
     Filter magFilter{ Filter::NEAREST };
-    Wrap wrap{ Wrap::REPEAT };
+    WrapMode wrap{ WrapMode::REPEAT };
 };
 
 struct ImageParams
@@ -52,7 +52,6 @@ public:
     ~Texture2D() = default;
     Texture2D(Texture2D&) = delete;
     Texture2D& operator=(Texture2D&) = delete;
-
 
     bool Init(const ImageParams& imageParams, const SamplingParams& samplingParams = SamplingParams());
     void Clear();

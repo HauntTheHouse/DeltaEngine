@@ -18,18 +18,20 @@ namespace
         case Delta::Filter::LINEAR_MIPMAP_NEAREST:  return GL_LINEAR_MIPMAP_NEAREST;
         case Delta::Filter::NEAREST_MIPMAP_LINEAR:  return GL_NEAREST_MIPMAP_LINEAR;
         case Delta::Filter::LINEAR_MIPMAP_LINEAR:   return GL_LINEAR_MIPMAP_LINEAR;
+        default: return GL_NONE;
         }
     }
 
-    GLint toGlWrap(Wrap wrap)
+    GLint toGlWrap(WrapMode wrap)
     {
         switch (wrap)
         {
-        case Delta::Wrap::REPEAT:               return GL_REPEAT;
-        case Delta::Wrap::CLAMP_TO_EDGE:        return GL_CLAMP_TO_EDGE;
-        case Delta::Wrap::CLAMP_TO_BORDER:      return GL_CLAMP_TO_BORDER;
-        case Delta::Wrap::MIRRORED_REPEAT:      return GL_MIRRORED_REPEAT;
-        case Delta::Wrap::MIRROR_CLAMP_TO_EDGE: return GL_MIRROR_CLAMP_TO_EDGE;
+        case Delta::WrapMode::REPEAT:               return GL_REPEAT;
+        case Delta::WrapMode::CLAMP_TO_EDGE:        return GL_CLAMP_TO_EDGE;
+        case Delta::WrapMode::CLAMP_TO_BORDER:      return GL_CLAMP_TO_BORDER;
+        case Delta::WrapMode::MIRRORED_REPEAT:      return GL_MIRRORED_REPEAT;
+        case Delta::WrapMode::MIRROR_CLAMP_TO_EDGE: return GL_MIRROR_CLAMP_TO_EDGE;
+        default: return GL_NONE;
         }
     }
 
@@ -41,9 +43,11 @@ namespace
         case Delta::Format::RG: return GL_RG;
         case Delta::Format::RGB: return GL_RGB;
         case Delta::Format::RGBA: return GL_RGBA;
+        default: return GL_NONE;
         }
     }
 }
+
 
 bool Texture2D::Init(const ImageParams& imageParams, const SamplingParams& samplingParams)
 {
@@ -98,6 +102,8 @@ void Texture2D::SetData(const unsigned char* data)
 ImageParams Texture2D::Load(const std::string& path)
 {
     ImageParams params{};
+
+    stbi_set_flip_vertically_on_load(true);
 
     int channelsNum;
     params.data = stbi_load(path.c_str(), &params.width, &params.height, &channelsNum, 0);

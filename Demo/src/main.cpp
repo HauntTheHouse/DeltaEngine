@@ -131,7 +131,7 @@ public:
             m_PinkTex.Bind(1);
             m_ShaderProgram.SetInt("uPink", 1);
 
-            Delta::Renderer::Draw(m_VAO);
+            Delta::Renderer::Draw(Delta::DrawPrimitive::TRIANGLES, m_VAO);
         }
         m_ShaderProgram.Unbind();
     }

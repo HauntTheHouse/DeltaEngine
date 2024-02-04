@@ -15,6 +15,10 @@ public:
     {
         VERTEX,
         FRAGMENT,
+        GEOMETRY,
+        TESS_EVALUATION,
+        TESS_CONTROL,
+        COMPUTE
     };
 
     ShaderProgram() = default;
@@ -36,11 +40,10 @@ public:
 
 private:
     static unsigned int CompileShader(const char* sourceCode, ShaderType shaderType);
-    static const char* GetShaderTypeStr(ShaderType shaderType);
-    constexpr static unsigned int GetRendererCode(ShaderType shaderType);
 
     unsigned int m_Id{ 0 };
     std::unordered_map<std::string, int> m_UniformLocation;
+
 };
 
 } // namespace Delta
