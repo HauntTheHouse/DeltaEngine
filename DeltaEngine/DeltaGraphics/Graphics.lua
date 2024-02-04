@@ -6,6 +6,7 @@ project "DeltaGraphics"
     files {
       "include/EngineCore/**.hpp",
       "src/EngineCore/*.cpp",
+      "src/EngineCore/Rendering/*.cpp",
       "src/EngineCore/Rendering/OpenGL/*.cpp"
     }
     includedirs {
@@ -20,10 +21,10 @@ project "DeltaGraphics"
     links {
         "glfw",
         "glad",
-        "spdlog",
         "imgui",
     }
     defines {
       "STB_IMAGE_IMPLEMENTATION",
-      "USING_OPENGL=1"
+      "USING_OPENGL=1",
+      "_SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING",
     }
