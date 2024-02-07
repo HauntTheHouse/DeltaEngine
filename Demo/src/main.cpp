@@ -42,19 +42,18 @@ public:
         m_VAO.SetIndexBuffer(m_EBO);
 
 
-        //Delta::Texture2D::GenerateCheckboard(8);
+        Delta::TextureParams params;
+        params.samplingParams.minFilter = Delta::MinFilter::LINEAR_MIPMAP_LINEAR;
+        params.samplingParams.magFilter = Delta::MagFilter::LINEAR;
+        params.imageParams = Delta::Texture2D::Load("assets/textures/brick_wall.png");
 
-        Delta::SamplingParams samplingParams{};
-        samplingParams.minFilter = Delta::Filter::LINEAR_MIPMAP_LINEAR;
-        samplingParams.magFilter = Delta::Filter::LINEAR;
+        m_BrickWallTex.Init(params);
 
-        Delta::ImageParams imageParams = Delta::Texture2D::Load("assets/textures/brick_wall.png");
-        m_BrickWallTex.Init(imageParams, samplingParams);
+        params.imageParams = Delta::Texture2D::GenerateFillColor({ 0.0f, 0.0f, 1.0f });
 
-        imageParams = Delta::Texture2D::GenerateFillColor({ 0.0f, 0.0f, 1.0f });
-        m_PinkTex.Init(imageParams);
+        m_PinkTex.Init(params);
 
-        Delta::Renderer::DepthTesting(true);
+        Delta::Renderer::SetDepthTestEnable(true);
     }
 
     ~Editor() override
@@ -69,8 +68,8 @@ public:
 
     void OnUpdate(Delta::Timestep aTimestep) override
     {
-        Delta::Vec3 movementDelta{ 0.0f, 0.0f, 0.0f };
-        Delta::Vec3 rotationDelta{ 0.0f, 0.0f, 0.0f };
+        Delta::Vec3f movementDelta{ 0.0f, 0.0f, 0.0f };
+        Delta::Vec3f rotationDelta{ 0.0f, 0.0f, 0.0f };
 
         if (Delta::Input::IsKeyPressed(Delta::KeyCode::KEY_W))
             movementDelta.z += 2.0f * aTimestep;
@@ -94,7 +93,7 @@ public:
         {
             if (Delta::Input::IsMouseButtonPressed(Delta::MouseButtonCode::MOUSE_BUTTON_LEFT))
             {
-                Delta::Vec2 currentCursorPostion = Delta::Input::GetCursorPosition();
+                Delta::Vec2f currentCursorPostion = Delta::Input::GetCursorPosition();
                 if (Delta::Input::IsMouseButtonPressed(Delta::MouseButtonCode::MOUSE_BUTTON_RIGHT))
                 {
                     movementDelta.x += (m_InitCursorPosition.x - currentCursorPostion.x) / 100.0f;
@@ -111,12 +110,12 @@ public:
 
         m_Camera.Move(movementDelta, rotationDelta);
 
-        Delta::Renderer::ClearColor(Delta::Vec4(m_BackgroundColor.x, m_BackgroundColor.y, m_BackgroundColor.z, 1.0f));
+        Delta::Renderer::ClearColor(Delta::Vec4f(m_BackgroundColor.x, m_BackgroundColor.y, m_BackgroundColor.z, 1.0f));
         Delta::Renderer::Clear();
 
-        static Delta::Vec3 translate(0.0f);
-        static Delta::Vec3 angles(0.0f);
-        static Delta::Vec3 scale(1.0f);
+        static Delta::Vec3f translate(0.0f);
+        static Delta::Vec3f angles(0.0f);
+        static Delta::Vec3f scale(1.0f);
 
         Delta::Mat4 transformMat;
         transformMat.transform(translate, angles, scale);
@@ -182,10 +181,10 @@ private:
     Delta::Texture2D m_BrickWallTex;
     Delta::Texture2D m_PinkTex;
 
-    Delta::Vec3 m_BackgroundColor{ 0.66f, 0.86f, 1.0f };
+    Delta::Vec3f m_BackgroundColor{ 0.66f, 0.86f, 1.0f };
 
     bool m_IsPerspectiveCamera{ true };
-    Delta::Vec2 m_InitCursorPosition;
+    Delta::Vec2f m_InitCursorPosition;
 
 };
 

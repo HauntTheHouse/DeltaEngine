@@ -2,7 +2,6 @@
 
 #include "EngineCore/Log.hpp"
 #include <glad/glad.h>
-#include <Mat4.hpp>
 
 #include <fstream>
 #include <sstream>
@@ -12,30 +11,16 @@ namespace Delta
 
 namespace
 {
-    GLenum toGlType(ShaderProgram::ShaderType shaderType)
+    const char* toStrType(ShaderType shaderType)
     {
         switch (shaderType)
         {
-        case ShaderProgram::ShaderType::VERTEX: return GL_VERTEX_SHADER;
-        case ShaderProgram::ShaderType::FRAGMENT: return GL_FRAGMENT_SHADER;
-        case ShaderProgram::ShaderType::GEOMETRY: return GL_GEOMETRY_SHADER;
-        case ShaderProgram::ShaderType::TESS_EVALUATION: return GL_TESS_EVALUATION_SHADER;
-        case ShaderProgram::ShaderType::TESS_CONTROL: return GL_TESS_CONTROL_SHADER;
-        case ShaderProgram::ShaderType::COMPUTE: return GL_COMPUTE_SHADER;
-        default: return GL_NONE;
-        }
-    }
-
-    const char* toStrType(ShaderProgram::ShaderType shaderType)
-    {
-        switch (shaderType)
-        {
-        case ShaderProgram::ShaderType::VERTEX: return "Vertex shader";
-        case ShaderProgram::ShaderType::FRAGMENT: return "Fragment shader";
-        case ShaderProgram::ShaderType::GEOMETRY: return "Geometry shader";
-        case ShaderProgram::ShaderType::TESS_EVALUATION: return "Tessellation evaluation shader";
-        case ShaderProgram::ShaderType::TESS_CONTROL: return "Tessellation control shader";
-        case ShaderProgram::ShaderType::COMPUTE: return "Compute shader";
+        case ShaderType::VERTEX: return "Vertex shader";
+        case ShaderType::FRAGMENT: return "Fragment shader";
+        case ShaderType::GEOMETRY: return "Geometry shader";
+        case ShaderType::TESS_EVALUATION: return "Tessellation evaluation shader";
+        case ShaderType::TESS_CONTROL: return "Tessellation control shader";
+        case ShaderType::COMPUTE: return "Compute shader";
         default: return "Unknown shader";
         }
     }
@@ -107,14 +92,60 @@ void ShaderProgram::Unbind()
     glUseProgram(0);
 }
 
-void ShaderProgram::SetMat4(const char* uniformName, const Mat4& mat4)
-{
-    glUniformMatrix4fv(GetUniformLocation(uniformName), 1, GL_FALSE, mat4.toPtr());
-}
 
 void ShaderProgram::SetInt(const char* uniformName, const int val)
 {
     glUniform1i(GetUniformLocation(uniformName), val);
+}
+
+void ShaderProgram::SetVec2i(const char* uniformName, const Vec2i& vec2)
+{
+    glUniform2iv(GetUniformLocation(uniformName), 1, vec2.toPtr());
+}
+
+void ShaderProgram::SetVec3i(const char* uniformName, const Vec3i& vec3)
+{
+    glUniform3iv(GetUniformLocation(uniformName), 1, vec3.toPtr());
+}
+
+void ShaderProgram::SetVec4i(const char* uniformName, const Vec4i& vec4)
+{
+    glUniform4iv(GetUniformLocation(uniformName), 1, vec4.toPtr());
+}
+
+void ShaderProgram::SetFloat(const char* uniformName, const float val)
+{
+    glUniform1f(GetUniformLocation(uniformName), val);
+}
+
+void ShaderProgram::SetVec2f(const char* uniformName, const Vec2f& vec2)
+{
+    glUniform2fv(GetUniformLocation(uniformName), 1, vec2.toPtr());
+}
+
+void ShaderProgram::SetVec3f(const char* uniformName, const Vec3f& vec3)
+{
+    glUniform3fv(GetUniformLocation(uniformName), 1, vec3.toPtr());
+}
+
+void ShaderProgram::SetVec4f(const char* uniformName, const Vec4f& vec4)
+{
+    glUniform4fv(GetUniformLocation(uniformName), 1, vec4.toPtr());
+}
+
+void ShaderProgram::SetMat2(const char* uniformName, const Mat2& mat2)
+{
+    glUniformMatrix2fv(GetUniformLocation(uniformName), 1, GL_FALSE, mat2.toPtr());
+}
+
+void ShaderProgram::SetMat3(const char* uniformName, const Mat3& mat3)
+{
+    glUniformMatrix3fv(GetUniformLocation(uniformName), 1, GL_FALSE, mat3.toPtr());
+}
+
+void ShaderProgram::SetMat4(const char* uniformName, const Mat4& mat4)
+{
+    glUniformMatrix4fv(GetUniformLocation(uniformName), 1, GL_FALSE, mat4.toPtr());
 }
 
 int ShaderProgram::GetUniformLocation(const char* uniformName)
@@ -129,7 +160,7 @@ int ShaderProgram::GetUniformLocation(const char* uniformName)
 
 unsigned int ShaderProgram::CompileShader(const char* sourceCode, ShaderType shaderType)
 {
-    GLuint shader = glCreateShader(static_cast<GLenum>(toGlType(shaderType)));
+    GLuint shader = glCreateShader(static_cast<GLenum>(toNativeType(shaderType)));
     glShaderSource(shader, 1, &sourceCode, nullptr);
     glCompileShader(shader);
 
