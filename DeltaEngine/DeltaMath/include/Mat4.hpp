@@ -11,7 +11,7 @@ class Mat4
 {
 public:
     Mat4() = default;
-    Mat4(Vec4 vec0, Vec4 vec1, Vec4 vec2, Vec4 vec3);
+    Mat4(Vec4f vec0, Vec4f vec1, Vec4f vec2, Vec4f vec3);
     Mat4(const float* mat);
 
     Mat4(const Mat4& rhs);
@@ -19,7 +19,7 @@ public:
 
     const Mat4& operator*=(const float rhs);
     const Mat4& operator+=(const Mat4& rhs);
-    Vec4 operator*(const Vec4& rhs) const;
+    Vec4f operator*(const Vec4f& rhs) const;
     Mat4 operator*(const float rhs) const;
     Mat4 operator*(const Mat4& rhs) const;
     Mat4 operator+(const Mat4& rhs) const;
@@ -32,23 +32,23 @@ public:
     Mat3 minor(const size_t i, const size_t j) const;
     float cofactor(const size_t i, const size_t j) const;
 
-    void orient(const Vec3& pos, const Vec3& forward, const Vec3& up);
-    void lookAt(const Vec3& pos, const Vec3& lookAt, const Vec3& up);
+    void orient(const Vec3f& pos, const Vec3f& forward, const Vec3f& up);
+    void lookAt(const Vec3f& pos, const Vec3f& lookAt, const Vec3f& up);
     void orthoOpenGL(float xmin, float xmax, float ymin, float ymax, float znear, float zfar);
     void orthoVulkan(float xmin, float xmax, float ymin, float ymax, float znear, float zfar);
     void perspectiveOpenGL(float fovy, float aspect, float nearPlane, float farPlane);
     void perspectiveVulkan(float fovy, float aspect, float nearPlane, float farPlane);
 
-    void transform(const Vec3& translate, const Vec3& rotate, const Vec3& scale = Vec3(1.0f));
-    void translate(const Vec3& translate);
-    void rotate(const Vec3& angles);
-    void scale(const Vec3& scale);
+    void transform(const Vec3f& translate, const Vec3f& rotate, const Vec3f& scale = Vec3f(1.0f));
+    void translate(const Vec3f& translate);
+    void rotate(const Vec3f& angles);
+    void scale(const Vec3f& scale);
 
     const float* toPtr() const;
     float* toPtr();
 
 public:
-    Vec4 rows[4];
+    Vec4f rows[4];
 
 }; // class Mat4
 

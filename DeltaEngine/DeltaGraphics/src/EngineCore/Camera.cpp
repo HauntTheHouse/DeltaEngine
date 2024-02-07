@@ -3,11 +3,11 @@
 namespace Delta
 {
 
-const Vec3 Camera::s_WorldForward = Vec3{ 0.0f, 0.0f, -1.0f };
-const Vec3 Camera::s_WorldRight = Vec3{ 1.0f, 0.0f, 0.0f };
-const Vec3 Camera::s_WorldUp = Vec3{ 0.0f, 1.0f, 0.0f };
+const Vec3f Camera::s_WorldForward = Vec3f{ 0.0f, 0.0f, -1.0f };
+const Vec3f Camera::s_WorldRight = Vec3f{ 1.0f, 0.0f, 0.0f };
+const Vec3f Camera::s_WorldUp = Vec3f{ 0.0f, 1.0f, 0.0f };
 
-void Camera::Init(const Vec3& position, const Vec3& rotation, ProjectionMode projectionMode)
+void Camera::Init(const Vec3f& position, const Vec3f& rotation, ProjectionMode projectionMode)
 {
     m_Position = position;
     m_Rotation = rotation;
@@ -17,19 +17,19 @@ void Camera::Init(const Vec3& position, const Vec3& rotation, ProjectionMode pro
     m_UpdateProjection = true;
 }
 
-void Camera::SetPosition(const Vec3& position)
+void Camera::SetPosition(const Vec3f& position)
 {
     m_Position = position;
     m_UpdateView = true;
 }
 
-void Camera::SetRotation(const Vec3& rotation)
+void Camera::SetRotation(const Vec3f& rotation)
 {
     m_Rotation = rotation;
     m_UpdateView = true;
 }
 
-void Camera::SetTransform(const Vec3& position, const Vec3& rotation)
+void Camera::SetTransform(const Vec3f& position, const Vec3f& rotation)
 {
     m_Position = position;
     m_Rotation = rotation;
@@ -87,7 +87,7 @@ Mat4 Camera::GetViewProjection()
     return GetView() * GetProjection();
 }
 
-void Camera::Move(const Vec3& movementDelta, const Vec3& rotationDelta)
+void Camera::Move(const Vec3f& movementDelta, const Vec3f& rotationDelta)
 {
     m_Position += m_Direction * movementDelta.z;
     m_Position += m_Right * movementDelta.x;

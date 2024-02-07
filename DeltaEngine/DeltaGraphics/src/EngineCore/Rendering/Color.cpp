@@ -3,7 +3,7 @@
 namespace Delta
 {
 
-Color::Color(const Vec3& rgb)
+Color::Color(const Vec3f& rgb)
     : r(rgb.x), g(rgb.y), b(rgb.z), a(1.0f) {}
 
 Color::Color(float r, float g, float b)
@@ -13,7 +13,7 @@ Color::Color(int r, int g, int b)
     : Color(r/255.0f, g/255.0f, b/255.0f) {}
 
 
-Color::Color(const Vec4& rgba)
+Color::Color(const Vec4f& rgba)
     : r(rgba.x), g(rgba.y), b(rgba.z), a(rgba.w) {}
 
 Color::Color(float r, float g, float b, float a)

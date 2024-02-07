@@ -4,7 +4,7 @@
 namespace Delta
 {
 
-inline Mat2::Mat2(Vec2 vec0, Vec2 vec1)
+inline Mat2::Mat2(Vec2f vec0, Vec2f vec1)
 {
     rows[0] = std::move(vec0);
     rows[1] = std::move(vec1);
@@ -12,8 +12,8 @@ inline Mat2::Mat2(Vec2 vec0, Vec2 vec1)
 
 inline Mat2::Mat2(const float* mat)
 {
-    rows[0] = Vec2(mat[0], mat[1]);
-    rows[1] = Vec2(mat[2], mat[3]);
+    rows[0] = Vec2f(mat[0], mat[1]);
+    rows[1] = Vec2f(mat[2], mat[3]);
 }
 
 inline Mat2::Mat2(const Mat2& rhs)

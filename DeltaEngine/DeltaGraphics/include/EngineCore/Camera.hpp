@@ -17,11 +17,11 @@ public:
 
     Camera() = default;
 
-    void Init(const Vec3& position, const Vec3& rotation, ProjectionMode projectionMode = ProjectionMode::PERSPECTIVE);
+    void Init(const Vec3f& position, const Vec3f& rotation, ProjectionMode projectionMode = ProjectionMode::PERSPECTIVE);
 
-    void SetPosition(const Vec3& position);
-    void SetRotation(const Vec3& rotation);
-    void SetTransform(const Vec3& position, const Vec3& rotation);
+    void SetPosition(const Vec3f& position);
+    void SetRotation(const Vec3f& rotation);
+    void SetTransform(const Vec3f& position, const Vec3f& rotation);
     void SetProjectionMode(ProjectionMode projectionMode);
 
     void SetAspect(float aspect);
@@ -31,14 +31,14 @@ public:
 
     float GetAspect() const { return m_Aspect; }
     float GetFov() const { return m_Fov; }
-    Vec2 GetNearFarPlanes() const { return Vec2(m_NearPlane, m_FarPlane); }
-    Vec4 GetOrthoPlanes() const { return Vec4(m_LeftPlane, m_RightPlane, m_DownPlane, m_UpPlane); }
+    Vec2f GetNearFarPlanes() const { return Vec2f(m_NearPlane, m_FarPlane); }
+    Vec4f GetOrthoPlanes() const { return Vec4f(m_LeftPlane, m_RightPlane, m_DownPlane, m_UpPlane); }
 
     const Mat4& GetView();
     const Mat4& GetProjection();
     Mat4 GetViewProjection();
 
-    void Move(const Vec3& movementDelta, const Vec3& rotationDelta);
+    void Move(const Vec3f& movementDelta, const Vec3f& rotationDelta);
 
 private:
     void UpdateView();
@@ -46,16 +46,16 @@ private:
 
     ProjectionMode m_ProjectionMode;
 
-    Vec3 m_Position;
-    Vec3 m_Rotation;
+    Vec3f m_Position;
+    Vec3f m_Rotation;
 
-    Vec3 m_Direction;
-    Vec3 m_Right;
-    Vec3 m_Up;
+    Vec3f m_Direction;
+    Vec3f m_Right;
+    Vec3f m_Up;
 
-    static const Vec3 s_WorldForward;
-    static const Vec3 s_WorldRight;
-    static const Vec3 s_WorldUp;
+    static const Vec3f s_WorldForward;
+    static const Vec3f s_WorldRight;
+    static const Vec3f s_WorldUp;
 
     float m_Aspect{ 1.0f };
     float m_Fov{ 45.0f };

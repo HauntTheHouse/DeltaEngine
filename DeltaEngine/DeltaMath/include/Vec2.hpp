@@ -1,15 +1,18 @@
 #pragma once
 
+#include <type_traits>
+
 namespace Delta
 {
 
+template<typename T>
 class Vec2
 {
 public:
     Vec2();
-    Vec2(const float value);
-    Vec2(const float x, const float y);
-    Vec2(const float *xy);
+    Vec2(const T value);
+    Vec2(const T x, const T y);
+    Vec2(const T *xy);
 
     Vec2(const Vec2& rhs);
     Vec2& operator=(const Vec2& rhs);
@@ -19,30 +22,40 @@ public:
 
     Vec2 operator+(const Vec2& rhs) const;
     Vec2 operator-(const Vec2& rhs) const;
-    Vec2 operator*(const float rhs) const;
-    Vec2 operator/(const float rhs) const;
+    Vec2 operator*(const T rhs) const;
+    Vec2 operator/(const T rhs) const;
     Vec2 operator-() const;
 
     const Vec2& operator+=(const Vec2& rhs);
     const Vec2& operator-=(const Vec2& rhs);
-    const Vec2& operator*=(const float rhs);
-    const Vec2& operator/=(const float rhs);
+    const Vec2& operator*=(const T rhs);
+    const Vec2& operator/=(const T rhs);
 
-    float operator[](const size_t idx) const;
-    float& operator[](const size_t idx);
+    T operator[](const size_t idx) const;
+    T& operator[](const size_t idx);
 
-    const Vec2& normalize();
-    float getMagnitude() const;
-    float dot(const Vec2& rhs) const;
+    template<typename U = T>
+    inline typename std::enable_if<std::is_floating_point<U>::value, const Vec2&>::type normalize();
 
-	const float* toPtr() const;
-	float* toPtr();
+    template<typename U = T>
+    typename std::enable_if<std::is_floating_point<U>::value, T>::type getMagnitude() const;
+
+    template<typename U = T>
+    typename std::enable_if<std::is_floating_point<U>::value, T>::type dot(const Vec2& rhs) const;
+
+	const T* toPtr() const;
+	T* toPtr();
 
 public:
-    float x;
-    float y;
+    T x;
+    T y;
 
 }; // class Vec2
+
+using Vec2f = Vec2<float>;
+using Vec2d = Vec2<double>;
+using Vec2i = Vec2<int>;
+using Vec2u = Vec2<unsigned int>;
 
 } // namespace Delta
 

@@ -3,7 +3,7 @@
 namespace Delta
 {
 
-inline Mat3::Mat3(Vec3 vec0, Vec3 vec1, Vec3 vec2)
+inline Mat3::Mat3(Vec3f vec0, Vec3f vec1, Vec3f vec2)
 {
     rows[0] = std::move(vec0);
     rows[1] = std::move(vec1);
@@ -12,9 +12,9 @@ inline Mat3::Mat3(Vec3 vec0, Vec3 vec1, Vec3 vec2)
 
 inline Mat3::Mat3(const float* mat)
 {
-    rows[0] = Vec3(mat[0], mat[1], mat[2]);
-    rows[1] = Vec3(mat[3], mat[4], mat[5]);
-    rows[2] = Vec3(mat[6], mat[7], mat[8]);
+    rows[0] = Vec3f(mat[0], mat[1], mat[2]);
+    rows[1] = Vec3f(mat[3], mat[4], mat[5]);
+    rows[2] = Vec3f(mat[6], mat[7], mat[8]);
 }
 
 inline Mat3::Mat3(const Mat3& rhs)
@@ -48,9 +48,9 @@ inline const Mat3& Mat3::operator+=(const Mat3& rhs)
     return *this;
 }
 
-inline Vec3 Mat3::operator*(const Vec3& rhs) const
+inline Vec3f Mat3::operator*(const Vec3f& rhs) const
 {
-    Vec3 tmp;
+    Vec3f tmp;
     tmp[0] = rows[0].dot(rhs);
     tmp[1] = rows[1].dot(rhs);
     tmp[2] = rows[2].dot(rhs);
@@ -89,9 +89,9 @@ inline Mat3 Mat3::operator+(const Mat3& rhs) const
 
 inline void Mat3::identity()
 {
-    rows[0] = Vec3(1, 0, 0);
-    rows[1] = Vec3(0, 1, 0);
-    rows[2] = Vec3(0, 0, 1);
+    rows[0] = Vec3f(1, 0, 0);
+    rows[1] = Vec3f(0, 1, 0);
+    rows[2] = Vec3f(0, 0, 1);
 }
 
 inline float Mat3::trace() const
@@ -168,23 +168,37 @@ inline float Mat3::cofactor(const size_t i, const size_t j) const
     return sign * minor.determinant();
 }
 
-inline void Mat3::rotate(const Vec3& angles)
+inline void Mat3::translate(const Vec2f& translate)
 {
-    Vec3 radians = angles * (PI / 180.0f);
+    *this = Mat3(Vec3f(1.0f,        0.0f,        0.0f),
+                 Vec3f(0.0f,        1.0f,        0.0f),
+                 Vec3f(translate.x, translate.y, 1.0f)) * *this;
+}
 
-    Mat3 rotX(Vec3(1.0f,  0.0f,             0.0f),
-              Vec3(0.0f,  cosf(radians.x),  sinf(radians.x)),
-              Vec3(0.0f, -sinf(radians.x),  cosf(radians.x)));
+inline void Mat3::rotate(const Vec3f& angles)
+{
+    Vec3f radians = angles * (PI / 180.0f);
 
-    Mat3 rotY(Vec3(cosf(radians.y), 0.0f, -sinf(radians.y)),
-              Vec3(0.0f,            1.0f,  0.0f),
-              Vec3(sinf(radians.y), 0.0f,  cosf(radians.y)));
+    Mat3 rotX(Vec3f(1.0f,  0.0f,             0.0f),
+              Vec3f(0.0f,  cosf(radians.x),  sinf(radians.x)),
+              Vec3f(0.0f, -sinf(radians.x),  cosf(radians.x)));
 
-    Mat3 rotZ(Vec3( cosf(radians.z),  sinf(radians.z), 0.0f),
-              Vec3(-sinf(radians.z),  cosf(radians.z), 0.0f),
-              Vec3( 0.0f,             0.0f,            1.0f));
+    Mat3 rotY(Vec3f(cosf(radians.y), 0.0f, -sinf(radians.y)),
+              Vec3f(0.0f,            1.0f,  0.0f),
+              Vec3f(sinf(radians.y), 0.0f,  cosf(radians.y)));
+
+    Mat3 rotZ(Vec3f( cosf(radians.z),  sinf(radians.z), 0.0f),
+              Vec3f(-sinf(radians.z),  cosf(radians.z), 0.0f),
+              Vec3f( 0.0f,             0.0f,            1.0f));
 
     *this = rotZ * rotY * rotX * *this;
+}
+
+inline void Mat3::scale(const Vec2f& scale)
+{
+    *this = Mat3(Vec3f(scale.x, 0.0f, 0.0f),
+                 Vec3f(0.0f, scale.y, 0.0f),
+                 Vec3f(0.0f, 0.0f,    1.0f)) * *this;
 }
 
 inline const float* Mat3::toPtr() const

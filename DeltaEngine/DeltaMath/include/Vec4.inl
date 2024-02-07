@@ -5,22 +5,28 @@
 namespace Delta
 {
 
-inline Vec4::Vec4() : x(0), y(0), z(0), w(0)
+template<typename T>
+inline Vec4<T>::Vec4() : x(0), y(0), z(0), w(0)
 {}
 
-inline Vec4::Vec4(const float value) : x(value), y(value), z(value), w(value)
+template<typename T>
+inline Vec4<T>::Vec4(const T value) : x(value), y(value), z(value), w(value)
 {}
 
-inline Vec4::Vec4(const float x, const float y, const float z, const float w) : x(x), y(y), z(z), w(w)
+template<typename T>
+inline Vec4<T>::Vec4(const T x, const T y, const T z, const T w) : x(x), y(y), z(z), w(w)
 {}
 
-inline Vec4::Vec4(const Vec4& rhs) : x(rhs.x), y(rhs.y), z(rhs.z), w(rhs.w)
+template<typename T>
+inline Vec4<T>::Vec4(const Vec4& rhs) : x(rhs.x), y(rhs.y), z(rhs.z), w(rhs.w)
 {}
 
-inline Vec4::Vec4(const float *xyzw) : x(xyzw[0]), y(xyzw[1]), z(xyzw[2]), w(xyzw[3])
+template<typename T>
+inline Vec4<T>::Vec4(const T *xyzw) : x(xyzw[0]), y(xyzw[1]), z(xyzw[2]), w(xyzw[3])
 {}
 
-inline Vec4& Vec4::operator=(const Vec4& rhs)
+template<typename T>
+inline Vec4<T>& Vec4<T>::operator=(const Vec4& rhs)
 {
     x = rhs.x;
     y = rhs.y;
@@ -29,42 +35,50 @@ inline Vec4& Vec4::operator=(const Vec4& rhs)
     return *this;
 }
 
-inline bool Vec4::operator==(const Vec4& rhs) const
+template<typename T>
+inline bool Vec4<T>::operator==(const Vec4& rhs) const
 {
     return (x == rhs.x && y == rhs.y && z == rhs.z && w == rhs.w) ? true : false;
 }
 
-inline bool Vec4::operator!=(const Vec4& rhs) const
+template<typename T>
+inline bool Vec4<T>::operator!=(const Vec4& rhs) const
 {
     return (*this == rhs) ? false : true;
 }
 
-inline Vec4 Vec4::operator+(const Vec4 & rhs) const
+template<typename T>
+inline Vec4<T> Vec4<T>::operator+(const Vec4 & rhs) const
 {
     return Vec4(x + rhs.x, y + rhs.y, z + rhs.z, w + rhs.w);
 }
 
-inline Vec4 Vec4::operator-(const Vec4& rhs) const
+template<typename T>
+inline Vec4<T> Vec4<T>::operator-(const Vec4& rhs) const
 {
     return Vec4(x - rhs.x, y - rhs.y, z - rhs.z, w - rhs.w);
 }
 
-inline Vec4 Vec4::operator*(const float rhs) const
+template<typename T>
+inline Vec4<T> Vec4<T>::operator*(const T rhs) const
 {
     return Vec4(x * rhs, y * rhs, z * rhs, w * rhs);
 }
 
-inline Vec4 Vec4::operator/(const float rhs) const
+template<typename T>
+inline Vec4<T> Vec4<T>::operator/(const T rhs) const
 {
     return Vec4(x / rhs, y / rhs, z / rhs, w / rhs);
 }
 
-inline Vec4 Vec4::operator-() const
+template<typename T>
+inline Vec4<T> Vec4<T>::operator-() const
 {
     return Vec4(-x, -y, -z, -w);
 }
 
-inline const Vec4& Vec4::operator+=(const Vec4& rhs)
+template<typename T>
+inline const Vec4<T>& Vec4<T>::operator+=(const Vec4& rhs)
 {
     x += rhs.x;
     y += rhs.y;
@@ -73,7 +87,8 @@ inline const Vec4& Vec4::operator+=(const Vec4& rhs)
     return *this;
 }
 
-inline const Vec4& Vec4::operator-=(const Vec4& rhs)
+template<typename T>
+inline const Vec4<T>& Vec4<T>::operator-=(const Vec4& rhs)
 {
     x -= rhs.x;
     y -= rhs.y;
@@ -82,7 +97,8 @@ inline const Vec4& Vec4::operator-=(const Vec4& rhs)
     return *this;
 }
 
-inline const Vec4& Vec4::operator*=(const float rhs)
+template<typename T>
+inline const Vec4<T>& Vec4<T>::operator*=(const T rhs)
 {
     x *= rhs;
     y *= rhs;
@@ -91,7 +107,8 @@ inline const Vec4& Vec4::operator*=(const float rhs)
     return *this;
 }
 
-inline const Vec4& Vec4::operator/=(const float rhs)
+template<typename T>
+inline const Vec4<T>& Vec4<T>::operator/=(const T rhs)
 {
     x /= rhs;
     y /= rhs;
@@ -100,21 +117,24 @@ inline const Vec4& Vec4::operator/=(const float rhs)
     return *this;
 }
 
-inline float Vec4::operator[](const size_t idx) const
+template<typename T>
+inline T Vec4<T>::operator[](const size_t idx) const
 {
     assert(idx >= 0 && idx <= 3);
     return (&x)[idx];
 }
 
-inline float& Vec4::operator[](const size_t idx)
+template<typename T>
+inline T& Vec4<T>::operator[](const size_t idx)
 {
     assert(idx >= 0 && idx <= 3);
     return (&x)[idx];
 }
 
-inline const Vec4& Vec4::normalize()
+template<typename T> template<typename U>
+inline typename std::enable_if<std::is_floating_point<U>::value, const Vec4<T>&>::type Vec4<T>::normalize()
 {
-    float mag = getMagnitude();
+    T mag = getMagnitude();
     assert(mag != 0.0f);
     x /= mag;
     y /= mag;
@@ -123,22 +143,26 @@ inline const Vec4& Vec4::normalize()
     return *this;
 }
 
-inline float Vec4::getMagnitude() const
+template<typename T> template<typename U>
+inline typename std::enable_if<std::is_floating_point<U>::value, T>::type Vec4<T>::getMagnitude() const
 {
     return std::sqrt(x*x + y*y + z*z + w*w);
 }
 
-inline float Vec4::dot(const Vec4& rhs) const
+template<typename T> template<typename U>
+inline typename std::enable_if<std::is_floating_point<U>::value, T>::type Vec4<T>::dot(const Vec4& rhs) const
 {
-    return x * rhs.x + y * rhs.y + z * rhs.z + w * rhs.w;
+    return x*rhs.x + y*rhs.y + z*rhs.z + w*rhs.w;
 }
 
-inline const float* Vec4::toPtr() const
+template<typename T>
+inline const T* Vec4<T>::toPtr() const
 {
     return &x;
 }
 
-inline float* Vec4::toPtr()
+template<typename T>
+inline T* Vec4<T>::toPtr()
 {
     return &x;
 }

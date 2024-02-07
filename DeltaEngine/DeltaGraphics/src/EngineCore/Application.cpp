@@ -39,7 +39,7 @@ Application::Application(unsigned int windowWidth, unsigned int windowHeight, co
     });
     m_EventDispatcher.AddEventListener<MouseMoveEvent>([this](MouseMoveEvent& event)
     {
-        Input::SetCursorPosition(Vec2(event.x, event.y));
+        Input::SetCursorPosition(Vec2f(event.x, event.y));
         OnMouseMoveEvent(event.x, event.y);
     });
     m_EventDispatcher.AddEventListener<MouseScrolledEvent>([this](MouseScrolledEvent& event)

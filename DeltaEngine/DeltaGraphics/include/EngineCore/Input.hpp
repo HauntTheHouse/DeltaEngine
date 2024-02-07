@@ -12,7 +12,7 @@ class Input
 public:
     static bool IsKeyPressed(KeyCode keyCode);
     static bool IsMouseButtonPressed(MouseButtonCode mouseButtonCode);
-    static Vec2 GetCursorPosition();
+    static Vec2f GetCursorPosition();
 
 private:
     static void PressKey(KeyCode keyCode);
@@ -21,11 +21,11 @@ private:
     static void PressMouseButton(MouseButtonCode mouseButtonCode);
     static void ReleaseMouseButton(MouseButtonCode mouseButtonCode);
 
-    static void SetCursorPosition(Vec2 newPosition);
+    static void SetCursorPosition(Vec2f newPosition);
 
     static std::array<bool, static_cast<size_t>(KeyCode::KEY_LAST) + 1> m_PressedKeys;
     static std::array<bool, static_cast<size_t>(MouseButtonCode::MOUSE_BUTTON_LAST) + 1> m_PressedMouseButtons;
-    static Vec2 m_CursorPosition;
+    static Vec2f m_CursorPosition;
 
     friend class Application;
 

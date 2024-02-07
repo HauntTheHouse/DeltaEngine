@@ -11,7 +11,7 @@ class Mat3
 {
 public:
     Mat3() = default;
-    Mat3(Vec3 vec0, Vec3 vec1, Vec3 vec2);
+    Mat3(Vec3f vec0, Vec3f vec1, Vec3f vec2);
     Mat3(const float* mat);
 
     Mat3(const Mat3& rhs);
@@ -19,7 +19,7 @@ public:
 
     const Mat3& operator*=(const float rhs);
     const Mat3& operator+=(const Mat3& rhs);
-    Vec3 operator*(const Vec3& rhs) const;
+    Vec3f operator*(const Vec3f& rhs) const;
     Mat3 operator*(const float rhs) const;
     Mat3 operator*(const Mat3& rhs) const;
     Mat3 operator+(const Mat3& rhs) const;
@@ -32,13 +32,15 @@ public:
     Mat2 minor(const size_t i, const size_t j) const;
     float cofactor(const size_t i, const size_t j) const;
 
-    void rotate(const Vec3& angles);
+    void translate(const Vec2f& translate);
+    void rotate(const Vec3f& angles);
+    void scale(const Vec2f& scale);
 
     const float* toPtr() const;
     float* toPtr();
 
 public:
-    Vec3 rows[3];
+    Vec3f rows[3];
 
 }; // class Mat3
 

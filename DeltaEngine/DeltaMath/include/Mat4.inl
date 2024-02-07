@@ -4,7 +4,7 @@
 namespace Delta
 {
 
-inline Mat4::Mat4(Vec4 vec0, Vec4 vec1, Vec4 vec2, Vec4 vec3)
+inline Mat4::Mat4(Vec4f vec0, Vec4f vec1, Vec4f vec2, Vec4f vec3)
 {
     rows[0] = std::move(vec0);
     rows[1] = std::move(vec1);
@@ -17,7 +17,7 @@ inline Mat4::Mat4(const float* mat)
     for (size_t i = 0; i < 4; ++i)
     {
         size_t ii = i * 4;
-        rows[i] = Vec4(mat[ii], mat[ii + 1], mat[ii + 2], mat[ii + 3]);
+        rows[i] = Vec4f(mat[ii], mat[ii + 1], mat[ii + 2], mat[ii + 3]);
     }
 }
 
@@ -48,9 +48,9 @@ inline const Mat4& Mat4::operator+=(const Mat4& rhs)
     return *this;
 }
 
-inline Vec4 Mat4::operator*(const Vec4& rhs) const
+inline Vec4f Mat4::operator*(const Vec4f& rhs) const
 {
-    Vec4 tmp;
+    Vec4f tmp;
     for (size_t i = 0; i < 4; ++i)
         tmp[i] = rows[i].dot(rhs);
     return tmp;
@@ -87,10 +87,10 @@ inline Mat4 Mat4::operator+(const Mat4& rhs) const
 
 inline void Mat4::identity()
 {
-    rows[0] = Vec4(1, 0, 0, 0);
-    rows[1] = Vec4(0, 1, 0, 0);
-    rows[2] = Vec4(0, 0, 1, 0);
-    rows[3] = Vec4(0, 0, 0, 1);
+    rows[0] = Vec4f(1, 0, 0, 0);
+    rows[1] = Vec4f(0, 1, 0, 0);
+    rows[2] = Vec4f(0, 0, 1, 0);
+    rows[3] = Vec4f(0, 0, 0, 1);
 }
 
 inline float Mat4::trace() const
@@ -175,39 +175,39 @@ inline float Mat4::cofactor(const size_t i, const size_t j) const
     return sign * minor.determinant();
 }
 
-inline void Mat4::orient(const Vec3& pos, const Vec3& forward, const Vec3& up)
+inline void Mat4::orient(const Vec3f& pos, const Vec3f& forward, const Vec3f& up)
 {
-    Vec3 left = up.cross(forward);
+    Vec3f left = up.cross(forward);
 
     // For our coordinate system where:
     // +x-axis = forward
     // +y-axis = left
     // +z-axis = up
-    rows[0] = Vec4(forward.x, left.x, up.x, pos.x);
-    rows[1] = Vec4(forward.y, left.y, up.y, pos.y);
-    rows[2] = Vec4(forward.z, left.z, up.z, pos.z);
-    rows[3] = Vec4(0.0f,      0.0f,   0.0f, 1.0f);
+    rows[0] = Vec4f(forward.x, left.x, up.x, pos.x);
+    rows[1] = Vec4f(forward.y, left.y, up.y, pos.y);
+    rows[2] = Vec4f(forward.z, left.z, up.z, pos.z);
+    rows[3] = Vec4f(0.0f,      0.0f,   0.0f, 1.0f);
 }
 
-inline void Mat4::lookAt(const Vec3& pos, const Vec3& lookAt, const Vec3& up)
+inline void Mat4::lookAt(const Vec3f& pos, const Vec3f& lookAt, const Vec3f& up)
 {
-    Vec3 forward = pos - lookAt;
+    Vec3f forward = pos - lookAt;
     forward.normalize();
 
-    Vec3 right = up.cross(forward);
+    Vec3f right = up.cross(forward);
     right.normalize();
 
-    Vec3 newUp = forward.cross(right);
+    Vec3f newUp = forward.cross(right);
     newUp.normalize();
 
     // For NDC coordinate system where:
     // +x-axis = right
     // +y-axis = up
     // +z-axis = forward
-    rows[0] = Vec4( right.x,         up.x,         forward.x,        0.0f);
-    rows[1] = Vec4( right.y,         up.y,         forward.y,        0.0f);
-    rows[2] = Vec4( right.z,         up.z,         forward.z,        0.0f);
-    rows[3] = Vec4(-pos.dot(right), -pos.dot(up), -pos.dot(forward), 1.0f);
+    rows[0] = Vec4f( right.x,         up.x,         forward.x,        0.0f);
+    rows[1] = Vec4f( right.y,         up.y,         forward.y,        0.0f);
+    rows[2] = Vec4f( right.z,         up.z,         forward.z,        0.0f);
+    rows[3] = Vec4f(-pos.dot(right), -pos.dot(up), -pos.dot(forward), 1.0f);
 }
 
 inline void Mat4::orthoOpenGL(float xmin, float xmax, float ymin, float ymax, float znear, float zfar)
@@ -220,10 +220,10 @@ inline void Mat4::orthoOpenGL(float xmin, float xmax, float ymin, float ymax, fl
     const float ty = -(ymax + ymin)  / height;
     const float tz = -(zfar + znear) / depth;
 
-    rows[0] = Vec4(2.0f/width, 0.0f,         0.0f,       0.0f);
-    rows[1] = Vec4(0.0f,       2.0f/height,  0.0f,       0.0f);
-    rows[2] = Vec4(0.0f,       0.0f,        -2.0f/depth, 0.0f);
-    rows[3] = Vec4(tx,         ty,           tz,         1.0f);
+    rows[0] = Vec4f(2.0f/width, 0.0f,         0.0f,       0.0f);
+    rows[1] = Vec4f(0.0f,       2.0f/height,  0.0f,       0.0f);
+    rows[2] = Vec4f(0.0f,       0.0f,        -2.0f/depth, 0.0f);
+    rows[3] = Vec4f(tx,         ty,           tz,         1.0f);
 }
 
 inline void Mat4::orthoVulkan(float xmin, float xmax, float ymin, float ymax, float znear, float zfar)
@@ -236,10 +236,10 @@ inline void Mat4::orthoVulkan(float xmin, float xmax, float ymin, float ymax, fl
     // Clip space remains [-1, 1] for x and y
     // Check section 23 of the specification
     Mat4 matVulkan;
-    matVulkan.rows[0] = Vec4(1.0f,  0.0f, 0.0f, 0.0f);
-    matVulkan.rows[1] = Vec4(0.0f, -1.0f, 0.0f, 0.0f);
-    matVulkan.rows[2] = Vec4(0.0f,  0.0f, 0.5f, 0.0f);
-    matVulkan.rows[3] = Vec4(0.0f,  0.0f, 0.0f, 1.0f);
+    matVulkan.rows[0] = Vec4f(1.0f,  0.0f, 0.0f, 0.0f);
+    matVulkan.rows[1] = Vec4f(0.0f, -1.0f, 0.0f, 0.0f);
+    matVulkan.rows[2] = Vec4f(0.0f,  0.0f, 0.5f, 0.0f);
+    matVulkan.rows[3] = Vec4f(0.0f,  0.0f, 0.0f, 1.0f);
 
     Mat4 matOpengl;
     matOpengl.orthoOpenGL(xmin, xmax, ymin, ymax, znear, zfar);
@@ -253,10 +253,10 @@ inline void Mat4::perspectiveOpenGL(float fovy, float aspect, float nearPlane, f
     const float xScale = f;
     const float yScale = f * aspect;
 
-    rows[0] = Vec4(xScale, 0.0f,    0.0f,                                             0.0f);
-    rows[1] = Vec4(0.0f,   yScale,  0.0f,                                             0.0f);
-    rows[2] = Vec4(0.0f,   0.0f,    (farPlane+nearPlane) / (nearPlane-farPlane),     -1.0f);
-    rows[3] = Vec4(0.0f,   0.0f,    (2.0f*farPlane*nearPlane) / (nearPlane-farPlane), 0.0f);
+    rows[0] = Vec4f(xScale, 0.0f,    0.0f,                                             0.0f);
+    rows[1] = Vec4f(0.0f,   yScale,  0.0f,                                             0.0f);
+    rows[2] = Vec4f(0.0f,   0.0f,    (farPlane+nearPlane) / (nearPlane-farPlane),     -1.0f);
+    rows[3] = Vec4f(0.0f,   0.0f,    (2.0f*farPlane*nearPlane) / (nearPlane-farPlane), 0.0f);
 }
 
 inline void Mat4::perspectiveVulkan(float fovy, float aspect, float nearPlane, float farPlane)
@@ -269,17 +269,17 @@ inline void Mat4::perspectiveVulkan(float fovy, float aspect, float nearPlane, f
     // Clip space remains [-1, 1] for x and y
     // Check section 23 of the specification
     Mat4 matVulkan;
-    matVulkan.rows[0] = Vec4(1.0f,  0.0f,  0.0f, 0.0f);
-    matVulkan.rows[1] = Vec4(0.0f, -1.0f,  0.0f, 0.0f);
-    matVulkan.rows[2] = Vec4(0.0f,  0.0f,  0.5f, 0.0f);
-    matVulkan.rows[3] = Vec4(0.0f,  0.0f,  0.0f, 1.0f);
+    matVulkan.rows[0] = Vec4f(1.0f,  0.0f,  0.0f, 0.0f);
+    matVulkan.rows[1] = Vec4f(0.0f, -1.0f,  0.0f, 0.0f);
+    matVulkan.rows[2] = Vec4f(0.0f,  0.0f,  0.5f, 0.0f);
+    matVulkan.rows[3] = Vec4f(0.0f,  0.0f,  0.0f, 1.0f);
 
     Mat4 matOpengl;
     matOpengl.perspectiveOpenGL(fovy, aspect, nearPlane, farPlane);
     *this = matVulkan * matOpengl;
 }
 
-inline void Mat4::transform(const Vec3& translate, const Vec3& rotate, const Vec3& scale)
+inline void Mat4::transform(const Vec3f& translate, const Vec3f& rotate, const Vec3f& scale)
 {
     this->identity();
     this->translate(translate);
@@ -287,42 +287,42 @@ inline void Mat4::transform(const Vec3& translate, const Vec3& rotate, const Vec
     this->scale(scale);
 }
 
-inline void Mat4::translate(const Vec3& translate)
+inline void Mat4::translate(const Vec3f& translate)
 {
-    *this = Mat4(Vec4(1.0f,        0.0f,        0.0f,        0.0f),
-                 Vec4(0.0f,        1.0f,        0.0f,        0.0f),
-                 Vec4(0.0f,        0.0f,        1.0f,        0.0f),
-                 Vec4(translate.x, translate.y, translate.z, 1.0f)) * *this;
+    *this = Mat4(Vec4f(1.0f,        0.0f,        0.0f,        0.0f),
+                 Vec4f(0.0f,        1.0f,        0.0f,        0.0f),
+                 Vec4f(0.0f,        0.0f,        1.0f,        0.0f),
+                 Vec4f(translate.x, translate.y, translate.z, 1.0f)) * *this;
 }
 
-inline void Mat4::rotate(const Vec3& angles)
+inline void Mat4::rotate(const Vec3f& angles)
 {
-    Vec3 radians = angles * (PI / 180.0f);
+    Vec3f radians = angles * (PI / 180.0f);
 
-    Mat4 rotX(Vec4(1.0f,  0.0f,             0.0f,            0.0f),
-              Vec4(0.0f,  cosf(radians.x),  sinf(radians.x), 0.0f),
-              Vec4(0.0f, -sinf(radians.x),  cosf(radians.x), 0.0f),
-              Vec4(0.0f,  0.0f,             0.0f,            1.0f));
+    Mat4 rotX(Vec4f(1.0f,  0.0f,             0.0f,            0.0f),
+              Vec4f(0.0f,  cosf(radians.x),  sinf(radians.x), 0.0f),
+              Vec4f(0.0f, -sinf(radians.x),  cosf(radians.x), 0.0f),
+              Vec4f(0.0f,  0.0f,             0.0f,            1.0f));
 
-    Mat4 rotY(Vec4( cosf(radians.y), 0.0f, -sinf(radians.y), 0.0f),
-              Vec4( 0.0f,            1.0f,  0.0f,            0.0f),
-              Vec4( sinf(radians.y), 0.0f,  cosf(radians.y), 0.0f),
-              Vec4( 0.0f,            0.0f,  0.0f,            1.0f));
+    Mat4 rotY(Vec4f( cosf(radians.y), 0.0f, -sinf(radians.y), 0.0f),
+              Vec4f( 0.0f,            1.0f,  0.0f,            0.0f),
+              Vec4f( sinf(radians.y), 0.0f,  cosf(radians.y), 0.0f),
+              Vec4f( 0.0f,            0.0f,  0.0f,            1.0f));
 
-    Mat4 rotZ(Vec4( cosf(radians.z),  sinf(radians.z), 0.0f, 0.0f),
-              Vec4(-sinf(radians.z),  cosf(radians.z), 0.0f, 0.0f),
-              Vec4( 0.0f,             0.0f,            1.0f, 0.0f),
-              Vec4( 0.0f,             0.0f,            0.0f, 1.0f));
+    Mat4 rotZ(Vec4f( cosf(radians.z),  sinf(radians.z), 0.0f, 0.0f),
+              Vec4f(-sinf(radians.z),  cosf(radians.z), 0.0f, 0.0f),
+              Vec4f( 0.0f,             0.0f,            1.0f, 0.0f),
+              Vec4f( 0.0f,             0.0f,            0.0f, 1.0f));
 
     *this = rotX * rotY * rotZ * *this;
 }
 
-inline void Mat4::scale(const Vec3& scale)
+inline void Mat4::scale(const Vec3f& scale)
 {
-    *this = Mat4(Vec4(scale.x, 0.0f, 0.0f, 0.0f),
-                 Vec4(0.0f, scale.y, 0.0f, 0.0f),
-                 Vec4(0.0f, 0.0f, scale.z, 0.0f),
-                 Vec4(0.0f, 0.0f, 0.0f,    1.0f)) * *this;
+    *this = Mat4(Vec4f(scale.x, 0.0f, 0.0f, 0.0f),
+                 Vec4f(0.0f, scale.y, 0.0f, 0.0f),
+                 Vec4f(0.0f, 0.0f, scale.z, 0.0f),
+                 Vec4f(0.0f, 0.0f, 0.0f,    1.0f)) * *this;
 }
 
 inline const float* Mat4::toPtr() const

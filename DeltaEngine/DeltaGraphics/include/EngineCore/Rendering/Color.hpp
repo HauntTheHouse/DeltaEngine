@@ -10,11 +10,11 @@ namespace Delta
 class Color
 {
 public:
-    Color(const Vec3& rgb);
+    Color(const Vec3f& rgb);
     Color(float r, float g, float b);
     Color(int r, int g, int b);
 
-    Color(const Vec4& rgba);
+    Color(const Vec4f& rgba);
     Color(float r, float g, float b, float a);
     Color(int r, int g, int b, int a);
 

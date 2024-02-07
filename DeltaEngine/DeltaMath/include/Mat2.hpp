@@ -9,7 +9,7 @@ class Mat2
 {
 public:
     Mat2() = default;
-    Mat2(Vec2 vec0, Vec2 vec1);
+    Mat2(Vec2f vec0, Vec2f vec1);
     Mat2(const float* mat);
 
     Mat2(const Mat2& rhs);
@@ -24,7 +24,7 @@ public:
     float* toPtr();
 
 public:
-    Vec2 rows[2];
+    Vec2f rows[2];
 
 }; // class Mat2
 

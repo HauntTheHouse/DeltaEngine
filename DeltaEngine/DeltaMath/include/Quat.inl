@@ -9,7 +9,7 @@ inline Quat::Quat() : x(0), y(0), z(0), w(1)
 inline Quat::Quat(float x, const float y, const float z, const float w) : x(x), y(y), z(z), w(w)
 {}
 
-inline Quat::Quat(Vec3 n, const float angleRadians)
+inline Quat::Quat(Vec3f n, const float angleRadians)
 {
     const float halfAngle = angleRadians * 0.5f;
     const float halfSin = std::sinf(halfAngle);
@@ -102,11 +102,11 @@ inline float Quat::getMagnitude() const
     return std::sqrtf(Quat::getMagnitudeSquared());
 }
 
-inline Vec3 Quat::rotatePoint(const Vec3& rhs) const
+inline Vec3f Quat::rotatePoint(const Vec3f& rhs) const
 {
     Quat vector(rhs.x, rhs.y, rhs.z, 0);
     Quat final = *this * vector * Quat::inverse();
-    return Vec3(final.x, final.y, final.z);
+    return Vec3f(final.x, final.y, final.z);
 }
 
 inline Mat3 Quat::rotateMatrix(const Mat3& rhs) const
@@ -118,12 +118,12 @@ inline Mat3 Quat::rotateMatrix(const Mat3& rhs) const
     return mat;
 }
 
-inline Vec3 Quat::xyz() const
+inline Vec3f Quat::xyz() const
 {
-    return Vec3(x, y, z);
+    return Vec3f(x, y, z);
 }
 
-inline Vec4 Quat::toVec4() const
+inline Vec4f Quat::toVec4() const
 {
     return Vec4(w, x, y, z);
 }
