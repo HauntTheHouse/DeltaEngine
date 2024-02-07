@@ -8,74 +8,113 @@ namespace Delta
 
 namespace
 {
-    GLint toGlFilter(Filter filter)
-    {
-        switch (filter)
-        {
-        case Delta::Filter::NEAREST:                return GL_NEAREST;
-        case Delta::Filter::LINEAR:                 return GL_LINEAR;
-        case Delta::Filter::NEAREST_MIPMAP_NEAREST: return GL_NEAREST_MIPMAP_NEAREST;
-        case Delta::Filter::LINEAR_MIPMAP_NEAREST:  return GL_LINEAR_MIPMAP_NEAREST;
-        case Delta::Filter::NEAREST_MIPMAP_LINEAR:  return GL_NEAREST_MIPMAP_LINEAR;
-        case Delta::Filter::LINEAR_MIPMAP_LINEAR:   return GL_LINEAR_MIPMAP_LINEAR;
-        default: return GL_NONE;
-        }
-    }
-
-    GLint toGlWrap(WrapMode wrap)
-    {
-        switch (wrap)
-        {
-        case Delta::WrapMode::REPEAT:               return GL_REPEAT;
-        case Delta::WrapMode::CLAMP_TO_EDGE:        return GL_CLAMP_TO_EDGE;
-        case Delta::WrapMode::CLAMP_TO_BORDER:      return GL_CLAMP_TO_BORDER;
-        case Delta::WrapMode::MIRRORED_REPEAT:      return GL_MIRRORED_REPEAT;
-        case Delta::WrapMode::MIRROR_CLAMP_TO_EDGE: return GL_MIRROR_CLAMP_TO_EDGE;
-        default: return GL_NONE;
-        }
-    }
-
-    GLint toGlFormat(Format format)
+    size_t getChannelsNum(Format format)
     {
         switch (format)
         {
-        case Delta::Format::RED: return GL_RED;
-        case Delta::Format::RG: return GL_RG;
-        case Delta::Format::RGB: return GL_RGB;
-        case Delta::Format::RGBA: return GL_RGBA;
-        default: return GL_NONE;
+        case Delta::Format::RED: return 1;
+        case Delta::Format::RG: return 2;
+        case Delta::Format::RGB: return 3;
+        case Delta::Format::RGBA: return 4;
+        default: return 0;
         }
     }
 }
 
+ImageParams::~ImageParams()
+{
+    if (data)
+    {
+        stbi_image_free(data);
+        data = nullptr;
+    }
+}
 
-bool Texture2D::Init(const ImageParams& imageParams, const SamplingParams& samplingParams)
+ImageParams::ImageParams(const ImageParams& params)
+    : width(params.width), height(params.height), format(params.format), data(nullptr)
+{
+    if (params.data)
+    {
+        size_t size = width * height * getChannelsNum(format);
+        data = static_cast<unsigned char*>(stbi__malloc(size));
+        std::copy(data, data + size, params.data);
+    }
+}
+
+ImageParams& ImageParams::operator=(const ImageParams& params)
+{
+    if (this != &params)
+    {
+        width = params.width;
+        height = params.height;
+        format = params.format;
+
+        if (data) stbi_image_free(data);
+        data = nullptr;
+
+        if (params.data)
+        {
+            size_t size = width * height * getChannelsNum(format);
+            data = static_cast<unsigned char*>(stbi__malloc(size));
+            std::copy(data, data + size, params.data);
+        }
+    }
+    return *this;
+}
+
+ImageParams::ImageParams(ImageParams&& params) noexcept
+    : width(params.width), height(params.height), format(params.format), data(params.data)
+{
+    params.width = 0;
+    params.height = 0;
+    params.data = nullptr;
+}
+
+ImageParams& ImageParams::operator=(ImageParams&& params) noexcept
+{
+    if (this != &params)
+    {
+        width = params.width;
+        height = params.height;
+        format = params.format;
+
+        if (data) stbi_image_free(data);
+        data = params.data;
+
+        params.width = 0;
+        params.height = 0;
+        params.data = nullptr;
+    }
+    return *this;
+}
+
+bool Texture2D::Init(const TextureParams& texParams)
 {
     if (m_Id != 0) return false;
 
-    ImageParams tmpParams = imageParams;
-    if (!tmpParams.data)
+    if (!texParams.imageParams.data)
     {
-        tmpParams = GenerateCheckboard(8);
+        TextureParams newTexParams;
+        newTexParams.imageParams = GenerateCheckboard(8);
+        return Init(newTexParams);
     }
 
-    m_Width = tmpParams.width;
-    m_Height = tmpParams.height;
+    m_Width = texParams.imageParams.width;
+    m_Height = texParams.imageParams.height;
 
-    GLint format = toGlFormat(tmpParams.format);
+    GLint format = toNativeType(texParams.imageParams.format);
 
     glGenTextures(1, static_cast<GLuint*>(&m_Id));
     glBindTexture(GL_TEXTURE_2D, static_cast<GLuint>(m_Id));
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, toGlWrap(samplingParams.wrap));
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, toGlWrap(samplingParams.wrap));
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, toGlFilter(samplingParams.minFilter));
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, toGlFilter(samplingParams.magFilter));
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, toNativeType(texParams.samplingParams.wrap));
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, toNativeType(texParams.samplingParams.wrap));
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, toNativeType(texParams.samplingParams.minFilter));
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, toNativeType(texParams.samplingParams.magFilter));
 
-    glTexImage2D(GL_TEXTURE_2D, 0, format, m_Width, m_Height, 0, format, GL_UNSIGNED_BYTE, tmpParams.data);
-    glGenerateMipmap(GL_TEXTURE_2D);
+    glTexImage2D(GL_TEXTURE_2D, 0, format, m_Width, m_Height, 0, format, GL_UNSIGNED_BYTE, texParams.imageParams.data);
 
-    stbi_image_free(tmpParams.data);
+    if (texParams.createMipmap) glGenerateMipmap(GL_TEXTURE_2D);
 
     return true;
 }
@@ -101,12 +140,17 @@ void Texture2D::SetData(const unsigned char* data)
 
 ImageParams Texture2D::Load(const std::string& path)
 {
+    return Texture2D::Load(path.c_str());
+}
+
+ImageParams Texture2D::Load(const char* path)
+{
     ImageParams params{};
 
     stbi_set_flip_vertically_on_load(true);
 
     int channelsNum;
-    params.data = stbi_load(path.c_str(), &params.width, &params.height, &channelsNum, 0);
+    params.data = stbi_load(path, &params.width, &params.height, &channelsNum, 0);
 
     switch (channelsNum)
     {
@@ -150,7 +194,7 @@ ImageParams Texture2D::GenerateCheckboard(int separationsNum)
     return params;
 }
 
-ImageParams Texture2D::GenerateFillColor(const Vec3& color)
+ImageParams Texture2D::GenerateFillColor(const Vec3f& color)
 {
     ImageParams params;
     params.width = params.height = 512;

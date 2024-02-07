@@ -1,48 +1,39 @@
 #pragma once
 
+#include "GfxEnums.hpp"
 #include <Vec3.hpp>
 #include <string>
 
 namespace Delta
 {
 
-enum class Filter
-{
-    NEAREST,
-    LINEAR,
-    NEAREST_MIPMAP_NEAREST,
-    LINEAR_MIPMAP_NEAREST,
-    NEAREST_MIPMAP_LINEAR,
-    LINEAR_MIPMAP_LINEAR
-};
-
-enum class WrapMode
-{
-    REPEAT,
-    CLAMP_TO_EDGE,
-    CLAMP_TO_BORDER,
-    MIRRORED_REPEAT,
-    MIRROR_CLAMP_TO_EDGE
-};
-
-enum class Format
-{
-    RED, RG, RGB, RGBA
-};
-
-struct SamplingParams
-{
-    Filter minFilter{ Filter::NEAREST_MIPMAP_NEAREST };
-    Filter magFilter{ Filter::NEAREST };
-    WrapMode wrap{ WrapMode::REPEAT };
-};
-
 struct ImageParams
 {
+    ImageParams() = default;
+    ~ImageParams();
+    ImageParams(const ImageParams& params);
+    ImageParams& operator=(const ImageParams& params);
+    ImageParams(ImageParams&& params) noexcept;
+    ImageParams& operator=(ImageParams&& params) noexcept;
+
     int width{ 256 };
     int height{ 256 };
     Format format{ Format::RGBA };
     unsigned char* data{ nullptr };
+};
+
+struct SamplingParams
+{
+    MinFilter minFilter{ MinFilter::NEAREST_MIPMAP_NEAREST };
+    MagFilter magFilter{ MagFilter::NEAREST };
+    WrapMode wrap{ WrapMode::REPEAT };
+};
+
+struct TextureParams
+{
+    ImageParams imageParams{};
+    SamplingParams samplingParams{};
+    bool createMipmap{ true };
 };
 
 class Texture2D
@@ -53,16 +44,20 @@ public:
     Texture2D(Texture2D&) = delete;
     Texture2D& operator=(Texture2D&) = delete;
 
-    bool Init(const ImageParams& imageParams, const SamplingParams& samplingParams = SamplingParams());
+    bool Init(const TextureParams& texParams = TextureParams());
     void Clear();
     void Bind(unsigned int unit) const;
 
     void SetData(const unsigned char* data);
 
     static ImageParams Load(const std::string& path);
+    static ImageParams Load(const char* path);
 
     static ImageParams GenerateCheckboard(int separationsNum);
-    static ImageParams GenerateFillColor(const Vec3& color);
+    static ImageParams GenerateFillColor(const Vec3f& color);
+
+    int GetWidth() const { return m_Width; }
+    int GetHeight() const { return m_Height; }
 
 private:
     unsigned int m_Id{ 0 };

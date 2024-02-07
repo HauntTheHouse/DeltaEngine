@@ -25,7 +25,7 @@ public:
 
     size_t GetVerticesCount() const { return m_VerticesCount; }
     size_t GetIndicesCount() const { return m_IndicesCount; }
-    IndexBuffer::DataType GetIndexDataType() const { return m_IndexDataType; }
+    IndexBufferType GetIndexDataType() const { return m_IndexDataType; }
 
 private:
     unsigned int m_Id{ 0 };
@@ -33,7 +33,7 @@ private:
     size_t m_AttributesCount{ 0 };
     size_t m_VerticesCount{ 0 };
     size_t m_IndicesCount{ 0 };
-    IndexBuffer::DataType m_IndexDataType{};
+    IndexBufferType m_IndexDataType{};
 
 };
 

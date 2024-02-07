@@ -8,22 +8,19 @@ namespace Delta
 
 namespace
 {
-    size_t getSize(const IndexBuffer::DataType dataType)
+    size_t getSize(const IndexBufferType dataType)
     {
         switch (dataType)
         {
-        case IndexBuffer::DataType::BYTE:
-        case IndexBuffer::DataType::UNSIGNED_BYTE: return 1;
-        case IndexBuffer::DataType::SHORT:
-        case IndexBuffer::DataType::UNSIGNED_SHORT: return 2;
-        case IndexBuffer::DataType::INT:
-        case IndexBuffer::DataType::UNSIGNED_INT: return 4;
-        default: return GL_NONE;
+        case IndexBufferType::UNSIGNED_BYTE: return 1;
+        case IndexBufferType::UNSIGNED_SHORT: return 2;
+        case IndexBufferType::UNSIGNED_INT: return 4;
+        default: return 0;
         }
     }
 }
 
-bool IndexBuffer::Init(const void* data, const size_t size, const DataType dataType, const VertexBuffer::Usage usage)
+bool IndexBuffer::Init(const void* data, const size_t size, const IndexBufferType dataType, const BufferUsage usage)
 {
     if (m_Id != 0) return false;
     m_IndicesCount = size / getSize(dataType);
@@ -31,7 +28,7 @@ bool IndexBuffer::Init(const void* data, const size_t size, const DataType dataT
 
     glGenBuffers(1, static_cast<GLuint*>(&m_Id));
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, static_cast<GLuint>(m_Id));
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, VertexBuffer::GetRendererCode(usage));
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, static_cast<GLenum>(toNativeType(usage)));
 
     return true;
 }

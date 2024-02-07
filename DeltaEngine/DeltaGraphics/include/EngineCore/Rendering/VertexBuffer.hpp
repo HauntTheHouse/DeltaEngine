@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GfxEnums.hpp"
 #include "BufferLayout.hpp"
 #include "EngineCore/Utils.hpp"
 
@@ -9,24 +10,17 @@ namespace Delta
 class VertexBuffer
 {
 public:
-    enum class Usage
-    {
-        STATIC,
-        DYNAMIC,
-        STREAM
-    };
-
     VertexBuffer() = default;
     ~VertexBuffer() = default;
     VertexBuffer(VertexBuffer&) = delete;
     VertexBuffer& operator=(VertexBuffer&) = delete;
 
     template<typename Container>
-    bool Init(Container&& vertices, const BufferLayout& layout, const Usage usage = Usage::STATIC)
+    bool Init(Container&& vertices, const BufferLayout& layout, const BufferUsage usage = BufferUsage::STATIC)
     {
         return Init(vertices.data(), Utils::getSizeInBytes(vertices), layout, usage);
     }
-    bool Init(const void* data, const size_t size, const BufferLayout& layout, const Usage usage);
+    bool Init(const void* data, const size_t size, const BufferLayout& layout, const BufferUsage usage);
     void Clear();
 
     void Bind() const;
@@ -34,8 +28,6 @@ public:
 
     const BufferLayout& GetLayout() const { return m_Layout; }
     size_t GetVerticesCount() const { return m_VerticesCount; }
-
-    static unsigned int GetRendererCode(Usage usage);
 
 private:
     unsigned int m_Id{ 0 };
