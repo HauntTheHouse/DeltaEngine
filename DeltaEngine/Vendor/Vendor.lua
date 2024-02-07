@@ -57,22 +57,8 @@ project "spdlog"
     kind "StaticLib"
     language "C++"
     cppdialect "C++17"
-    files {
-        "spdlog/src/spdlog.cpp",
-        "spdlog/src/stdout_sinks.cpp",
-        "spdlog/src/color_sinks.cpp",
-        "spdlog/src/file_sinks.cpp",
-        "spdlog/src/async.cpp",
-        "spdlog/src/cfg.cpp",
-
-    }
     includedirs {
         "spdlog/include"
-    }
-    defines {
-        "SPDLOG_COMPILED_LIB",
-        "SPDLOG_BUILD_WARNINGS=OFF",
-        "_SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING"
     }
 
     filter "action:vs*"
