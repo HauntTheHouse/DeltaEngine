@@ -113,6 +113,30 @@ inline const Vec3<T>& Vec3<T>::operator/=(const T rhs)
 }
 
 template<typename T>
+inline bool Vec3<T>::operator>(const Vec3& rhs) const
+{
+    return x > rhs.x && y > rhs.y && z > rhs.z;
+}
+
+template<typename T>
+inline bool Vec3<T>::operator<(const Vec3& rhs) const
+{
+    return x < rhs.x && y < rhs.y && z < rhs.z;
+}
+
+template<typename T>
+inline bool Vec3<T>::operator>=(const Vec3& rhs) const
+{
+    return x >= rhs.x && y >= rhs.y && z >= rhs.z;
+}
+
+template<typename T>
+inline bool Vec3<T>::operator<=(const Vec3& rhs) const
+{
+    return x <= rhs.x && y <= rhs.y && z <= rhs.z;
+}
+
+template<typename T>
 inline T Vec3<T>::operator[](const size_t idx) const
 {
     assert(idx >= 0 && idx <= 2);

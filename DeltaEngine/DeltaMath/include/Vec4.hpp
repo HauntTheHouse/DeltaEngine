@@ -31,6 +31,11 @@ public:
     const Vec4& operator*=(const T rhs);
     const Vec4& operator/=(const T rhs);
 
+    bool operator> (const Vec4& rhs) const;
+    bool operator< (const Vec4& rhs) const;
+    bool operator>=(const Vec4& rhs) const;
+    bool operator<=(const Vec4& rhs) const;
+
     T operator[](const size_t idx) const;
     T& operator[](const size_t idx);
 

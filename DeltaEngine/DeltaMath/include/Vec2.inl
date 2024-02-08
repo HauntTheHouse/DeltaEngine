@@ -108,6 +108,30 @@ inline const Vec2<T>& Vec2<T>::operator/=(const T rhs)
 }
 
 template<typename T>
+inline bool Vec2<T>::operator>(Vec2 rhs) const
+{
+    return x > rhs.x && y > rhs.y;
+}
+
+template<typename T>
+inline bool Vec2<T>::operator<(Vec2 rhs) const
+{
+    return x < rhs.x && y < rhs.y;
+}
+
+template<typename T>
+inline bool Vec2<T>::operator>=(Vec2 rhs) const
+{
+    return x >= rhs.x && y >= rhs.y;
+}
+
+template<typename T>
+inline bool Vec2<T>::operator<=(Vec2 rhs) const
+{
+    return x <= rhs.x && y <= rhs.y;
+}
+
+template<typename T>
 inline T Vec2<T>::operator[](const size_t idx) const
 {
     assert(idx >= 0 && idx <= 1);
