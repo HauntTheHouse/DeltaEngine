@@ -1,6 +1,8 @@
 # Delta Engine
-My attempt to create a game physics engine following the book ["Game Physics: In One Weekend"](https://gamephysicsweekend.github.io/).
 
-Graphics engine is being created according to the Game Engine series by [The Cherno](https://www.youtube.com/@TheCherno), [SimpleCoding](https://www.youtube.com/@SimpleCodingChannel) and my preferences.
+The engine system is inspired by [The Cherno's](https://www.youtube.com/@TheCherno) Game Engine series.
 
-In progress.
+The math library was implemented according to the book ["Game Physics: In One Weekend"](https://gamephysicsweekend.github.io/).\
+I will also try to implement the physical engine based on this book.
+
+In progress from now to forever.
