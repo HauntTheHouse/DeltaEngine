@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Vec3.hpp>
-#include <Vec4.hpp>
+#include <DeltaMath/Vec3.hpp>
+#include <DeltaMath/Vec4.hpp>
 #include <cstdint>
 
 namespace Delta

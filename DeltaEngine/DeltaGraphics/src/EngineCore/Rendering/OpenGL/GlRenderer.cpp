@@ -5,7 +5,7 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <Vec4.hpp>
+#include <DeltaMath/Vec4.hpp>
 
 namespace Delta
 {

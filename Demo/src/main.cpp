@@ -13,9 +13,9 @@
 #include "EngineCore/Rendering/Texture2D.hpp"
 
 #include <imgui.h>
-#include <Vec2.hpp>
-#include <Vec3.hpp>
-#include <Mat4.hpp>
+#include <DeltaMath/Vec2.hpp>
+#include <DeltaMath/Vec3.hpp>
+#include <DeltaMath/Mat4.hpp>
 
 #include "CubeData.hpp"
 

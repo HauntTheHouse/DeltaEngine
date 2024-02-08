@@ -4,7 +4,7 @@ project "DeltaMath"
     cppdialect "C++17"
 
     files {
-        "include/**.hpp",
-        "include/**.inl",
+        "include/DeltaMath/**.hpp",
+        "include/DeltaMat/**.inl",
     }
     includedirs { "include" }

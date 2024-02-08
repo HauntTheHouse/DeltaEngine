@@ -1,7 +1,7 @@
 #pragma once
 
 #include "GfxEnums.hpp"
-#include <Vec3.hpp>
+#include <DeltaMath/Vec3.hpp>
 #include <string>
 
 namespace Delta

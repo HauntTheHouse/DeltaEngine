@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Input.hpp"
-#include <Vec2.hpp>
+#include <DeltaMath/Vec2.hpp>
 #include <functional>
 #include <string>
 

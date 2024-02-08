@@ -1,9 +1,9 @@
 #pragma once
 
 #include "GfxEnums.hpp"
-#include <Mat4.hpp>
-#include <Mat3.hpp>
-#include <Mat2.hpp>
+#include <DeltaMath/Mat4.hpp>
+#include <DeltaMath/Mat3.hpp>
+#include <DeltaMath/Mat2.hpp>
 
 #include <unordered_map>
 #include <string>

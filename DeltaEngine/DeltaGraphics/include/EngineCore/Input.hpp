@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Keys.hpp"
-#include <Vec2.hpp>
+#include <DeltaMath/Vec2.hpp>
 #include <array>
 
 namespace Delta
