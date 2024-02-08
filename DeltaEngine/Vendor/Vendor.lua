@@ -1,6 +1,10 @@
 project "glfw"
     kind "StaticLib"
     language "C"
+
+    targetdir (BUILD_DIR .. "/bin/" .. CONFIG_NAME .. "/%{prj.name}")
+	objdir (BUILD_DIR .. "/obj/" .. CONFIG_NAME .. "/%{prj.name}")
+
     files {
         "glfw/include/GLFW/*.h",
         "glfw/src/context.c",
@@ -57,6 +61,10 @@ project "spdlog"
     kind "StaticLib"
     language "C++"
     cppdialect "C++17"
+
+    targetdir (BUILD_DIR .. "/bin/" .. CONFIG_NAME .. "/%{prj.name}")
+	objdir (BUILD_DIR .. "/obj/" .. CONFIG_NAME .. "/%{prj.name}")
+
     includedirs {
         "spdlog/include"
     }
@@ -71,6 +79,10 @@ project "spdlog"
 project "glad"
     kind "StaticLib"
     language "C"
+
+    targetdir (BUILD_DIR .. "/bin/" .. CONFIG_NAME .. "/%{prj.name}")
+	objdir (BUILD_DIR .. "/obj/" .. CONFIG_NAME .. "/%{prj.name}")
+
     files {
         "glad/include/glad/glad.h",
         "glad/include/KHR/khrplatform.h",
@@ -82,6 +94,10 @@ project "imgui"
     kind "StaticLib"
     language "C++"
     cppdialect "C++11"
+
+    targetdir (BUILD_DIR .. "/bin/" .. CONFIG_NAME .. "/%{prj.name}")
+	objdir (BUILD_DIR .. "/obj/" .. CONFIG_NAME .. "/%{prj.name}")
+
     files {
         "imgui/imgui.h",
         "imgui/backends/imgui_impl_glfw.h",
@@ -103,6 +119,9 @@ project "imgui"
 project "stb_image"
     kind "StaticLib"
     language "C"
+
+    targetdir (BUILD_DIR .. "/bin/" .. CONFIG_NAME .. "/%{prj.name}")
+	objdir (BUILD_DIR .. "/obj/" .. CONFIG_NAME .. "/%{prj.name}")
+
     files "stb/stb_image.h"
     includedirs "stb"
-

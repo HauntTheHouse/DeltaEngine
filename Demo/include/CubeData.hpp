@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include <EngineCore/Rendering/BufferLayout.hpp>
+#include <DeltaEngine/Render/BufferLayout.hpp>
 
 class CubeData
 {

@@ -1,9 +1,9 @@
-build/
-Build/
-Binary/
-Object/
-bin/
-obj/
+build*/
+Build*/
+Bin*/
+Obj*/
+bin*/
+obj*/
 
 .vscode/
 .vs/
@@ -16,3 +16,5 @@ obj/
 *.vcxproj
 *.vcxproj.filters
 *.vcxproj.user
+
+imgui.ini

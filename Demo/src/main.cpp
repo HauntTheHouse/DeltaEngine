@@ -1,21 +1,20 @@
-#include "EngineCore/Application.hpp"
-#include "EngineCore/EntryPoint.hpp"
+#include "DeltaEngine/EntryPoint.hpp"
 
-#include "EngineCore/Camera.hpp"
-#include "EngineCore/Time.hpp"
-#include "EngineCore/Rendering/VertexArray.hpp"
-#include "EngineCore/Rendering/Renderer.hpp"
+#include "DeltaEngine/Camera.hpp"
+#include "DeltaEngine/Time.hpp"
+#include "DeltaEngine/Render/VertexArray.hpp"
+#include "DeltaEngine/Render/Renderer.hpp"
 
-#include "EngineCore/Input.hpp"
-#include "EngineCore/Rendering/ShaderProgram.hpp"
-#include "EngineCore/Rendering/VertexBuffer.hpp"
-#include "EngineCore/Rendering/IndexBuffer.hpp"
-#include "EngineCore/Rendering/Texture2D.hpp"
+#include "DeltaEngine/Input.hpp"
+#include "DeltaEngine/Render/ShaderProgram.hpp"
+#include "DeltaEngine/Render/VertexBuffer.hpp"
+#include "DeltaEngine/Render/IndexBuffer.hpp"
+#include "DeltaEngine/Render/Texture2D.hpp"
 
 #include <imgui.h>
-#include <DeltaMath/Vec2.hpp>
-#include <DeltaMath/Vec3.hpp>
-#include <DeltaMath/Mat4.hpp>
+#include <DeltaEngine/Math/Vec2.hpp>
+#include <DeltaEngine/Math/Vec3.hpp>
+#include <DeltaEngine/Math/Mat4.hpp>
 
 #include "CubeData.hpp"
 
