@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Singleton.hpp"
 #include "Keys.hpp"
 #include <DeltaEngine/Math/Vec2.hpp>
 #include <array>
@@ -7,28 +8,51 @@
 namespace Delta
 {
 
-class Input
+class InputManager : public Singleton<InputManager>
 {
-public:
-    static bool IsKeyPressed(KeyCode keyCode);
-    static bool IsMouseButtonPressed(MouseButtonCode mouseButtonCode);
-    static Vec2f GetCursorPosition();
-
 private:
-    static void PressKey(KeyCode keyCode);
-    static void ReleaseKey(KeyCode keyCode);
+    void Init();
 
-    static void PressMouseButton(MouseButtonCode mouseButtonCode);
-    static void ReleaseMouseButton(MouseButtonCode mouseButtonCode);
+    bool IsKeyPressed(KeyCode keyCode);
+    bool IsMouseButtonPressed(MouseButtonCode mouseButtonCode);
+    Vec2f GetCursorPosition();
 
-    static void SetCursorPosition(Vec2f newPosition);
+    void PressKey(KeyCode keyCode);
+    void ReleaseKey(KeyCode keyCode);
 
-    static std::array<bool, static_cast<size_t>(KeyCode::KEY_LAST) + 1> m_PressedKeys;
-    static std::array<bool, static_cast<size_t>(MouseButtonCode::MOUSE_BUTTON_LAST) + 1> m_PressedMouseButtons;
-    static Vec2f m_CursorPosition;
+    void PressMouseButton(MouseButtonCode mouseButtonCode);
+    void ReleaseMouseButton(MouseButtonCode mouseButtonCode);
+
+    void SetCursorPosition(Vec2f newPosition);
+
+    static const size_t s_MaxKeys{ static_cast<size_t>(KeyCode::KEY_LAST) + 1 };
+    std::array<bool, s_MaxKeys> m_PressedKeys;
+
+    static const size_t s_MaxButtons{ static_cast<size_t>(MouseButtonCode::MOUSE_BUTTON_LAST) + 1 };
+    std::array<bool, s_MaxButtons> m_PressedMouseButtons;
+
+    Vec2f m_CursorPosition;
 
     friend class Application;
+    friend class Input;
 
 };
 
-}
+class Input
+{
+public:
+    inline static bool IsKeyPressed(KeyCode keyCode)
+    {
+        return InputManager::GetInstance().IsKeyPressed(keyCode);
+    }
+    inline static bool IsMouseButtonPressed(MouseButtonCode mouseButtonCode)
+    {
+        return InputManager::GetInstance().IsMouseButtonPressed(mouseButtonCode);
+    }
+    inline static Vec2f GetCursorPosition()
+    {
+        return InputManager::GetInstance().GetCursorPosition();
+    }
+};
+
+} // namespace Delta

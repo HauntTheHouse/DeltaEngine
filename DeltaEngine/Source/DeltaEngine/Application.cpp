@@ -19,27 +19,27 @@ Application::Application(unsigned int windowWidth, unsigned int windowHeight, co
     });
     m_EventDispatcher.AddEventListener<MouseButtonPressedEvent>([this](MouseButtonPressedEvent& event)
     {
-        Input::PressMouseButton(event.mMouseButton);
+        m_InputManager.PressMouseButton(event.mMouseButton);
         OnMouseButtonEvent(event.mMouseButton, event.x, event.y, true);
     });
     m_EventDispatcher.AddEventListener<MouseButtonReleasedEvent>([this](MouseButtonReleasedEvent& event)
     {
-        Input::ReleaseMouseButton(event.mMouseButton);
+        m_InputManager.ReleaseMouseButton(event.mMouseButton);
         OnMouseButtonEvent(event.mMouseButton, event.x, event.y, false);
     });
     m_EventDispatcher.AddEventListener<KeyPressedEvent>([this](KeyPressedEvent& event)
     {
-        Input::PressKey(event.keyCode);
+        m_InputManager.PressKey(event.keyCode);
         OnKeyEvent(event.keyCode, true);
     });
     m_EventDispatcher.AddEventListener<KeyReleasedEvent>([this](KeyReleasedEvent& event)
     {
-        Input::ReleaseKey(event.keyCode);
+        m_InputManager.ReleaseKey(event.keyCode);
         OnKeyEvent(event.keyCode, true);
     });
     m_EventDispatcher.AddEventListener<MouseMoveEvent>([this](MouseMoveEvent& event)
     {
-        Input::SetCursorPosition(Vec2f(event.x, event.y));
+        m_InputManager.SetCursorPosition(Vec2f(event.x, event.y));
         OnMouseMoveEvent(event.x, event.y);
     });
     m_EventDispatcher.AddEventListener<MouseScrolledEvent>([this](MouseScrolledEvent& event)
@@ -55,6 +55,8 @@ Application::Application(unsigned int windowWidth, unsigned int windowHeight, co
     {
         m_EventDispatcher.Dispatch(event);
     });
+
+    m_InputManager.Init();
 }
 
 void Application::Run()

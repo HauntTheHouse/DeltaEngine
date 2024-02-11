@@ -3,48 +3,56 @@
 namespace Delta
 {
 
-std::array<bool, static_cast<size_t>(KeyCode::KEY_LAST) + 1> Input::m_PressedKeys = {};
-std::array<bool, static_cast<size_t>(MouseButtonCode::MOUSE_BUTTON_LAST) + 1> Input::m_PressedMouseButtons = {};
-Vec2f Input::m_CursorPosition{};
+void InputManager::Init()
+{
+    for (size_t i = 0; i < s_MaxKeys; ++i)
+    {
+        m_PressedKeys[i] = false;
+    }
+    for (size_t i = 0; i < s_MaxButtons; ++i)
+    {
+        m_PressedMouseButtons[i] = false;
+    }
+    m_CursorPosition = Vec2f(0.0f);
+}
 
-
-bool Delta::Input::IsKeyPressed(KeyCode keyCode)
+bool Delta::InputManager::IsKeyPressed(KeyCode keyCode)
 {
     return m_PressedKeys[static_cast<size_t>(keyCode)];
 }
 
-bool Input::IsMouseButtonPressed(MouseButtonCode mouseButtonCode)
+bool InputManager::IsMouseButtonPressed(MouseButtonCode mouseButtonCode)
 {
     return m_PressedMouseButtons[static_cast<size_t>(mouseButtonCode)];
 }
 
-Vec2f Input::GetCursorPosition()
+Vec2f InputManager::GetCursorPosition()
 {
     return m_CursorPosition;
 }
 
 
-void Input::PressKey(KeyCode keyCode)
+void InputManager::PressKey(KeyCode keyCode)
 {
     m_PressedKeys[static_cast<size_t>(keyCode)] = true;
 }
 
-void Input::ReleaseKey(KeyCode keyCode)
+void InputManager::ReleaseKey(KeyCode keyCode)
 {
     m_PressedKeys[static_cast<size_t>(keyCode)] = false;
 }
 
-void Input::PressMouseButton(MouseButtonCode mouseButtonCode)
+void InputManager::PressMouseButton(MouseButtonCode mouseButtonCode)
 {
     m_PressedMouseButtons[static_cast<size_t>(mouseButtonCode)] = true;
 }
 
-void Input::ReleaseMouseButton(MouseButtonCode mouseButtonCode)
+void InputManager::ReleaseMouseButton(MouseButtonCode mouseButtonCode)
 {
     m_PressedMouseButtons[static_cast<size_t>(mouseButtonCode)] = false;
 }
 
-void Input::SetCursorPosition(Vec2f newPosition)
+void InputManager::SetCursorPosition(Vec2f newPosition)
 {
     m_CursorPosition = newPosition;
 }

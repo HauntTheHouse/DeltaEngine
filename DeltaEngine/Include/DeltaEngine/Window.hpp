@@ -46,7 +46,7 @@ private:
     GLFWwindow* m_Window{ nullptr };
     WindowParameters m_Data;
 
-    friend class Input;
+    friend class InputManager;
 };
 
 } // namespace Delta

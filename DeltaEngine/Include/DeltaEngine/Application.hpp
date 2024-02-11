@@ -2,7 +2,9 @@
 
 #include "Window.hpp"
 #include "Event.hpp"
+#include "Input.hpp"
 #include "Time.hpp"
+#include "Render/GraphicsSystem.hpp"
 
 namespace Delta
 {
@@ -33,6 +35,8 @@ public:
 private:
     Window m_Window;
     EventDispatcher m_EventDispatcher;
+
+    InputManager m_InputManager;
 
     bool m_IsShouldClose{ false };
 
