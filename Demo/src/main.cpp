@@ -6,7 +6,7 @@
 #include "DeltaEngine/Render/Renderer.hpp"
 
 #include "DeltaEngine/Input.hpp"
-#include "DeltaEngine/Render/ShaderProgram.hpp"
+#include "DeltaEngine/Render/ShaderManager.hpp"
 #include "DeltaEngine/Render/VertexBuffer.hpp"
 #include "DeltaEngine/Render/IndexBuffer.hpp"
 #include "DeltaEngine/Render/Texture2D.hpp"
@@ -30,8 +30,10 @@ public:
         m_Camera.SetNearFarPlanes(0.1f, 100.0f);
         m_Camera.SetOrthoPlanes(-8.0f, 8.0f, -8.0f, 8.0f);
 
-        m_ShaderProgram.Init("assets/shaders/object.vert", "assets/shaders/object.frag");
-        m_ShaderProgram.Bind();
+        Delta::ShaderTypePaths paths;
+        paths.vertexPath = "assets/shaders/object.vert";
+        paths.fragmentPath = "assets/shaders/object.frag";
+        m_HandleShader = Delta::ShaderManager::GetInstance().Aquire(paths);
 
         m_VBO.Init(CubeData::GetVertices(), CubeData::GetLayout());
         m_EBO.Init(CubeData::GetIndices());
@@ -60,9 +62,9 @@ public:
         m_EBO.Clear();
         m_VBO.Clear();
         m_VAO.Clear();
-        m_ShaderProgram.Clear();
         m_BrickWallTex.Clear();
         m_PinkTex.Clear();
+        Delta::ShaderManager::GetInstance().Release(m_HandleShader);
     }
 
     void OnUpdate(Delta::Timestep aTimestep) override
@@ -119,19 +121,21 @@ public:
         Delta::Mat4 transformMat;
         transformMat.transform(translate, angles, scale);
 
-        m_ShaderProgram.Bind();
+        auto& shaderProgram = Delta::ShaderManager::GetInstance().Dereference(m_HandleShader);
+
+        shaderProgram.Bind();
         {
-            m_ShaderProgram.SetMat4("uModel", transformMat);
-            m_ShaderProgram.SetMat4("uViewProject", m_Camera.GetViewProjection());
+            shaderProgram.SetMat4("uModel", transformMat);
+            shaderProgram.SetMat4("uViewProject", m_Camera.GetViewProjection());
 
             m_BrickWallTex.Bind(0);
-            m_ShaderProgram.SetInt("uDefaultTexture", 0);
+            shaderProgram.SetInt("uDefaultTexture", 0);
             m_PinkTex.Bind(1);
-            m_ShaderProgram.SetInt("uPink", 1);
+            shaderProgram.SetInt("uPink", 1);
 
             Delta::Renderer::Draw(Delta::DrawPrimitive::TRIANGLES, m_VAO);
         }
-        m_ShaderProgram.Unbind();
+        shaderProgram.Unbind();
     }
 
     void OnGuiDraw() override
@@ -173,7 +177,7 @@ public:
 private:
     Delta::Camera m_Camera;
 
-    Delta::ShaderProgram m_ShaderProgram;
+    Delta::HandleShader m_HandleShader;
     Delta::VertexBuffer m_VBO;
     Delta::IndexBuffer m_EBO;
     Delta::VertexArray m_VAO;

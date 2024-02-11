@@ -12,6 +12,7 @@ public:
     void Clear();
 
 private:
+    ShaderManager m_ShaderManager;
 
 };
 

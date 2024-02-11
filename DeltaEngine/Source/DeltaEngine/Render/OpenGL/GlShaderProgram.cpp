@@ -1,6 +1,7 @@
 #include "DeltaEngine/Render/ShaderProgram.hpp"
 
 #include "DeltaEngine/Log.hpp"
+#include "DeltaEngine/Utils.hpp"
 #include <glad/glad.h>
 
 #include <fstream>
@@ -24,61 +25,6 @@ namespace
         default: return "Unknown shader";
         }
     }
-}
-
-bool ShaderProgram::Init(const char* vertexShaderPath, const char* fragmentShaderPath)
-{
-    auto const readFile = [](const char* path)
-    {
-        std::fstream file(path);
-        std::stringstream stream;
-        stream << file.rdbuf();
-        return stream.str();
-    };
-
-    std::string vsStr = readFile(vertexShaderPath);
-    std::string fsStr = readFile(fragmentShaderPath);
-
-    return InitFromSrc(vsStr.c_str(), fsStr.c_str());
-}
-
-bool ShaderProgram::InitFromSrc(const char* vertexShaderSrc, const char* fragmentShaderSrc)
-{
-    if (m_Id != 0) return false;
-
-    const GLuint vs = CompileShader(vertexShaderSrc, ShaderType::VERTEX);
-    if (vs == 0) return false;
-    const GLuint fs = CompileShader(fragmentShaderSrc, ShaderType::FRAGMENT);
-    if (fs == 0) return false;
-
-    m_Id = static_cast<unsigned int>(glCreateProgram());
-    glAttachShader(static_cast<GLuint>(m_Id), vs);
-    glAttachShader(static_cast<GLuint>(m_Id), fs);
-    glLinkProgram(static_cast<GLuint>(m_Id));
-
-    GLint success;
-    const GLsizei logSize = 256;
-    GLchar infoLog[logSize];
-    glGetProgramiv(static_cast<GLuint>(m_Id), GL_LINK_STATUS, &success);
-    if (!success)
-    {
-        glGetProgramInfoLog(static_cast<GLuint>(m_Id), logSize, nullptr, infoLog);
-        LOG_ERROR("Program linking failed\n{0}", infoLog);
-        return false;
-    }
-
-    glDetachShader(static_cast<GLuint>(m_Id), vs);
-    glDetachShader(static_cast<GLuint>(m_Id), fs);
-    glDeleteShader(vs);
-    glDeleteShader(fs);
-
-    return true;
-}
-
-void ShaderProgram::Clear()
-{
-    glDeleteProgram(static_cast<GLuint>(m_Id));
-    m_Id = 0;
 }
 
 void ShaderProgram::Bind() const
@@ -156,6 +102,74 @@ int ShaderProgram::GetUniformLocation(const char* uniformName)
     GLint uniformLocation = glGetUniformLocation(static_cast<GLuint>(m_Id), uniformName);
     m_UniformLocation.insert({ uniformName, uniformLocation });
     return uniformLocation;
+}
+
+bool ShaderProgram::Init(const ShaderTypePaths& shaderTypePaths)
+{
+    if (m_Id != 0) return false;
+
+    const size_t maxShadersNum = static_cast<size_t>(ShaderType::MAX_NUM);
+
+    std::vector<GLuint> shadersToAttach;
+    shadersToAttach.reserve(maxShadersNum);
+
+    for (size_t i = 0; i < maxShadersNum; ++i)
+    {
+        if (shaderTypePaths.shaderPaths[i].empty())
+            continue;
+
+        std::string shaderSrc = Utils::ReadFile(shaderTypePaths.shaderPaths[i]);
+
+        GLuint shaderId = ShaderProgram::CompileShader(shaderSrc, static_cast<ShaderType>(i));
+        if (!shaderId) return false;
+
+        shadersToAttach.push_back(shaderId);
+
+    }
+
+    m_Id = static_cast<unsigned int>(glCreateProgram());
+
+    for (GLuint shaderToAttach : shadersToAttach)
+    {
+        glAttachShader(static_cast<GLuint>(m_Id), shaderToAttach);
+    }
+    glLinkProgram(static_cast<GLuint>(m_Id));
+
+    GLint success;
+    const GLsizei logSize = 256;
+    GLchar infoLog[logSize];
+    glGetProgramiv(static_cast<GLuint>(m_Id), GL_LINK_STATUS, &success);
+    if (!success)
+    {
+        glGetProgramInfoLog(static_cast<GLuint>(m_Id), logSize, nullptr, infoLog);
+        LOG_ERROR("Program linking failed\n{0}", infoLog);
+        return false;
+    }
+
+    for (GLuint shaderToAttach : shadersToAttach)
+    {
+        glDetachShader(static_cast<GLuint>(m_Id), shaderToAttach);
+        glDeleteShader(shaderToAttach);
+    }
+
+    return true;
+}
+
+bool ShaderProgram::Init(const std::string& binaryPath)
+{
+    // TODO: implement initialization for compiled binary shaders
+    return false;
+}
+
+void ShaderProgram::Clear()
+{
+    glDeleteProgram(static_cast<GLuint>(m_Id));
+    m_Id = 0;
+}
+
+unsigned int ShaderProgram::CompileShader(const std::string& sourceCode, ShaderType shaderType)
+{
+    return CompileShader(sourceCode.c_str(), shaderType);
 }
 
 unsigned int ShaderProgram::CompileShader(const char* sourceCode, ShaderType shaderType)

@@ -215,7 +215,9 @@ enum class ShaderType
     GEOMETRY,
     TESS_EVALUATION,
     TESS_CONTROL,
-    COMPUTE
+    COMPUTE,
+
+    MAX_NUM
 };
 unsigned int toNativeType(ShaderType shaderType);
 

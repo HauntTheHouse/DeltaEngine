@@ -7,23 +7,37 @@
 
 #include <unordered_map>
 #include <string>
+#include <array>
 
 namespace Delta
 {
 
 class Mat4;
 
+struct ShaderTypePaths
+{
+    ShaderTypePaths() : vertexPath(), fragmentPath(), geometryPath(), tessEvaluaitionPath(), tessControlPath(), computePath() {}
+    ~ShaderTypePaths() {}
+    union
+    {
+        struct
+        {
+            std::string vertexPath;
+            std::string fragmentPath;
+            std::string geometryPath;
+            std::string tessEvaluaitionPath;
+            std::string tessControlPath;
+            std::string computePath;
+        };
+        std::array<std::string, static_cast<size_t>(ShaderType::MAX_NUM)> shaderPaths;
+    };
+};
+
 class ShaderProgram
 {
 public:
     ShaderProgram() = default;
     ~ShaderProgram() = default;
-    ShaderProgram(ShaderProgram&) = delete;
-    ShaderProgram& operator=(ShaderProgram&) = delete;
-
-    bool Init(const char* vertexShaderPath, const char* fragmentShaderPath);
-    bool InitFromSrc(const char* vertexShaderSrc, const char* fragmentShaderSrc);
-    void Clear();
 
     void Bind() const;
     static void Unbind();
@@ -45,11 +59,18 @@ public:
     int GetUniformLocation(const char* uniformName);
 
 private:
+    bool Init(const ShaderTypePaths& shaderTypePaths);
+    bool Init(const std::string& binaryPath);
+
+    void Clear();
+
+    static unsigned int CompileShader(const std::string& sourceCode, ShaderType shaderType);
     static unsigned int CompileShader(const char* sourceCode, ShaderType shaderType);
 
     unsigned int m_Id{ 0 };
     std::unordered_map<std::string, int> m_UniformLocation;
 
+    friend class ShaderManager;
 };
 
 } // namespace Delta
