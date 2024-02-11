@@ -57,6 +57,14 @@ Application::Application(unsigned int windowWidth, unsigned int windowHeight, co
     });
 
     m_InputManager.Init();
+
+    m_GraphicsSystem.Init();
+}
+
+Application::~Application()
+{
+    m_GraphicsSystem.Clear();
+    m_Window.Shutdown();
 }
 
 void Application::Run()
@@ -77,7 +85,6 @@ void Application::Run()
         m_Window.OnUpdate();
     }
 
-    m_Window.Shutdown();
 }
 
 void Application::ShouldClose()

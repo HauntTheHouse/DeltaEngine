@@ -13,7 +13,7 @@ class Application
 {
 public:
     Application(unsigned int windowWidth, unsigned int windowHeight, const char* title);
-    virtual ~Application() {};
+    virtual ~Application();
 
     Application(const Application&) = delete;
     Application(Application&&) = delete;
@@ -37,6 +37,7 @@ private:
     EventDispatcher m_EventDispatcher;
 
     InputManager m_InputManager;
+    GraphicsSystem m_GraphicsSystem;
 
     bool m_IsShouldClose{ false };
 
