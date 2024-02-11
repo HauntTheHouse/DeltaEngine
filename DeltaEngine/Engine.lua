@@ -1,6 +1,12 @@
 ENGINE_DIR = _WORKING_DIR .. "/DeltaEngine"
 VENDOR_DIR = ENGINE_DIR .. "/Vendor"
 
+ENGINE_PUBLIC_INCLUDES = {
+    ENGINE_DIR .. "/Include",
+    VENDOR_DIR .. "/spdlog/include",
+    VENDOR_DIR .. "/imgui",
+}
+
 require "Vendor/Vendor"
 
 project "DeltaEngine"
@@ -33,5 +39,4 @@ project "DeltaEngine"
     defines {
         "STB_IMAGE_IMPLEMENTATION",
         "USING_OPENGL=1",
-        "_SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING",
     }

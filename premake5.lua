@@ -10,6 +10,10 @@ workspace "DeltaEngine"
     startproject "Demo"
     configurations { "Debug", "Release" }
 
+    defines {
+        "_SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING"
+    }
+
 	if os.is64bit() and not os.istarget("windows") then
 		platforms "x86_64"
 	else
@@ -31,7 +35,6 @@ workspace "DeltaEngine"
 			"NDEBUG",
 		}
 		optimize "Full"
-
 
 require "DeltaEngine/Engine"
 require "Demo/Demo"

@@ -8,8 +8,7 @@ project "Demo"
 
     includedirs {
 		"include",
-        ENGINE_DIR .. "/Include",
-        VENDOR_DIR .. "/imgui",
+        ENGINE_PUBLIC_INCLUDES
 	}
     files {
         "include/**.hpp",
