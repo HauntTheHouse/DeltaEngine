@@ -67,28 +67,29 @@ public:
         Delta::ShaderManager::GetInstance().Release(m_HandleShader);
     }
 
-    void OnUpdate(Delta::Timestep aTimestep) override
+    void OnUpdate(Delta::Timestep timestep) override
     {
         Delta::Vec3f movementDelta{ 0.0f, 0.0f, 0.0f };
         Delta::Vec3f rotationDelta{ 0.0f, 0.0f, 0.0f };
 
+        float ts = timestep.GetSeconds<float>();
         if (Delta::Input::IsKeyPressed(Delta::KeyCode::KEY_W))
-            movementDelta.z += 2.0f * aTimestep;
+            movementDelta.z += 2.0f * ts;
         else if (Delta::Input::IsKeyPressed(Delta::KeyCode::KEY_S))
-            movementDelta.z -= 2.0f * aTimestep;
+            movementDelta.z -= 2.0f * ts;
         if (Delta::Input::IsKeyPressed(Delta::KeyCode::KEY_D))
-            movementDelta.x += 2.0f * aTimestep;
+            movementDelta.x += 2.0f * ts;
         else if (Delta::Input::IsKeyPressed(Delta::KeyCode::KEY_A))
-            movementDelta.x -= 2.0f * aTimestep;
+            movementDelta.x -= 2.0f * ts;
 
         if (Delta::Input::IsKeyPressed(Delta::KeyCode::KEY_UP))
-            rotationDelta.x -= 40.0f * aTimestep;
+            rotationDelta.x -= 40.0f * ts;
         else if (Delta::Input::IsKeyPressed(Delta::KeyCode::KEY_DOWN))
-            rotationDelta.x += 40.0f * aTimestep;
+            rotationDelta.x += 40.0f * ts;
         if (Delta::Input::IsKeyPressed(Delta::KeyCode::KEY_RIGHT))
-            rotationDelta.y += 40.0f * aTimestep;
+            rotationDelta.y += 40.0f * ts;
         else if (Delta::Input::IsKeyPressed(Delta::KeyCode::KEY_LEFT))
-            rotationDelta.y -= 40.0f * aTimestep;
+            rotationDelta.y -= 40.0f * ts;
 
         if (!ImGui::IsAnyItemActive())
         {

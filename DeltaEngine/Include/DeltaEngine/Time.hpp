@@ -6,22 +6,32 @@ namespace Delta
 class Time
 {
 public:
-    static float GetSeconds();
-    static float GetMilliseconds() { return GetSeconds() * 1000.0f; }
+    template<typename T>
+    inline static T GetSeconds()
+    {
+        return static_cast<T>(GetNativeTime());
+    }
+    template<typename T>
+    inline static T GetMilliseconds()
+    {
+        return static_cast<T>(GetNativeTime() * 1000.0);
+    }
+private:
+    static double GetNativeTime();
 };
 
 class Timestep
 {
 public:
-    Timestep(float time = 0.0f) : m_Time(time) {}
-    operator float() const { return m_Time; }
+    Timestep(double time = 0) : m_Time(time) {}
 
-    float GetSeconds() const { return m_Time; }
-    float GetMilliseconds() const { return m_Time * 1000.0f; }
+    template<typename T>
+    inline T GetSeconds() const { return static_cast<T>(m_Time); }
+    template<typename T>
+    inline T GetMilliseconds() const { return static_cast<T>(m_Time * 1000.0); }
 
 private:
-    float m_Time;
-
+    double m_Time;
 };
 
 } // namespace Delta

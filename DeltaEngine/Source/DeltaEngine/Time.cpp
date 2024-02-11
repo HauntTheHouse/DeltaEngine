@@ -5,9 +5,9 @@
 namespace Delta
 {
 
-float Time::GetSeconds()
+double Time::GetNativeTime()
 {
-    return static_cast<float>(glfwGetTime());
+    return glfwGetTime();
 }
 
 } // namespace Delta

@@ -71,8 +71,8 @@ void Application::Run()
 {
     while (!m_IsShouldClose)
     {
-        static float lastFrameTime = 0.0f;
-        float time = Time::GetSeconds();
+        static double lastFrameTime = 0.0;
+        double time = Time::GetSeconds<double>();
         Timestep timestep = time - lastFrameTime;
         lastFrameTime = time;
 
