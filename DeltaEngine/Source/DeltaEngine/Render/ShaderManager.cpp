@@ -45,14 +45,4 @@ void ShaderManager::Release(HandleShader handle)
     m_ShaderManager.Release(handle);
 }
 
-ShaderProgram& ShaderManager::Dereference(HandleShader handle)
-{
-    return m_ShaderManager.Dereference(handle);
-}
-
-const ShaderProgram& ShaderManager::Dereference(HandleShader handle) const
-{
-    return m_ShaderManager.Dereference(handle);
-}
-
 } // namespace Delta

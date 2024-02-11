@@ -16,7 +16,13 @@ class Mat4;
 
 struct ShaderTypePaths
 {
-    ShaderTypePaths() : vertexPath(), fragmentPath(), geometryPath(), tessEvaluaitionPath(), tessControlPath(), computePath() {}
+    ShaderTypePaths()
+        : vertexPath()
+        , fragmentPath()
+        , geometryPath()
+        , tessEvaluaitionPath()
+        , tessControlPath()
+        , computePath() {}
     ~ShaderTypePaths() {}
     union
     {

@@ -8,7 +8,6 @@ namespace Delta
 {
 
 using HandleShader = Handle<ShaderProgram>;
-using ShaderManagerH = HandleManager<ShaderProgram, HandleShader>;
 
 class ShaderManager : public Singleton<ShaderManager>
 {
@@ -18,14 +17,16 @@ public:
 
     void Release(HandleShader handle);
 
-    ShaderProgram& Dereference(HandleShader handle);
-    const ShaderProgram& Dereference(HandleShader handle) const;
+    inline ShaderProgram& Dereference(HandleShader handle)
+    { return m_ShaderManager.Dereference(handle); }
+    inline const ShaderProgram& Dereference(HandleShader handle) const
+    { return m_ShaderManager.Dereference(handle); }
 
 private:
     bool Init();
     void Clear();
 
-    ShaderManagerH m_ShaderManager;
+    HandleManager<ShaderProgram, HandleShader> m_ShaderManager;
 
     friend class GraphicsSystem;
 };
