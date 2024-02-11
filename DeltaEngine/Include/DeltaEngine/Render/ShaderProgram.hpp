@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GfxEnums.hpp"
+#include "Texture2D.hpp"
 #include <DeltaEngine/Math/Mat4.hpp>
 #include <DeltaEngine/Math/Mat3.hpp>
 #include <DeltaEngine/Math/Mat2.hpp>
@@ -61,6 +62,8 @@ public:
     void SetMat2(const char* uniformName, const Mat2& mat2);
     void SetMat3(const char* uniformName, const Mat3& mat3);
     void SetMat4(const char* uniformName, const Mat4& mat4);
+
+    void SetTexture(const char* uniformName, const Texture2D& bindTex, int unit);
 
     int GetUniformLocation(const char* uniformName);
 

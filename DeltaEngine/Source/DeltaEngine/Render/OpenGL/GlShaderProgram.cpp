@@ -94,6 +94,12 @@ void ShaderProgram::SetMat4(const char* uniformName, const Mat4& mat4)
     glUniformMatrix4fv(GetUniformLocation(uniformName), 1, GL_FALSE, mat4.toPtr());
 }
 
+void ShaderProgram::SetTexture(const char* uniformName, const Texture2D& bindTex, int unit)
+{
+    bindTex.Bind(unit);
+    SetInt(uniformName, unit);
+}
+
 int ShaderProgram::GetUniformLocation(const char* uniformName)
 {
     const auto it = m_UniformLocation.find(uniformName);

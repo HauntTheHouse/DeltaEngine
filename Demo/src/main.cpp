@@ -129,12 +129,10 @@ public:
             shaderProgram.SetMat4("uViewProject", m_Camera.GetViewProjection());
 
             auto& brickWallTex = Delta::TextureManager::GetInstance().Dereference(m_HandleBrickWallTex);
-            brickWallTex.Bind(0);
-            shaderProgram.SetInt("uDefaultTexture", 0);
+            shaderProgram.SetTexture("uDefaultTexture", brickWallTex, 0);
 
             auto& pinkTex = Delta::TextureManager::GetInstance().Dereference(m_HandlePinkTex);
-            pinkTex.Bind(1);
-            shaderProgram.SetInt("uPink", 1);
+            shaderProgram.SetTexture("uPink", pinkTex, 1);
 
             Delta::Renderer::Draw(Delta::DrawPrimitive::TRIANGLES, m_VAO);
         }
