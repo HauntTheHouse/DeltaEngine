@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GfxEnums.hpp"
+#include "Color.hpp"
 #include <DeltaEngine/Math/Vec3.hpp>
 #include <string>
 
@@ -41,29 +42,29 @@ class Texture2D
 public:
     Texture2D() = default;
     ~Texture2D() = default;
-    Texture2D(Texture2D&) = delete;
-    Texture2D& operator=(Texture2D&) = delete;
 
-    bool Init(const TextureParams& texParams = TextureParams());
-    void Clear();
     void Bind(unsigned int unit) const;
 
     void SetData(const unsigned char* data);
+
+    int GetWidth() const { return m_Width; }
+    int GetHeight() const { return m_Height; }
 
     static ImageParams Load(const std::string& path);
     static ImageParams Load(const char* path);
 
     static ImageParams GenerateCheckboard(int separationsNum);
-    static ImageParams GenerateFillColor(const Vec3f& color);
-
-    int GetWidth() const { return m_Width; }
-    int GetHeight() const { return m_Height; }
+    static ImageParams GenerateFillColor(const Color& color);
 
 private:
+    bool Init(const TextureParams& texParams = TextureParams());
+    void Clear();
+
     unsigned int m_Id{ 0 };
     int m_Width{};
     int m_Height{};
 
+    friend class TextureManager;
 };
 
 } // namespace Delta

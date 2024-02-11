@@ -194,7 +194,7 @@ ImageParams Texture2D::GenerateCheckboard(int separationsNum)
     return params;
 }
 
-ImageParams Texture2D::GenerateFillColor(const Vec3f& color)
+ImageParams Texture2D::GenerateFillColor(const Color& color)
 {
     ImageParams params;
     params.width = params.height = 512;
@@ -208,9 +208,9 @@ ImageParams Texture2D::GenerateFillColor(const Vec3f& color)
         for (size_t x = 0; x < params.width; ++x)
         {
             size_t id = y * params.width * channelsNum + x * channelsNum;
-            params.data[id + 0] = static_cast<unsigned char>(color.x * 255.0f);
-            params.data[id + 1] = static_cast<unsigned char>(color.y * 255.0f);
-            params.data[id + 2] = static_cast<unsigned char>(color.z * 255.0f);
+            params.data[id + 0] = static_cast<unsigned char>(color.r * 255.0f);
+            params.data[id + 1] = static_cast<unsigned char>(color.g * 255.0f);
+            params.data[id + 2] = static_cast<unsigned char>(color.b * 255.0f);
         }
     }
 

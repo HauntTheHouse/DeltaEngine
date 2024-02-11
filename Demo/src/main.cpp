@@ -1,20 +1,20 @@
 #include "DeltaEngine/EntryPoint.hpp"
 
-#include "DeltaEngine/Camera.hpp"
-#include "DeltaEngine/Time.hpp"
-#include "DeltaEngine/Render/VertexArray.hpp"
-#include "DeltaEngine/Render/Renderer.hpp"
-
-#include "DeltaEngine/Input.hpp"
 #include "DeltaEngine/Render/ShaderManager.hpp"
+#include "DeltaEngine/Render/TextureManager.hpp"
+#include "DeltaEngine/Render/VertexArray.hpp"
 #include "DeltaEngine/Render/VertexBuffer.hpp"
 #include "DeltaEngine/Render/IndexBuffer.hpp"
-#include "DeltaEngine/Render/Texture2D.hpp"
+#include "DeltaEngine/Render/Renderer.hpp"
 
-#include <imgui.h>
+#include "DeltaEngine/Camera.hpp"
+#include "DeltaEngine/Time.hpp"
+#include "DeltaEngine/Input.hpp"
+
 #include <DeltaEngine/Math/Vec2.hpp>
 #include <DeltaEngine/Math/Vec3.hpp>
 #include <DeltaEngine/Math/Mat4.hpp>
+#include <imgui.h>
 
 #include "CubeData.hpp"
 
@@ -47,12 +47,10 @@ public:
         params.samplingParams.minFilter = Delta::MinFilter::LINEAR_MIPMAP_LINEAR;
         params.samplingParams.magFilter = Delta::MagFilter::LINEAR;
         params.imageParams = Delta::Texture2D::Load("assets/textures/brick_wall.png");
+        m_HandleBrickWallTex = Delta::TextureManager::GetInstance().Aquire(params);
 
-        m_BrickWallTex.Init(params);
-
-        params.imageParams = Delta::Texture2D::GenerateFillColor({ 0.0f, 0.0f, 1.0f });
-
-        m_PinkTex.Init(params);
+        params.imageParams = Delta::Texture2D::GenerateFillColor({ 1.0f, 0.0f, 1.0f });
+        m_HandlePinkTex = Delta::TextureManager::GetInstance().Aquire(params);
 
         Delta::Renderer::SetDepthTestEnable(true);
     }
@@ -62,8 +60,9 @@ public:
         m_EBO.Clear();
         m_VBO.Clear();
         m_VAO.Clear();
-        m_BrickWallTex.Clear();
-        m_PinkTex.Clear();
+
+        Delta::TextureManager::GetInstance().Release(m_HandleBrickWallTex);
+        Delta::TextureManager::GetInstance().Release(m_HandlePinkTex);
         Delta::ShaderManager::GetInstance().Release(m_HandleShader);
     }
 
@@ -129,9 +128,12 @@ public:
             shaderProgram.SetMat4("uModel", transformMat);
             shaderProgram.SetMat4("uViewProject", m_Camera.GetViewProjection());
 
-            m_BrickWallTex.Bind(0);
+            auto& brickWallTex = Delta::TextureManager::GetInstance().Dereference(m_HandleBrickWallTex);
+            brickWallTex.Bind(0);
             shaderProgram.SetInt("uDefaultTexture", 0);
-            m_PinkTex.Bind(1);
+
+            auto& pinkTex = Delta::TextureManager::GetInstance().Dereference(m_HandlePinkTex);
+            pinkTex.Bind(1);
             shaderProgram.SetInt("uPink", 1);
 
             Delta::Renderer::Draw(Delta::DrawPrimitive::TRIANGLES, m_VAO);
@@ -179,11 +181,11 @@ private:
     Delta::Camera m_Camera;
 
     Delta::HandleShader m_HandleShader;
+    Delta::HandleTexture m_HandleBrickWallTex;
+    Delta::HandleTexture m_HandlePinkTex;
     Delta::VertexBuffer m_VBO;
     Delta::IndexBuffer m_EBO;
     Delta::VertexArray m_VAO;
-    Delta::Texture2D m_BrickWallTex;
-    Delta::Texture2D m_PinkTex;
 
     Delta::Vec3f m_BackgroundColor{ 0.66f, 0.86f, 1.0f };
 

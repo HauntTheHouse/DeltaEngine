@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ShaderManager.hpp"
+#include "TextureManager.hpp"
 
 namespace Delta
 {
@@ -13,6 +14,7 @@ public:
 
 private:
     ShaderManager m_ShaderManager;
+    TextureManager m_TextureManager;
 
 };
 
