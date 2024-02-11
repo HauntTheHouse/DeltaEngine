@@ -20,8 +20,8 @@ namespace Delta
 #define LOG_ERROR(...)    spdlog::error(__VA_ARGS__)
 #define LOG_CRITICAL(...) spdlog::critical(__VA_ARGS__)
 
-#define ASSERT(...) assert(__VA_ARGS__)
-
 #endif
+
+#define ASSERT(...) assert(__VA_ARGS__)
 
 } // namespace Delta
