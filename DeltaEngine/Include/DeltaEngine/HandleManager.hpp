@@ -20,25 +20,34 @@ public:
     Data& Dereference(Handle handle);
     const Data& Dereference(Handle handle) const;
 
-    unsigned int GetUsedHandleCount() const { return m_MagicNumbers.size() - m_FreeSlots.size(); }
-    bool HasUsedHandleCount() const { return !!GetUsedHandleCount(); }
-
     template<typename Function>
-    void ForEach(Function func)
-    {
-        for (size_t i = 0; i < m_UserData.size(); ++i)
-        {
-            if (m_MagicNumbers[i] != 0)
-            {
-                func(m_UserData[i]);
-            }
-        }
-    }
+    void ForEach(Function&& func);
 
 private:
-    std::vector<Data> m_UserData;
-    std::vector<unsigned int> m_MagicNumbers;
-    std::vector<unsigned int> m_FreeSlots;
+    struct HandleData
+    {
+        HandleData()
+            : realData()
+            , magicNumber(0) {};
+        HandleData(uint16_t magicNumber)
+            : realData()
+            , magicNumber(magicNumber) {};
+        HandleData(const HandleData& other)
+            : realData(other.realData)
+            , magicNumber(other.magicNumber) {}
+        ~HandleData() {};
+
+        union
+        {
+            Data realData;
+            uint16_t freeSlotIndex;
+        };
+
+        uint16_t magicNumber;
+    };
+
+    std::vector<HandleData> m_UserData;
+    uint16_t m_NextFreeIndex{ UINT16_MAX };
 
 };
 
@@ -46,44 +55,40 @@ private:
 template <typename Data, typename Handle>
 inline Data& HandleManager<Data, Handle>::Acquire(Handle& handle)
 {
-    // If free list is empty, add a new one, otherwise use first one found
-    unsigned int index;
-    if (m_FreeSlots.empty())
+    uint32_t index = m_NextFreeIndex;
+    if (index == UINT16_MAX)
     {
-        index = static_cast<unsigned int>(m_MagicNumbers.size());
+        index = static_cast<uint32_t>(m_UserData.size());
         handle.Init(index);
-        m_UserData.emplace_back(Data());
-        m_MagicNumbers.push_back(handle.GetMagic());
+        m_UserData.emplace_back(HandleData(handle.GetMagic()));
     }
     else
     {
-        index = m_FreeSlots.back();
+        m_NextFreeIndex = m_UserData[index].freeSlotIndex;
         handle.Init(index);
-        m_FreeSlots.pop_back();
-        m_MagicNumbers[index] = handle.GetMagic();
+        m_UserData[index].magicNumber = handle.GetMagic();
     }
-    return m_UserData[index];
+    return m_UserData[index].realData;
 }
 
 template <typename Data, typename Handle>
 inline void HandleManager<Data, Handle>::Release(Handle handle)
 {
-    unsigned int index = handle.GetIndex();
+    uint32_t index = handle.GetIndex();
 
     ASSERT(index < m_UserData.size());
-    ASSERT(m_MagicNumbers[index] == handle.GetMagic());
+    ASSERT(m_UserData[index].magicNumber == handle.GetMagic());
 
-    // Remove it - tag as unused and add to free list
-    m_MagicNumbers[index] = 0;
-    m_FreeSlots.push_back(index);
+    m_UserData[index].freeSlotIndex = m_NextFreeIndex;
+    m_UserData[index].magicNumber = 0;
+    m_NextFreeIndex = index;
 }
 
 template<typename Data, typename Handle>
 inline void HandleManager<Data, Handle>::ReleaseAll()
 {
     m_UserData.clear();
-    m_MagicNumbers.clear();
-    m_FreeSlots.clear();
+    m_NextFreeIndex = UINT16_MAX;
 }
 
 template <typename Data, typename Handle>
@@ -91,18 +96,31 @@ inline Data& HandleManager<Data, Handle>::Dereference(Handle handle)
 {
     ASSERT(!handle.IsNull());
 
-    unsigned int index = handle.GetIndex();
+    uint32_t index = handle.GetIndex();
 
     ASSERT(index < m_UserData.size());
-    ASSERT(m_MagicNumbers[index] == handle.GetMagic());
+    ASSERT(m_UserData[index].magicNumber == handle.GetMagic());
 
-    return m_UserData[index];
+    return m_UserData[index].realData;
 }
 
 template <typename Data, typename Handle>
 inline const Data& HandleManager<Data, Handle>::Dereference(Handle handle) const
 {
     return const_cast<HandleManager<Data, Handle>*>(this)->Dereference(handle);
+}
+
+template <typename Data, typename Handle>
+template<typename Function>
+void HandleManager<Data, Handle>::ForEach(Function&& func)
+{
+    for (size_t i = 0; i < m_UserData.size(); ++i)
+    {
+        if (m_UserData[i].magicNumber != 0)
+        {
+            func(m_UserData[i].realData);
+        }
+    }
 }
 
 } // namespace Delta
